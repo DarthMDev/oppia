@@ -90,7 +90,7 @@ def get_exploration_components_from_dir(dir_path):
         for directory in dirs:
             if root == dir_path and directory != 'assets':
                 raise Exception(
-                    'The only directory in %s should be assets/' % dir_path)
+                    'The only directory in {0!s} should be assets/'.format(dir_path))
 
         for filename in files:
             filepath = os.path.join(root, filename)
@@ -118,7 +118,7 @@ def get_exploration_components_from_dir(dir_path):
                     filepath, raw_bytes=True)))
 
     if yaml_content is None:
-        raise Exception('No yaml file specifed for %s' % dir_path)
+        raise Exception('No yaml file specifed for {0!s}'.format(dir_path))
 
     return yaml_content, assets_list
 
@@ -176,7 +176,7 @@ def get_comma_sep_string_from_list(items):
     if len(items) == 1:
         return items[0]
 
-    return '%s and %s' % (', '.join(items[:-1]), items[-1])
+    return '{0!s} and {1!s}'.format(', '.join(items[:-1]), items[-1])
 
 
 def to_ascii(string):
@@ -234,8 +234,8 @@ def convert_png_to_data_url(filepath):
     This method is currently used only in tests for RTE extensions.
     """
     file_contents = get_file_contents(filepath, raw_bytes=True, mode='rb')
-    return 'data:image/png;base64,%s' % urllib.quote(
-        file_contents.encode('base64'))
+    return 'data:image/png;base64,{0!s}'.format(urllib.quote(
+        file_contents.encode('base64')))
 
 
 def camelcase_to_hyphenated(camelcase_str):
@@ -247,8 +247,7 @@ def set_url_query_parameter(url, param_name, param_value):
     """Set or replace a query parameter, and return the modified URL."""
     if not isinstance(param_name, basestring):
         raise Exception(
-            'URL query parameter name must be a string, received %s'
-            % param_name)
+            'URL query parameter name must be a string, received {0!s}'.format(param_name))
 
     scheme, netloc, path, query_string, fragment = urlparse.urlsplit(url)
     query_params = urlparse.parse_qs(query_string)
@@ -278,8 +277,7 @@ def convert_to_hash(string, max_length):
     """Convert a string to a SHA1 hash."""
     if not isinstance(string, basestring):
         raise Exception(
-            'Expected string, received %s of type %s' %
-            (string, type(string)))
+            'Expected string, received {0!s} of type {1!s}'.format(string, type(string)))
 
     encoded_string = base64.urlsafe_b64encode(
         hashlib.sha1(string).digest())
@@ -395,12 +393,12 @@ def require_valid_name(name, name_type):
 
     if re.search('\s\s+', name):
         raise ValidationError(
-            'Adjacent whitespace in %s should be collapsed.' % name_type)
+            'Adjacent whitespace in {0!s} should be collapsed.'.format(name_type))
 
     for c in feconf.INVALID_NAME_CHARS:
         if c in name:
             raise ValidationError(
-                'Invalid character %s in %s: %s' % (c, name_type, name))
+                'Invalid character {0!s} in {1!s}: {2!s}'.format(c, name_type, name))
 
 
 def capitalize_string(s):
@@ -419,8 +417,8 @@ def get_info_card_url_for_category(category):
         feconf.CATEGORIES_TO_COLORS[category] if
         category in feconf.CATEGORIES_TO_COLORS else feconf.DEFAULT_COLOR)
     return (
-        '/images/gallery/exploration_background_%s_large.png' %
-        info_card_color)
+        '/images/gallery/exploration_background_{0!s}_large.png'.format(
+        info_card_color))
 
 
 def get_hex_color_for_category(category):

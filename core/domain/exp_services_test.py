@@ -195,10 +195,10 @@ class ExplorationSummaryQueriesUnitTests(ExplorationServicesUnitTests):
         query = ' '.join(terms)
         if categories:
             query += ' category=(' + ' OR '.join([
-                '"%s"' % category for category in categories]) + ')'
+                '"{0!s}"'.format(category) for category in categories]) + ')'
         if languages:
             query += ' language_code=(' + ' OR '.join([
-                '"%s"' % language for language in languages]) + ')'
+                '"{0!s}"'.format(language) for language in languages]) + ')'
         return query
 
     def test_get_exploration_summaries_with_no_query(self):
@@ -359,7 +359,7 @@ class ExplorationCreateAndDeleteUnitTests(ExplorationServicesUnitTests):
     def test_retrieval_of_multiple_explorations(self):
         exps = {}
         chars = 'abcde'
-        exp_ids = ['%s%s' % (self.EXP_ID, c) for c in chars]
+        exp_ids = ['{0!s}{1!s}'.format(self.EXP_ID, c) for c in chars]
         for _id in exp_ids:
             exp = self.save_new_valid_exploration(_id, self.OWNER_ID)
             exps[_id] = exp
@@ -566,7 +566,7 @@ class LoadingAndDeletionOfExplorationDemosTest(ExplorationServicesUnitTests):
             duration = datetime.datetime.utcnow() - start_time
             processing_time = duration.seconds + duration.microseconds / 1E6
             self.log_line(
-                'Loaded and validated exploration %s (%.2f seconds)' % (
+                'Loaded and validated exploration {0!s} ({1:.2f} seconds)'.format(
                 exploration.title.encode('utf-8'), processing_time))
 
         self.assertEqual(
@@ -586,17 +586,17 @@ class ZipFileExportUnitTests(ExplorationServicesUnitTests):
 """author_notes: ''
 blurb: ''
 category: A category
-init_state_name: %s
+init_state_name: {0!s}
 language_code: en
 objective: The objective
 param_changes: []
-param_specs: {}
-schema_version: %d
+param_specs: {{}}
+schema_version: {1:d}
 skin_customizations:
   panels_contents:
     bottom: []
 states:
-  %s:
+  {2!s}:
     content:
     - type: text
       value: ''
@@ -609,7 +609,7 @@ states:
         rows:
           value: 1
       default_outcome:
-        dest: %s
+        dest: {3!s}
         feedback: []
         param_changes: []
       fallbacks: []
@@ -634,10 +634,10 @@ states:
       fallbacks: []
       id: TextInput
     param_changes: []
-states_schema_version: %d
+states_schema_version: {4:d}
 tags: []
 title: A title
-""" % (
+""".format(
     feconf.DEFAULT_INIT_STATE_NAME,
     exp_domain.Exploration.CURRENT_EXPLORATION_SCHEMA_VERSION,
     feconf.DEFAULT_INIT_STATE_NAME,
@@ -648,17 +648,17 @@ title: A title
 """author_notes: ''
 blurb: ''
 category: A category
-init_state_name: %s
+init_state_name: {0!s}
 language_code: en
 objective: The objective
 param_changes: []
-param_specs: {}
-schema_version: %d
+param_specs: {{}}
+schema_version: {1:d}
 skin_customizations:
   panels_contents:
     bottom: []
 states:
-  %s:
+  {2!s}:
     content:
     - type: text
       value: ''
@@ -671,7 +671,7 @@ states:
         rows:
           value: 1
       default_outcome:
-        dest: %s
+        dest: {3!s}
         feedback: []
         param_changes: []
       fallbacks: []
@@ -696,10 +696,10 @@ states:
       fallbacks: []
       id: TextInput
     param_changes: []
-states_schema_version: %d
+states_schema_version: {4:d}
 tags: []
 title: A title
-""" % (
+""".format(
     feconf.DEFAULT_INIT_STATE_NAME,
     exp_domain.Exploration.CURRENT_EXPLORATION_SCHEMA_VERSION,
     feconf.DEFAULT_INIT_STATE_NAME,
@@ -2036,7 +2036,7 @@ class ExplorationSearchTests(ExplorationServicesUnitTests):
 
         for i in xrange(50):
             rating_services.assign_rating_to_exploration(
-                'user_id_%s' % i, self.EXP_ID, 1)
+                'user_id_{0!s}'.format(i), self.EXP_ID, 1)
 
         # The rank will be at least 0.
         self.assertEqual(exp_services._get_search_rank(self.EXP_ID), 0)
@@ -2891,8 +2891,8 @@ title: Old Title
         commit_dict_4 = {
             'committer_id': feconf.MIGRATION_BOT_USERNAME,
             'commit_message':
-                'Update exploration states from schema version 0 to %d.' %
-                feconf.CURRENT_EXPLORATION_STATES_SCHEMA_VERSION,
+                'Update exploration states from schema version 0 to {0:d}.'.format(
+                feconf.CURRENT_EXPLORATION_STATES_SCHEMA_VERSION),
             'commit_cmds': [{
                 'cmd': 'migrate_states_schema_to_latest_version',
                 'from_version': '0',

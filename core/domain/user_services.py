@@ -56,19 +56,19 @@ class UserSettings(object):
     def validate(self):
         if not isinstance(self.user_id, basestring):
             raise utils.ValidationError(
-                'Expected user_id to be a string, received %s' % self.user_id)
+                'Expected user_id to be a string, received {0!s}'.format(self.user_id))
         if not self.user_id:
             raise utils.ValidationError('No user id specified.')
 
         if not isinstance(self.email, basestring):
             raise utils.ValidationError(
-                'Expected email to be a string, received %s' % self.email)
+                'Expected email to be a string, received {0!s}'.format(self.email))
         if not self.email:
             raise utils.ValidationError('No user email specified.')
         if ('@' not in self.email or self.email.startswith('@')
                 or self.email.endswith('@')):
             raise utils.ValidationError(
-                'Invalid email address: %s' % self.email)
+                'Invalid email address: {0!s}'.format(self.email))
 
     @property
     def truncated_email(self):
@@ -77,10 +77,10 @@ class UserSettings(object):
         if len(first_part) <= 1:
             first_part = '..'
         elif len(first_part) <= 3:
-            first_part = '%s..' % first_part[0]
+            first_part = '{0!s}..'.format(first_part[0])
         else:
             first_part = first_part[:-3] + '..'
-        return '%s%s' % (first_part, last_part)
+        return '{0!s}{1!s}'.format(first_part, last_part)
 
     @property
     def is_known_user(self):
@@ -101,8 +101,7 @@ class UserSettings(object):
             raise utils.ValidationError('Empty username supplied.')
         elif len(username) > MAX_USERNAME_LENGTH:
             raise utils.ValidationError(
-                'A username can have at most %s characters.'
-                % MAX_USERNAME_LENGTH)
+                'A username can have at most {0!s} characters.'.format(MAX_USERNAME_LENGTH))
         elif not re.match(feconf.ALPHANUMERIC_REGEX, username):
             raise utils.ValidationError(
                 'Usernames can only have alphanumeric characters.')
@@ -206,7 +205,7 @@ def get_user_settings(user_id, strict=False):
     """Return the user settings for a single user."""
     user_settings = get_users_settings([user_id])[0]
     if strict and user_settings is None:
-        logging.error('Could not find user with id %s' % user_id)
+        logging.error('Could not find user with id {0!s}'.format(user_id))
         raise Exception('User not found.')
     return user_settings
 
@@ -250,7 +249,7 @@ def _create_user(user_id, email):
     """Creates a new user. Returns the user_settings object."""
     user_settings = get_user_settings(user_id, strict=False)
     if user_settings is not None:
-        raise Exception('User %s already exists.' % user_id)
+        raise Exception('User {0!s} already exists.'.format(user_id))
 
     user_settings = UserSettings(
         user_id, email,
@@ -350,7 +349,7 @@ def get_human_readable_user_ids(user_ids):
     usernames = []
     for ind, user_settings in enumerate(users_settings):
         if user_settings is None:
-            logging.error('User id %s not known in list of user_ids %s' % (
+            logging.error('User id {0!s} not known in list of user_ids {1!s}'.format(
                 user_ids[ind], user_ids))
             raise Exception('User not found.')
         elif user_settings.user_id == feconf.SYSTEM_COMMITTER_ID:
@@ -359,8 +358,8 @@ def get_human_readable_user_ids(user_ids):
             usernames.append(user_settings.username)
         else:
             usernames.append(
-                '[Awaiting user registration: %s]' %
-                user_settings.truncated_email)
+                '[Awaiting user registration: {0!s}]'.format(
+                user_settings.truncated_email))
     return usernames
 
 
@@ -420,14 +419,13 @@ class UserContributions(object):
     def validate(self):
         if not isinstance(self.user_id, basestring):
             raise utils.ValidationError(
-                'Expected user_id to be a string, received %s' % self.user_id)
+                'Expected user_id to be a string, received {0!s}'.format(self.user_id))
         if not self.user_id:
             raise utils.ValidationError('No user id specified.')
 
         if not isinstance(self.created_exploration_ids, list):
             raise utils.ValidationError(
-                'Expected created_exploration_ids to be a list, received %s' 
-            % self.created_exploration_ids)    
+                'Expected created_exploration_ids to be a list, received {0!s}'.format(self.created_exploration_ids))    
         for exploration_id in self.created_exploration_ids:
             if not isinstance(exploration_id, basestring):
                 raise utils.ValidationError(
@@ -437,8 +435,7 @@ class UserContributions(object):
 
         if not isinstance(self.edited_exploration_ids, list):
             raise utils.ValidationError(
-                'Expected edited_exploration_ids to be a list, received %s' 
-            % self.edited_exploration_ids)
+                'Expected edited_exploration_ids to be a list, received {0!s}'.format(self.edited_exploration_ids))
         for exploration_id in self.edited_exploration_ids:
             if not isinstance(exploration_id, basestring):
                 raise utils.ValidationError(
@@ -466,7 +463,7 @@ def create_user_contributions(user_id, created_exploration_ids, edited_explorati
     user_contributions = get_user_contributions(user_id, strict=False)
     if user_contributions:
         raise Exception(
-            'User contributions model for user %s already exists.' % user_id)
+            'User contributions model for user {0!s} already exists.'.format(user_id))
     else:
         user_contributions = UserContributions(
             user_id, created_exploration_ids, edited_exploration_ids)
@@ -481,7 +478,7 @@ def update_user_contributions(user_id, created_exploration_ids, edited_explorati
     user_contributions = get_user_contributions(user_id, strict=False)
     if not user_contributions:
         raise Exception(
-            'User contributions model for user %s does not exist.' % user_id)
+            'User contributions model for user {0!s} does not exist.'.format(user_id))
 
     user_contributions.created_exploration_ids = created_exploration_ids
     user_contributions.edited_exploration_ids = edited_exploration_ids

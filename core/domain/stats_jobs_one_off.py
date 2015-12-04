@@ -42,7 +42,7 @@ class StatisticsAudit(jobs.BaseMapReduceJobManager):
             if item.first_entry_count < 0:
                 yield (
                     StatisticsAudit._STATE_COUNTER_ERROR_KEY,
-                    'Less than 0: %s %d' % (item.key, item.first_entry_count))
+                    'Less than 0: {0!s} {1:d}'.format(item.key, item.first_entry_count))
             return
         # Older versions of ExplorationAnnotations didn't store exp_id
         # This is short hand for making sure we get ones updated most recently
@@ -80,8 +80,7 @@ class StatisticsAudit(jobs.BaseMapReduceJobManager):
             value = ast.literal_eval(value_str)
             if value['starts'] < 0:
                 yield (
-                    'Negative start count: exp_id:%s version:%s starts:%s' %
-                    (key, value['version'], value['starts']),)
+                    'Negative start count: exp_id:{0!s} version:{1!s} starts:{2!s}'.format(key, value['version'], value['starts']),)
 
             if value['completions'] < 0:
                 yield (
@@ -90,7 +89,7 @@ class StatisticsAudit(jobs.BaseMapReduceJobManager):
                     (key, value['version'], value['completions']),)
 
             if value['completions'] > value['starts']:
-                yield ('Completions > starts: exp_id:%s version:%s %s>%s' % (
+                yield ('Completions > starts: exp_id:{0!s} version:{1!s} {2!s}>{3!s}'.format(
                     key, value['version'], value['completions'],
                     value['starts']),)
 
@@ -106,11 +105,9 @@ class StatisticsAudit(jobs.BaseMapReduceJobManager):
                     sum_state_hit[state_name] += counts['first_entry_count']
 
         if sum_starts != all_starts:
-            yield ('Non-all != all for starts: exp_id:%s sum: %s all: %s'
-                % (key, sum_starts, all_starts),)
+            yield ('Non-all != all for starts: exp_id:{0!s} sum: {1!s} all: {2!s}'.format(key, sum_starts, all_starts),)
         if sum_completions != all_completions:
-            yield ('Non-all != all for completions: exp_id:%s sum: %s all: %s'
-                % (key, sum_completions, all_completions),)
+            yield ('Non-all != all for completions: exp_id:{0!s} sum: {1!s} all: {2!s}'.format(key, sum_completions, all_completions),)
 
         for state_name in all_state_hit:
             if (state_name not in sum_state_hit and

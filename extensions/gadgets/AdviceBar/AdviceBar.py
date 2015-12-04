@@ -88,11 +88,11 @@ class AdviceBar(base.BaseGadget):
         tip_count = len(customization_args['adviceObjects']['value'])
         if tip_count > self._MAX_TIP_COUNT:
             raise utils.ValidationError(
-                'AdviceBars are limited to %d tips, found %d.' % (
+                'AdviceBars are limited to {0:d} tips, found {1:d}.'.format(
                     self._MAX_TIP_COUNT,
                     tip_count))
         elif tip_count < self._MIN_TIP_COUNT:
             raise utils.ValidationError(
-                'AdviceBar requires at least %d tips, found %s.' % (
+                'AdviceBar requires at least {0:d} tips, found {1!s}.'.format(
                     self._MIN_TIP_COUNT,
                     tip_count))

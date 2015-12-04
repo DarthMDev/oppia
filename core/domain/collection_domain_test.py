@@ -96,8 +96,8 @@ class CollectionDomainUnitTests(test_utils.GenericTestBase):
 
         self.collection.schema_version = 100
         with self.assertRaisesRegexp(
-                utils.ValidationError, 'Expected schema version to be %s' %
-                feconf.CURRENT_COLLECTION_SCHEMA_VERSION):
+                utils.ValidationError, 'Expected schema version to be {0!s}'.format(
+                feconf.CURRENT_COLLECTION_SCHEMA_VERSION)):
             self.collection.validate()
 
     def test_nodes_validation(self):

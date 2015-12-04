@@ -40,8 +40,7 @@ class ObjectNormalizationUnitTests(test_utils.GenericTestBase):
         """
         for item in mappings:
             assert cls.normalize(item[0]) == item[1], (
-                'Expected %s when normalizing %s as a %s, got %s' %
-                (item[1], item[0], cls.__name__, cls.normalize(item[0]))
+                'Expected {0!s} when normalizing {1!s} as a {2!s}, got {3!s}'.format(item[1], item[0], cls.__name__, cls.normalize(item[0]))
             )
 
         for item in invalid_items:

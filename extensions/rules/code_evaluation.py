@@ -79,7 +79,7 @@ def normalize_code(code_str):
         if is_shortfall_line:
             num_spaces = max(num_spaces_to_desired_indent_level.keys())
 
-        normalized_code_lines.append('%s%s' % (
+        normalized_code_lines.append('{0!s}{1!s}'.format(
             FOUR_SPACES * num_spaces_to_desired_indent_level[num_spaces],
             line.lstrip()))
 

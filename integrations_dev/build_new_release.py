@@ -63,15 +63,15 @@ parsed_args = _PARSER.parse_args()
 
 if not parsed_args.name:
     raise Exception(
-        'No name specified: expected one of %s' % ALLOWED_INTEGRATION_NAMES)
+        'No name specified: expected one of {0!s}'.format(ALLOWED_INTEGRATION_NAMES))
 elif parsed_args.name not in ALLOWED_INTEGRATION_NAMES:
     raise Exception(
-        'Invalid name: expected one of %s' % ALLOWED_INTEGRATION_NAMES)
+        'Invalid name: expected one of {0!s}'.format(ALLOWED_INTEGRATION_NAMES))
 
 if not parsed_args.version_number:
     raise Exception('No version_number specified.')
 elif not VERSION_NUMBER_REGEX.match(parsed_args.version_number):
-    raise Exception('Invalid version_number: %s' % parsed_args.version_number)
+    raise Exception('Invalid version_number: {0!s}'.format(parsed_args.version_number))
 
 # Check that the current directory is correct.
 if not os.getcwd().endswith('oppia'):
@@ -85,7 +85,7 @@ DATE_STR = datetime.datetime.utcnow().strftime('%Y%m%d')
 SOURCE_DIR = os.path.join(INTEGRATIONS_DEV_ROOT, INTEGRATION_NAME)
 TARGET_DIR = os.path.join(
     INTEGRATIONS_ROOT,
-    '%s_%s_v%s' % (INTEGRATION_NAME, DATE_STR, VERSION_NUMBER))
+    '{0!s}_{1!s}_v{2!s}'.format(INTEGRATION_NAME, DATE_STR, VERSION_NUMBER))
 
 
 def _make_tarfile(output_filename, source_dir):
@@ -94,17 +94,17 @@ def _make_tarfile(output_filename, source_dir):
 
 
 print ''
-print 'Starting deployment process for %s' % SOURCE_DIR
+print 'Starting deployment process for {0!s}'.format(SOURCE_DIR)
 
 # Check that the source directory exists.
 if not os.path.exists(SOURCE_DIR):
-    raise Exception('Source directory %s not found' % SOURCE_DIR)
+    raise Exception('Source directory {0!s} not found'.format(SOURCE_DIR))
 if not os.path.exists(os.path.join(SOURCE_DIR, README_FILENAME)):
     raise Exception('Source README file not found')
 
 # Check that the target directory does not exist.
 if os.path.exists(TARGET_DIR):
-    raise Exception('Target directory %s already exists' % TARGET_DIR)
+    raise Exception('Target directory {0!s} already exists'.format(TARGET_DIR))
 
 try:
     # Copy the source to the target directory.
@@ -141,7 +141,7 @@ try:
             os.path.join(TARGET_DIR, SCRIPT_LOCATIONS[INTEGRATION_NAME]))
 
     print ''
-    print 'Done! Please check %s for the release candidate.' % TARGET_DIR
+    print 'Done! Please check {0!s} for the release candidate.'.format(TARGET_DIR)
     print ''
 except Exception:
     # Remove destination folder.

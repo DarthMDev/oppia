@@ -73,11 +73,11 @@ class Registry(object):
 
         component_tags = {}
         for component in component_list:
-            tag_name = 'oppia-noninteractive-%s' % (
-                utils.camelcase_to_hyphenated(component.id))
+            tag_name = 'oppia-noninteractive-{0!s}'.format((
+                utils.camelcase_to_hyphenated(component.id)))
 
             component_tags[tag_name] = [
-                '%s-with-value' % ca_spec.name
+                '{0!s}-with-value'.format(ca_spec.name)
                 for ca_spec in component.customization_arg_specs]
 
         return component_tags

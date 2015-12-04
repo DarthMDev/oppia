@@ -36,7 +36,7 @@ class SearchFailureError(Exception):
        platform specific errors."""
     def __init__(self, original_exception=None):
         super(SearchFailureError, self).__init__(
-            '%s: %s' % (type(original_exception), original_exception.message))
+            '{0!s}: {1!s}'.format(type(original_exception), original_exception.message))
         self.original_exception = original_exception
 
 
@@ -68,8 +68,7 @@ def add_documents_to_index(documents, index, retries=DEFAULT_NUM_RETRIES):
     """
     if not isinstance(index, basestring):
         raise ValueError(
-            'Index must be the unicode/str name of an index, got %s'
-            % type(index))
+            'Index must be the unicode/str name of an index, got {0!s}'.format(type(index)))
 
     index = gae_search.Index(index)
     gae_docs = [_dict_to_search_document(d) for d in documents]
@@ -84,7 +83,7 @@ def add_documents_to_index(documents, index, retries=DEFAULT_NUM_RETRIES):
             for res in e.results:
                 if res.code == gae_search.OperationResult.TRANSIENT_ERROR:
                     new_retries = retries - 1
-                    logging.debug('%d tries left, retrying.' % (new_retries))
+                    logging.debug('{0:d} tries left, retrying.'.format((new_retries)))
                     return add_documents_to_index(
                         documents=documents,
                         index=index.name,
@@ -99,7 +98,7 @@ def add_documents_to_index(documents, index, retries=DEFAULT_NUM_RETRIES):
 
 def _dict_to_search_document(d):
     if not isinstance(d, dict):
-        raise ValueError('document should be a dictionary, got %s' % type(d))
+        raise ValueError('document should be a dictionary, got {0!s}'.format(type(d)))
 
     doc_id = d.get('id')
 
@@ -170,18 +169,15 @@ def delete_documents_from_index(
     """
     if not isinstance(index, basestring):
         raise ValueError(
-            'Index must be the unicode/str name of an index, got %s'
-            % type(index))
+            'Index must be the unicode/str name of an index, got {0!s}'.format(type(index)))
 
     for i in xrange(len(doc_ids)):
         if not isinstance(doc_ids[i], basestring):
-            raise ValueError('all doc_ids must be string, got %s at index %d' %
-                             (type(doc_ids[i]), i))
+            raise ValueError('all doc_ids must be string, got {0!s} at index {1:d}'.format(type(doc_ids[i]), i))
 
     index = gae_search.Index(index)
     try:
-        logging.debug('Attempting to delete documents from index %s, ids: %s' %
-                      (index.name, ', '.join(doc_ids)))
+        logging.debug('Attempting to delete documents from index {0!s}, ids: {1!s}'.format(index.name, ', '.join(doc_ids)))
         index.delete(doc_ids, deadline=5)
     except gae_search.DeleteError as e:
         logging.exception('Something went wrong during deletion.')
@@ -189,7 +185,7 @@ def delete_documents_from_index(
             for res in e.results:
                 if res.code == gae_search.OperationResult.TRANSIENT_ERROR:
                     new_retries = retries - 1
-                    logging.debug('%d tries left, retrying.' % (new_retries))
+                    logging.debug('{0:d} tries left, retrying.'.format((new_retries)))
                     delete_documents_from_index(
                         doc_ids=doc_ids,
                         index=index.name,
@@ -270,18 +266,18 @@ def search(query_string, index, cursor=None, limit=feconf.GALLERY_PAGE_SIZE,
     except gae_search.QueryError as e:
         # This can happen for query strings like "NOT" or a string that
         # contains backslashes.
-        logging.exception('Could not parse query string %s' % query_string)
+        logging.exception('Could not parse query string {0!s}'.format(query_string))
         return [], None
 
     index = gae_search.Index(index)
 
     try:
-        logging.debug('attempting a search with query %s' % query)
+        logging.debug('attempting a search with query {0!s}'.format(query))
         results = index.search(query)
     except gae_search.TransientError as e:
         logging.exception('something went wrong while searching.')
         if retries > 1:
-            logging.debug('%d attempts left, retrying...' % (retries - 1))
+            logging.debug('{0:d} attempts left, retrying...'.format((retries - 1)))
             return search(
                 query_string,
                 index.name,

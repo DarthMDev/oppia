@@ -1086,11 +1086,11 @@ class SchemaMigrationMethodsUnitTests(test_utils.GenericTestBase):
         for i in range(CURRENT_STATES_SCHEMA_VERSION):
             self.assertTrue(hasattr(
                 exp_domain.Exploration,
-                '_convert_states_v%s_dict_to_v%s_dict' % (i, i + 1)))
+                '_convert_states_v{0!s}_dict_to_v{1!s}_dict'.format(i, i + 1)))
 
         self.assertFalse(hasattr(
             exp_domain.Exploration,
-            '_convert_states_v%s_dict_to_v%s_dict' % (
+            '_convert_states_v{0!s}_dict_to_v{1!s}_dict'.format(
                 CURRENT_STATES_SCHEMA_VERSION,
                 CURRENT_STATES_SCHEMA_VERSION + 1)))
 
@@ -1102,11 +1102,11 @@ class SchemaMigrationMethodsUnitTests(test_utils.GenericTestBase):
         for i in range(1, CURRENT_EXPLORATION_SCHEMA_VERSION):
             self.assertTrue(hasattr(
                 exp_domain.Exploration,
-                '_convert_v%s_dict_to_v%s_dict' % (i, i + 1)))
+                '_convert_v{0!s}_dict_to_v{1!s}_dict'.format(i, i + 1)))
 
         self.assertFalse(hasattr(
             exp_domain.Exploration,
-            '_convert_v%s_dict_to_v%s_dict' % (
+            '_convert_v{0!s}_dict_to_v{1!s}_dict'.format(
                 CURRENT_EXPLORATION_SCHEMA_VERSION,
                 CURRENT_EXPLORATION_SCHEMA_VERSION + 1)))
 

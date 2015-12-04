@@ -123,7 +123,7 @@ class ExplorationModel(base_models.VersionedModel):
         # sure summary dicts get updated correctly when explorations
         # are changed)
         ExplorationCommitLogEntryModel(
-            id=('exploration-%s-%s' % (self.id, self.version)),
+            id=('exploration-{0!s}-{1!s}'.format(self.id, self.version)),
             user_id=committer_id,
             username=committer_username,
             exploration_id=self.id,
@@ -214,7 +214,7 @@ class ExplorationRightsModel(base_models.VersionedModel):
             # sure summary dicts get updated correctly when explorations
             # are changed)
             ExplorationCommitLogEntryModel(
-                id=('rights-%s-%s' % (self.id, self.version)),
+                id=('rights-{0!s}-{1!s}'.format(self.id, self.version)),
                 user_id=committer_id,
                 username=committer_username,
                 exploration_id=self.id,

@@ -58,7 +58,7 @@ def empty_environ():
     os.environ['USER_EMAIL'] = ''
     os.environ['USER_ID'] = ''
     os.environ['USER_IS_ADMIN'] = '0'
-    os.environ['DEFAULT_VERSION_HOSTNAME'] = '%s:%s' % (
+    os.environ['DEFAULT_VERSION_HOSTNAME'] = '{0!s}:{1!s}'.format(
         os.environ['HTTP_HOST'], os.environ['SERVER_PORT'])
 
 
@@ -113,7 +113,7 @@ class TestBase(unittest.TestCase):
     }
 
     def _get_unicode_test_string(self, suffix):
-        return '%s%s' % (self.UNICODE_TEST_STRING, suffix)
+        return '{0!s}{1!s}'.format(self.UNICODE_TEST_STRING, suffix)
 
     def setUp(self):
         raise NotImplementedError
@@ -138,7 +138,7 @@ class TestBase(unittest.TestCase):
         """Print the line with a prefix that can be identified by the
         script that calls the test.
         """
-        print '%s%s' % (LOG_LINE_PREFIX, line)
+        print '{0!s}{1!s}'.format(LOG_LINE_PREFIX, line)
 
     def _delete_all_models(self):
         raise NotImplementedError
@@ -372,7 +372,7 @@ class TestBase(unittest.TestCase):
         )
         rights_manager.create_new_exploration_rights(exp_id, user_id)
 
-        commit_message = 'New exploration created with title \'%s\'.' % title
+        commit_message = 'New exploration created with title \'{0!s}\'.'.format(title)
         exp_model.commit(user_id, commit_message, [{
             'cmd': 'create_new',
             'title': 'title',
@@ -419,7 +419,7 @@ class TestBase(unittest.TestCase):
             try:
                 obj_type = exp_param_specs[pc.name].obj_type
             except:
-                raise Exception('Parameter %s not found' % pc.name)
+                raise Exception('Parameter {0!s} not found'.format(pc.name))
             new_param_dict[pc.name] = pc.get_normalized_value(
                 obj_type, new_param_dict)
         return new_param_dict
@@ -443,7 +443,7 @@ class TestBase(unittest.TestCase):
 
         # First, the answer must be classified.
         classify_result = self.post_json(
-            '/explorehandler/classify/%s' % exploration_id, {
+            '/explorehandler/classify/{0!s}'.format(exploration_id), {
                 'old_state': exploration.states[state_name].to_dict(),
                 'params': params,
                 'answer': answer
@@ -452,7 +452,7 @@ class TestBase(unittest.TestCase):
 
         # Next, ensure the submission is recorded.
         self.post_json(
-            '/explorehandler/answer_submitted_event/%s' % exploration_id, {
+            '/explorehandler/answer_submitted_event/{0!s}'.format(exploration_id), {
                 'answer': answer,
                 'params': params,
                 'version': exploration.version,
@@ -598,7 +598,7 @@ class AppEngineTestBase(TestBase):
                         headers=headers)
                     if response.status_code != 200:
                         raise RuntimeError(
-                            'MapReduce task to URL %s failed' % task.url)
+                            'MapReduce task to URL {0!s} failed'.format(task.url))
 
             tasks = self.taskqueue_stub.get_filtered_tasks(
                 queue_names=queue_names)

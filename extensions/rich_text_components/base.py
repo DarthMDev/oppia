@@ -75,10 +75,10 @@ class BaseRichTextComponent(object):
         consists of a single directive/template pair.
         """
         js_directives = utils.get_file_contents(os.path.join(
-            feconf.RTE_EXTENSIONS_DIR, self.id, '%s.js' % self.id))
+            feconf.RTE_EXTENSIONS_DIR, self.id, '{0!s}.js'.format(self.id)))
         html_templates = utils.get_file_contents(os.path.join(
-            feconf.RTE_EXTENSIONS_DIR, self.id, '%s.html' % self.id))
-        return '<script>%s</script>\n%s' % (js_directives, html_templates)
+            feconf.RTE_EXTENSIONS_DIR, self.id, '{0!s}.html'.format(self.id)))
+        return '<script>{0!s}</script>\n{1!s}'.format(js_directives, html_templates)
 
     def to_dict(self):
         """Gets a dict representing this component. Only the default values for

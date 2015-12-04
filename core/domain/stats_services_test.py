@@ -130,10 +130,10 @@ class StateImprovementsUnitTests(test_utils.GenericTestBase):
 
         for ind in range(5):
             event_services.StartExplorationEventHandler.record(
-                'eid', 1, exp.init_state_name, 'session_id_%s' % ind,
+                'eid', 1, exp.init_state_name, 'session_id_{0!s}'.format(ind),
                 {}, feconf.PLAY_TYPE_NORMAL)
             event_services.StateHitEventHandler.record(
-                'eid', 1, exp.init_state_name, 'session_id_%s' % ind,
+                'eid', 1, exp.init_state_name, 'session_id_{0!s}'.format(ind),
                 {}, feconf.PLAY_TYPE_NORMAL)
         event_services.AnswerSubmissionEventHandler.record(
             'eid', 1, exp.init_state_name, self.DEFAULT_RULESPEC_STR, '1')
@@ -206,13 +206,13 @@ class StateImprovementsUnitTests(test_utils.GenericTestBase):
         # Fail to answer twice.
         for i in range(2):
             event_services.StartExplorationEventHandler.record(
-                'eid', 1, state_name, 'session_id %d' % i, {},
+                'eid', 1, state_name, 'session_id {0:d}'.format(i), {},
                 feconf.PLAY_TYPE_NORMAL)
             event_services.StateHitEventHandler.record(
-                'eid', 1, state_name, 'session_id %d' % i,
+                'eid', 1, state_name, 'session_id {0:d}'.format(i),
                 {}, feconf.PLAY_TYPE_NORMAL)
             event_services.MaybeLeaveExplorationEventHandler.record(
-                'eid', 1, state_name, 'session_id %d' % i, 10.0, {},
+                'eid', 1, state_name, 'session_id {0:d}'.format(i), 10.0, {},
                 feconf.PLAY_TYPE_NORMAL)
 
         # Hit the default rule once.

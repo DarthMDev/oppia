@@ -62,9 +62,9 @@ def download_files(source_url_root, target_dir, source_filenames):
     common.ensure_directory_exists(target_dir)
     for filename in source_filenames:
         if not os.path.exists(os.path.join(target_dir, filename)):
-            print 'Downloading file %s to %s' % (filename, target_dir)
+            print 'Downloading file {0!s} to {1!s}'.format(filename, target_dir)
             urllib.urlretrieve(
-                '%s/%s' % (source_url_root, filename),
+                '{0!s}/{1!s}'.format(source_url_root, filename),
                 os.path.join(target_dir, filename))
 
 
@@ -86,7 +86,7 @@ def download_and_unzip_files(
         in the local directory.
     """
     if not os.path.exists(os.path.join(target_parent_dir, target_root_name)):
-        print 'Downloading and unzipping file %s to %s' % (
+        print 'Downloading and unzipping file {0!s} to {1!s}'.format(
             zip_root_name, target_parent_dir)
         common.ensure_directory_exists(target_parent_dir)
 
@@ -133,7 +133,7 @@ def download_and_untar_files(
         in the local directory.
     """
     if not os.path.exists(os.path.join(target_parent_dir, target_root_name)):
-        print 'Downloading and untarring file %s to %s' % (
+        print 'Downloading and untarring file {0!s} to {1!s}'.format(
             tar_root_name, target_parent_dir)
         common.ensure_directory_exists(target_parent_dir)
 
@@ -220,9 +220,9 @@ def download_manifest_files(source_url):
 download_manifest_files(MANIFEST_FILE_PATH)
 
 MATHJAX_REV = '2.4-latest'
-MATHJAX_ROOT_NAME = 'MathJax-%s' % MATHJAX_REV
+MATHJAX_ROOT_NAME = 'MathJax-{0!s}'.format(MATHJAX_REV)
 MATHJAX_ZIP_URL = (
-    'https://github.com/mathjax/MathJax/archive/v%s.zip' % MATHJAX_REV)
+    'https://github.com/mathjax/MathJax/archive/v{0!s}.zip'.format(MATHJAX_REV))
 MATHJAX_ZIP_ROOT_NAME = MATHJAX_ROOT_NAME
 MATHJAX_TARGET_ROOT_NAME = MATHJAX_ROOT_NAME
 
@@ -236,5 +236,5 @@ MATHJAX_SUBDIRS_TO_REMOVE = [
 for subdir in MATHJAX_SUBDIRS_TO_REMOVE:
     full_dir = os.path.join(MATHJAX_DIR_PREFIX, subdir)
     if os.path.isdir(full_dir):
-        print 'Removing unnecessary MathJax directory \'%s\'' % subdir
+        print 'Removing unnecessary MathJax directory \'{0!s}\''.format(subdir)
         shutil.rmtree(full_dir)

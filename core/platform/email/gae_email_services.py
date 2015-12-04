@@ -36,11 +36,11 @@ def send_mail_to_admin(subject, body):
     if feconf.CAN_SEND_EMAILS_TO_ADMIN:
         if not mail.is_email_valid(feconf.ADMIN_EMAIL_ADDRESS):
             raise Exception(
-                'Malformed email address: %s' %
-                feconf.ADMIN_EMAIL_ADDRESS)
+                'Malformed email address: {0!s}'.format(
+                feconf.ADMIN_EMAIL_ADDRESS))
 
         app_id = app_identity.get_application_id()
-        body = '(Sent from %s)\n\n%s' % (app_id, body)
+        body = '(Sent from {0!s})\n\n{1!s}'.format(app_id, body)
 
         mail.send_mail(
             feconf.SYSTEM_EMAIL_ADDRESS, feconf.ADMIN_EMAIL_ADDRESS, subject,
@@ -76,10 +76,10 @@ def send_mail(
 
     if not mail.is_email_valid(sender_email):
         raise ValueError(
-            'Malformed sender email address: %s' % sender_email)
+            'Malformed sender email address: {0!s}'.format(sender_email))
     if not mail.is_email_valid(recipient_email):
         raise ValueError(
-            'Malformed recipient email address: %s' % recipient_email)
+            'Malformed recipient email address: {0!s}'.format(recipient_email))
 
     mail.send_mail(
         sender_email, recipient_email, subject, plaintext_body, html=html_body)

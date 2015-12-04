@@ -87,7 +87,7 @@ class DependencyControllerTests(test_utils.GenericTestBase):
         self.assertNotIn('skulpt', all_dependency_ids)
 
         # Thus, Skulpt is not loaded in the exploration reader.
-        response = self.testapp.get('/explore/%s' % EXP_ID)
+        response = self.testapp.get('/explore/{0!s}'.format(EXP_ID))
         self.assertEqual(response.status_int, 200)
         response.mustcontain(no=['skulpt'])
 
@@ -105,6 +105,6 @@ class DependencyControllerTests(test_utils.GenericTestBase):
         self.assertIn('skulpt', all_dependency_ids)
 
         # Thus, Skulpt is loaded in the exploration reader.
-        response = self.testapp.get('/explore/%s' % EXP_ID)
+        response = self.testapp.get('/explore/{0!s}'.format(EXP_ID))
         self.assertEqual(response.status_int, 200)
         response.mustcontain('skulpt')

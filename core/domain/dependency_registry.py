@@ -35,7 +35,7 @@ class Registry(object):
         client webpage.
         """
         return utils.get_file_contents(os.path.join(
-            feconf.DEPENDENCIES_TEMPLATES_DIR, '%s.html' % dependency_id))
+            feconf.DEPENDENCIES_TEMPLATES_DIR, '{0!s}.html'.format(dependency_id)))
 
     @classmethod
     def get_angular_modules(cls, dependency_id):

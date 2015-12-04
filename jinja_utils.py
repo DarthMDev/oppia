@@ -73,7 +73,7 @@ def get_jinja_env(dir_path):
         else:
             # Wrap the file in an immediately-invoked function expression
             # (IIFE) to prevent pollution of the global scope.
-            return jinja2.Markup('(function() {%s})();' % raw_file_contents)
+            return jinja2.Markup('(function() {{{0!s}}})();'.format(raw_file_contents))
 
     def include_skins_js_file(name):
         """Include a raw JS file from extensions/skins in the template."""
@@ -103,7 +103,7 @@ def parse_string(string, params, autoescape=True):
     try:
         parsed_string = env.parse(string)
     except Exception:
-        raise Exception('Unable to parse string with Jinja: %s' % string)
+        raise Exception('Unable to parse string with Jinja: {0!s}'.format(string))
 
     variables = meta.find_undeclared_variables(parsed_string)
     if any([var not in params for var in variables]):
@@ -113,8 +113,7 @@ def parse_string(string, params, autoescape=True):
         return env.from_string(string).render(params)
     except Exception:
         logging.error(
-            'jinja_utils.parse_string() failed with args: %s, %s, %s' %
-            (string, params, autoescape))
+            'jinja_utils.parse_string() failed with args: {0!s}, {1!s}, {2!s}'.format(string, params, autoescape))
         return env.from_string('[CONTENT PARSING ERROR]').render({})
 
 

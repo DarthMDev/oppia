@@ -92,7 +92,7 @@ def main():
 
     for directory in DIRS_TO_ADD_TO_SYS_PATH:
         if not os.path.exists(os.path.dirname(directory)):
-            raise Exception('Directory %s does not exist.' % directory)
+            raise Exception('Directory {0!s} does not exist.'.format(directory))
         sys.path.insert(0, directory)
 
     import dev_appserver
@@ -109,7 +109,7 @@ def main():
         tests_run += result.testsRun
         if result.errors or result.failures:
             raise Exception(
-                'Test suite failed: %s tests run, %s errors, %s failures.' % (
+                'Test suite failed: {0!s} tests run, {1!s} errors, {2!s} failures.'.format(
                     result.testsRun, len(result.errors), len(result.failures)))
 
     if tests_run == 0:

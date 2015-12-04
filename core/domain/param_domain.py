@@ -108,8 +108,7 @@ class ParamChange(object):
     def validate(self):
         if not isinstance(self.name, basestring):
             raise utils.ValidationError(
-                'Expected param_change name to be a string, received %s'
-                % self.name)
+                'Expected param_change name to be a string, received {0!s}'.format(self.name))
         if not re.match(feconf.ALPHANUMERIC_REGEX, self.name):
             raise utils.ValidationError(
                 'Only parameter names with characters in [a-zA-Z0-9] are '
@@ -119,7 +118,7 @@ class ParamChange(object):
             self.generator
         except KeyError:
             raise utils.ValidationError(
-                'Invalid generator id %s' % self._generator_id)
+                'Invalid generator id {0!s}'.format(self._generator_id))
         except Exception:
             raise utils.ValidationError(
                 'Generator %s is not a valid generator for exploration '
@@ -128,10 +127,8 @@ class ParamChange(object):
 
         if not isinstance(self.customization_args, dict):
             raise utils.ValidationError(
-                'Expected a dict of customization_args, received %s'
-                % self.customization_args)
+                'Expected a dict of customization_args, received {0!s}'.format(self.customization_args))
         for arg_name in self.customization_args:
             if not isinstance(arg_name, basestring):
                 raise Exception(
-                    'Invalid parameter change customization_arg name: %s'
-                    % arg_name)
+                    'Invalid parameter change customization_arg name: {0!s}'.format(arg_name))

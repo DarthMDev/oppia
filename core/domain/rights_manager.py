@@ -104,16 +104,16 @@ class ActivityRights(object):
         editor_viewer = set(self.editor_ids).intersection(set(self.viewer_ids))
         if owner_editor:
             raise utils.ValidationError(
-                'A user cannot be both an owner and an editor: %s' %
-                owner_editor)
+                'A user cannot be both an owner and an editor: {0!s}'.format(
+                owner_editor))
         if owner_viewer:
             raise utils.ValidationError(
-                'A user cannot be both an owner and a viewer: %s' %
-                owner_viewer)
+                'A user cannot be both an owner and a viewer: {0!s}'.format(
+                owner_viewer))
         if editor_viewer:
             raise utils.ValidationError(
-                'A user cannot be both an owner and an editor: %s' %
-                editor_viewer)
+                'A user cannot be both an owner and an editor: {0!s}'.format(
+                editor_viewer))
 
     def to_dict(self):
         """Returns a dict suitable for use by the frontend."""
@@ -315,8 +315,8 @@ def _get_activity_rights(activity_type, activity_id):
         return get_collection_rights(activity_id, strict=False)
     else:
         raise Exception(
-            'Cannot get activity rights for unknown activity type: %s' % (
-                activity_type))
+            'Cannot get activity rights for unknown activity type: {0!s}'.format((
+                activity_type)))
 
 
 class Actor(object):
@@ -523,7 +523,7 @@ def _assign_role(
 
     if new_role == ROLE_OWNER:
         if Actor(assignee_id)._is_owner(activity_rights):
-            raise Exception('This user already owns this %s.' % activity_type)
+            raise Exception('This user already owns this {0!s}.'.format(activity_type))
 
         activity_rights.owner_ids.append(assignee_id)
 
@@ -537,11 +537,11 @@ def _assign_role(
     elif new_role == ROLE_EDITOR:
         if Actor(assignee_id)._has_editing_rights(activity_rights):
             raise Exception(
-                'This user already can edit this %s.'  % activity_type)
+                'This user already can edit this {0!s}.'.format(activity_type))
 
         if activity_rights.community_owned:
             raise Exception(
-                'Community-owned %ss can be edited by anyone.' % activity_type)
+                'Community-owned {0!s}s can be edited by anyone.'.format(activity_type))
 
         activity_rights.editor_ids.append(assignee_id)
 
@@ -552,18 +552,18 @@ def _assign_role(
     elif new_role == ROLE_VIEWER:
         if Actor(assignee_id)._has_viewing_rights(activity_rights):
             raise Exception(
-                'This user already can view this %s.' % activity_type)
+                'This user already can view this {0!s}.'.format(activity_type))
 
         if activity_rights.status != ACTIVITY_STATUS_PRIVATE:
             raise Exception(
-                'Public %ss can be viewed by anyone.' % activity_type)
+                'Public {0!s}s can be viewed by anyone.'.format(activity_type))
 
         activity_rights.viewer_ids.append(assignee_id)
 
     else:
-        raise Exception('Invalid role: %s' % new_role)
+        raise Exception('Invalid role: {0!s}'.format(new_role))
 
-    commit_message = 'Changed role of %s from %s to %s' % (
+    commit_message = 'Changed role of {0!s} from {1!s} to {2!s}'.format(
         assignee_username, old_role, new_role)
     commit_cmds = [{
         'cmd': CMD_CHANGE_ROLE,
@@ -584,7 +584,7 @@ def _release_ownership_of_activity(committer_id, activity_id, activity_type):
             'User %s tried to release ownership of %s %s but was '
             'refused permission.' % (committer_id, activity_type, activity_id))
         raise Exception(
-            'The ownership of this %s cannot be released.' % activity_type)
+            'The ownership of this {0!s} cannot be released.'.format(activity_type))
 
     activity_rights = _get_activity_rights(activity_type, activity_id)
     activity_rights.community_owned = True
@@ -597,7 +597,7 @@ def _release_ownership_of_activity(committer_id, activity_id, activity_type):
 
     _save_activity_rights(
         committer_id, activity_rights, activity_type,
-        '%s ownership released to the community.' % activity_type, commit_cmds)
+        '{0!s} ownership released to the community.'.format(activity_type), commit_cmds)
     _update_activity_summary(activity_type, activity_rights)
 
 
@@ -647,11 +647,11 @@ def _publish_activity(committer_id, activity_id, activity_type):
         logging.error(
             'User %s tried to publish %s %s but was refused '
             'permission.' % (committer_id, activity_type, activity_id))
-        raise Exception('This %s cannot be published.' % activity_type)
+        raise Exception('This {0!s} cannot be published.'.format(activity_type))
 
     _change_activity_status(
         committer_id, activity_id, activity_type, ACTIVITY_STATUS_PUBLIC,
-        '%s published.' % activity_type)
+        '{0!s} published.'.format(activity_type))
 
 
 def _unpublish_activity(committer_id, activity_id, activity_type):
@@ -659,11 +659,11 @@ def _unpublish_activity(committer_id, activity_id, activity_type):
         logging.error(
             'User %s tried to unpublish %s %s but was refused '
             'permission.' % (committer_id, activity_type, activity_id))
-        raise Exception('This %s cannot be unpublished.' % activity_type)
+        raise Exception('This {0!s} cannot be unpublished.'.format(activity_type))
 
     _change_activity_status(
         committer_id, activity_id, activity_type, ACTIVITY_STATUS_PRIVATE,
-        '%s unpublished.' % activity_type)
+        '{0!s} unpublished.'.format(activity_type))
 
 
 def _publicize_activity(committer_id, activity_id, activity_type):
@@ -671,12 +671,12 @@ def _publicize_activity(committer_id, activity_id, activity_type):
         logging.error(
             'User %s tried to publicize %s %s but was refused '
             'permission.' % (committer_id, activity_type, activity_id))
-        raise Exception('This %s cannot be marked as "featured".' % (
-            activity_type))
+        raise Exception('This {0!s} cannot be marked as "featured".'.format((
+            activity_type)))
 
     _change_activity_status(
         committer_id, activity_id, activity_type, ACTIVITY_STATUS_PUBLICIZED,
-        '%s publicized.' % activity_type)
+        '{0!s} publicized.'.format(activity_type))
 
 
 def _unpublicize_activity(committer_id, activity_id, activity_type):

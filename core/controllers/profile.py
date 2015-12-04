@@ -166,7 +166,7 @@ class PreferencesHandler(base.BaseHandler):
             user_services.update_email_preferences(self.user_id, data)
         else:
             raise self.InvalidInputException(
-                'Invalid update type: %s' % update_type)
+                'Invalid update type: {0!s}'.format(update_type))
 
         self.render_json({})
 

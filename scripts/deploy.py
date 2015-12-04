@@ -67,7 +67,7 @@ else:
 
 CURRENT_DATETIME = datetime.datetime.utcnow()
 
-RELEASE_DIR_NAME = 'deploy-%s-%s' % (
+RELEASE_DIR_NAME = 'deploy-{0!s}-{1!s}'.format(
     '-'.join('-'.join(APP_NAME.split('.')).split(':')),
     CURRENT_DATETIME.strftime('%Y%m%d-%H%M%S'))
 RELEASE_DIR_PATH = os.path.join(os.getcwd(), '..', RELEASE_DIR_NAME)
@@ -105,7 +105,7 @@ def preprocess_release():
 
     if not os.path.exists(DEPLOY_DATA_PATH):
         raise Exception(
-            'Could not find deploy_data directory at %s' % DEPLOY_DATA_PATH)
+            'Could not find deploy_data directory at {0!s}'.format(DEPLOY_DATA_PATH))
 
     for filename in SPLASH_PAGE_FILES:
         src = os.path.join(DEPLOY_DATA_PATH, 'images', filename)
@@ -164,9 +164,9 @@ shutil.copytree(
 with common.CD(RELEASE_DIR_PATH):
     if not os.getcwd().endswith(RELEASE_DIR_NAME):
         raise Exception(
-            'Invalid directory accessed during deployment: %s' % os.getcwd())
+            'Invalid directory accessed during deployment: {0!s}'.format(os.getcwd()))
 
-    print 'Changing directory to %s' % os.getcwd()
+    print 'Changing directory to {0!s}'.format(os.getcwd())
 
     print 'Preprocessing release...'
     preprocess_release()
@@ -193,7 +193,7 @@ with common.CD(RELEASE_DIR_PATH):
     # Writing log entry.
     common.ensure_directory_exists(os.path.dirname(LOG_FILE_PATH))
     with open(LOG_FILE_PATH, 'a') as log_file:
-        log_file.write('Successfully deployed to %s at %s (version %s)\n' % (
+        log_file.write('Successfully deployed to {0!s} at {1!s} (version {2!s})\n'.format(
             APP_NAME, CURRENT_DATETIME.strftime('%Y-%m-%d %H:%M:%S'),
             CURRENT_GIT_VERSION))
 

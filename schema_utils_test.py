@@ -198,9 +198,9 @@ def _validate_dict_keys(dict_to_check, required_keys, optional_keys):
       AssertionError: if the validation fails.
     """
     assert set(required_keys) <= set(dict_to_check.keys()), (
-        'Missing keys: %s' % dict_to_check)
+        'Missing keys: {0!s}'.format(dict_to_check))
     assert set(dict_to_check.keys()) <= set(required_keys + optional_keys), (
-        'Extra keys: %s' % dict_to_check)
+        'Extra keys: {0!s}'.format(dict_to_check))
 
 
 def validate_schema(schema):

@@ -56,9 +56,9 @@ class BaseSkin(object):
     def get_html(cls):
         if cls.entry_point_path is None:
             raise Exception(
-                'No entry-point specified for skin %s.' % cls.skin_id)
+                'No entry-point specified for skin {0!s}.'.format(cls.skin_id))
         return jinja2.Markup(jinja_utils.get_jinja_env(
-            feconf.SKINS_TEMPLATES_DIR).get_template('%s/%s' % (
+            feconf.SKINS_TEMPLATES_DIR).get_template('{0!s}/{1!s}'.format(
                 cls.skin_id, cls.entry_point_path)).render())
 
     @classmethod
@@ -68,16 +68,16 @@ class BaseSkin(object):
         """
         if cls.js_path is None:
             raise Exception(
-                'No JS path specified for skin %s.' % cls.skin_id)
-        return '%s/%s' % (cls.skin_id, cls.js_path)
+                'No JS path specified for skin {0!s}.'.format(cls.skin_id))
+        return '{0!s}/{1!s}'.format(cls.skin_id, cls.js_path)
 
     @classmethod
     def get_tag(cls):
         """Returns a tag used to load the skin template."""
         if cls.tag_name is None:
             raise Exception(
-                'No tag name specified for skin %s.' % cls.skin_id)
-        return '<%s></%s>' % (cls.tag_name, cls.tag_name)
+                'No tag name specified for skin {0!s}.'.format(cls.skin_id))
+        return '<{0!s}></{1!s}>'.format(cls.tag_name, cls.tag_name)
 
     @classmethod
     def validate_panel(cls, panel, gadget_list):
@@ -210,20 +210,20 @@ class GadgetPanelSpec(object):
                     gadget.height for gadget in gadget_instances)
             else:
                 raise utils.ValidationError(
-                    "Unrecognized axis for '%s' panel. Valid options are: %s" % (
+                    "Unrecognized axis for '{0!s}' panel. Valid options are: {1!s}".format(
                         self._name,
                         str(self._valid_axes)))
 
             # Validate fit for each dimension.
             if self._height < total_height:
                 raise utils.ValidationError(
-                    "Size exceeded: %s panel height of %d exceeds limit of %d" % (
+                    "Size exceeded: {0!s} panel height of {1:d} exceeds limit of {2:d}".format(
                         self._name,
                         total_height,
                         self._height))
             elif self._width < total_width:
                 raise utils.ValidationError(
-                    "Size exceeded: %s panel width of %d exceeds limit of %d" % (
+                    "Size exceeded: {0!s} panel width of {1:d} exceeds limit of {2:d}".format(
                         self._name,
                         total_width,
                         self._width))

@@ -59,7 +59,7 @@ else:
 
 CURRENT_DATETIME = datetime.datetime.utcnow()
 
-RELEASE_DIR_NAME = 'deploy-EXPERIMENT-%s-%s' % (
+RELEASE_DIR_NAME = 'deploy-EXPERIMENT-{0!s}-{1!s}'.format(
     '-'.join('-'.join(APP_NAME.split('.')).split(':')),
     CURRENT_DATETIME.strftime('%Y%m%d-%H%M%S'))
 RELEASE_DIR_PATH = os.path.join(os.getcwd(), '..', RELEASE_DIR_NAME)
@@ -117,9 +117,9 @@ shutil.copytree(
 with common.CD(RELEASE_DIR_PATH):
     if not os.getcwd().endswith(RELEASE_DIR_NAME):
         raise Exception(
-            'Invalid directory accessed during deployment: %s' % os.getcwd())
+            'Invalid directory accessed during deployment: {0!s}'.format(os.getcwd()))
 
-    print 'Changing directory to %s' % os.getcwd()
+    print 'Changing directory to {0!s}'.format(os.getcwd())
 
     print 'Preprocessing release...'
     preprocess_release()

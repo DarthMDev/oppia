@@ -185,14 +185,14 @@ class InteractionUnitTests(test_utils.GenericTestBase):
 
             try:
                 self.assertTrue(os.path.isfile(os.path.join(
-                    interaction_dir, '%sSpec.js' % interaction_id)))
+                    interaction_dir, '{0!s}Spec.js'.format(interaction_id))))
                 optional_dirs_and_files_count += 1
             except Exception:
                 pass
 
             try:
                 self.assertTrue(os.path.isfile(os.path.join(
-                    interaction_dir, '%sRulesServiceSpec.js' % interaction_id)))
+                    interaction_dir, '{0!s}RulesServiceSpec.js'.format(interaction_id))))
                 optional_dirs_and_files_count += 1
             except Exception:
                 pass
@@ -209,10 +209,10 @@ class InteractionUnitTests(test_utils.GenericTestBase):
                 dir_contents
             )
 
-            py_file = os.path.join(interaction_dir, '%s.py' % interaction_id)
+            py_file = os.path.join(interaction_dir, '{0!s}.py'.format(interaction_id))
             html_file = os.path.join(
-                interaction_dir, '%s.html' % interaction_id)
-            js_file = os.path.join(interaction_dir, '%s.js' % interaction_id)
+                interaction_dir, '{0!s}.html'.format(interaction_id))
+            js_file = os.path.join(interaction_dir, '{0!s}.js'.format(interaction_id))
             validator_js_file = os.path.join(interaction_dir, 'validator.js')
 
             self.assertTrue(os.path.isfile(py_file))
@@ -223,7 +223,7 @@ class InteractionUnitTests(test_utils.GenericTestBase):
             static_dir = os.path.join(interaction_dir, 'static')
             self.assertTrue(os.path.isdir(static_dir))
             png_file = os.path.join(
-                interaction_dir, 'static', '%s.png' % interaction_id)
+                interaction_dir, 'static', '{0!s}.png'.format(interaction_id))
 
             self.assertTrue(os.path.isfile(png_file))
             with open(png_file, 'rb') as f:
@@ -238,20 +238,20 @@ class InteractionUnitTests(test_utils.GenericTestBase):
                 validator_js_file)
 
             self.assertIn(
-                'oppiaInteractive%s' % interaction_id, js_file_content)
-            self.assertIn('oppiaResponse%s' % interaction_id, js_file_content)
+                'oppiaInteractive{0!s}'.format(interaction_id), js_file_content)
+            self.assertIn('oppiaResponse{0!s}'.format(interaction_id), js_file_content)
             self.assertIn(
-                '<script type="text/ng-template" id="interaction/%s"' %
-                    interaction_id,
+                '<script type="text/ng-template" id="interaction/{0!s}"'.format(
+                    interaction_id),
                 html_file_content)
             self.assertIn(
-                '<script type="text/ng-template" id="response/%s"' %
-                    interaction_id,
+                '<script type="text/ng-template" id="response/{0!s}"'.format(
+                    interaction_id),
                 html_file_content)
             self.assertNotIn('<script>', js_file_content)
             self.assertNotIn('</script>', js_file_content)
             self.assertIn(
-                'oppiaInteractive%sValidator' % interaction_id,
+                'oppiaInteractive{0!s}Validator'.format(interaction_id),
                 validator_js_file_content)
             self.assertNotIn('<script>', validator_js_file_content)
             self.assertNotIn('</script>', validator_js_file_content)

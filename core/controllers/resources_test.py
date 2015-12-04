@@ -50,7 +50,7 @@ class ImageHandlerTest(test_utils.GenericTestBase):
                   mode='rb') as f:
             raw_image = f.read()
         response_dict = self.post_json(
-            '%s/0' % self.IMAGE_UPLOAD_URL_PREFIX,
+            '{0!s}/0'.format(self.IMAGE_UPLOAD_URL_PREFIX),
             {'filename': 'test.png'},
             csrf_token=csrf_token,
             upload_files=(('image', 'unused_filename', raw_image),)
@@ -60,7 +60,7 @@ class ImageHandlerTest(test_utils.GenericTestBase):
         self.logout()
 
         response = self.testapp.get(
-            str('%s/0/%s' % (self.IMAGE_VIEW_URL_PREFIX, filepath)))
+            str('{0!s}/0/{1!s}'.format(self.IMAGE_VIEW_URL_PREFIX, filepath)))
         self.assertEqual(response.content_type, 'image/png')
         self.assertEqual(response.body, raw_image)
 
@@ -73,7 +73,7 @@ class ImageHandlerTest(test_utils.GenericTestBase):
 
         # Upload an empty image.
         response_dict = self.post_json(
-            '%s/0' % self.IMAGE_UPLOAD_URL_PREFIX,
+            '{0!s}/0'.format(self.IMAGE_UPLOAD_URL_PREFIX),
             {'filename': 'test.png'},
             csrf_token=csrf_token,
             expect_errors=True,
@@ -94,7 +94,7 @@ class ImageHandlerTest(test_utils.GenericTestBase):
 
         # Upload a malformed image.
         response_dict = self.post_json(
-            '%s/0' % self.IMAGE_UPLOAD_URL_PREFIX,
+            '{0!s}/0'.format(self.IMAGE_UPLOAD_URL_PREFIX),
             {'filename': 'test.png'},
             csrf_token=csrf_token,
             expect_errors=True,
@@ -111,7 +111,7 @@ class ImageHandlerTest(test_utils.GenericTestBase):
         """Test retrieval of invalid images."""
 
         response = self.testapp.get(
-            '%s/0/bad_image' % self.IMAGE_VIEW_URL_PREFIX, expect_errors=True)
+            '{0!s}/0/bad_image'.format(self.IMAGE_VIEW_URL_PREFIX), expect_errors=True)
         self.assertEqual(response.status_int, 404)
 
     def test_bad_filenames_are_detected(self):
@@ -125,7 +125,7 @@ class ImageHandlerTest(test_utils.GenericTestBase):
                   mode='rb') as f:
             raw_image = f.read()
         response_dict = self.post_json(
-            '%s/0' % self.IMAGE_UPLOAD_URL_PREFIX,
+            '{0!s}/0'.format(self.IMAGE_UPLOAD_URL_PREFIX),
             {'filename': 'test/a.png'},
             csrf_token=csrf_token,
             expect_errors=True, expected_status_int=400,

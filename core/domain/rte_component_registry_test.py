@@ -87,14 +87,14 @@ class RteComponentUnitTests(test_utils.GenericTestBase):
                 feconf.ALLOWED_RTE_EXTENSIONS.iteritems()):
             contents = os.listdir(
                 os.path.join(os.getcwd(), component_definition['dir']))
-            self.assertIn('%s.py' % component_name, contents)
+            self.assertIn('{0!s}.py'.format(component_name), contents)
 
     def test_image_data_urls_for_rte_components(self):
         """Test the data urls for the RTE component icons."""
         component_list = rte_component_registry.Registry._rte_components
         for (cpt_name, cpt_spec) in feconf.ALLOWED_RTE_EXTENSIONS.iteritems():
             image_filepath = os.path.join(
-                os.getcwd(), cpt_spec['dir'], '%s.png' % cpt_name)
+                os.getcwd(), cpt_spec['dir'], '{0!s}.png'.format(cpt_name))
             self.assertEqual(
                 utils.convert_png_to_data_url(image_filepath),
                 component_list[cpt_name].icon_data_url)
@@ -120,10 +120,10 @@ class RteComponentUnitTests(test_utils.GenericTestBase):
             dir_contents = self._listdir_omit_ignored(component_dir)
             self.assertLessEqual(len(dir_contents), 5)
 
-            py_file = os.path.join(component_dir, '%s.py' % component_id)
-            html_file = os.path.join(component_dir, '%s.html' % component_id)
-            js_file = os.path.join(component_dir, '%s.js' % component_id)
-            png_file = os.path.join(component_dir, '%s.png' % component_id)
+            py_file = os.path.join(component_dir, '{0!s}.py'.format(component_id))
+            html_file = os.path.join(component_dir, '{0!s}.html'.format(component_id))
+            js_file = os.path.join(component_dir, '{0!s}.js'.format(component_id))
+            png_file = os.path.join(component_dir, '{0!s}.png'.format(component_id))
             protractor_file = os.path.join(component_dir, 'protractor.js')
 
             self.assertTrue(os.path.isfile(py_file))
@@ -135,7 +135,7 @@ class RteComponentUnitTests(test_utils.GenericTestBase):
             js_file_content = utils.get_file_contents(js_file)
             html_file_content = utils.get_file_contents(html_file)
             self.assertIn(
-                'oppiaNoninteractive%s' % component_id, js_file_content)
+                'oppiaNoninteractive{0!s}'.format(component_id), js_file_content)
             self.assertIn(
                 '<script type="text/ng-template" '
                 'id="richTextComponent/%s"' % component_id,

@@ -35,7 +35,7 @@ class FeedbackServicesUnitTests(test_utils.GenericTestBase):
         thread_id = threadlist[0]['thread_id']
         # The thread id should be prefixed with the exploration id and a full
         # stop.
-        self.assertTrue(thread_id.startswith('%s.' % EXP_ID))
+        self.assertTrue(thread_id.startswith('{0!s}.'.format(EXP_ID)))
         # The rest of the thread id should not have any full stops.
         self.assertNotIn('.', thread_id[len(EXP_ID) + 1:])
 
@@ -50,7 +50,7 @@ class FeedbackServicesUnitTests(test_utils.GenericTestBase):
         # The message id should be prefixed with the thread id and a full stop,
         # followed by the message id.
         self.assertEqual(
-            datastore_id, '%s.%s' % (thread_id, message_id))
+            datastore_id, '{0!s}.{1!s}'.format(thread_id, message_id))
 
     def test_create_message_fails_if_invalid_thread_id(self):
         with self.assertRaises(

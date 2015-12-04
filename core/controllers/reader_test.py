@@ -43,7 +43,7 @@ class ReaderPermissionsTest(test_utils.GenericTestBase):
 
     def test_unpublished_explorations_are_invisible_to_logged_out_users(self):
         response = self.testapp.get(
-            '%s/%s' % (feconf.EXPLORATION_URL_PREFIX, self.EXP_ID),
+            '{0!s}/{1!s}'.format(feconf.EXPLORATION_URL_PREFIX, self.EXP_ID),
             expect_errors=True)
         self.assertEqual(response.status_int, 404)
 
@@ -51,7 +51,7 @@ class ReaderPermissionsTest(test_utils.GenericTestBase):
         self.signup(self.VIEWER_EMAIL, self.VIEWER_USERNAME)
         self.login(self.VIEWER_EMAIL)
         response = self.testapp.get(
-            '%s/%s' % (feconf.EXPLORATION_URL_PREFIX, self.EXP_ID),
+            '{0!s}/{1!s}'.format(feconf.EXPLORATION_URL_PREFIX, self.EXP_ID),
             expect_errors=True)
         self.assertEqual(response.status_int, 404)
         self.logout()
@@ -67,7 +67,7 @@ class ReaderPermissionsTest(test_utils.GenericTestBase):
 
         self.login(OTHER_EDITOR_EMAIL)
         response = self.testapp.get(
-            '%s/%s' % (feconf.EXPLORATION_URL_PREFIX, self.EXP_ID),
+            '{0!s}/{1!s}'.format(feconf.EXPLORATION_URL_PREFIX, self.EXP_ID),
             expect_errors=True)
         self.assertEqual(response.status_int, 404)
         self.logout()
@@ -75,7 +75,7 @@ class ReaderPermissionsTest(test_utils.GenericTestBase):
     def test_unpublished_explorations_are_visible_to_their_editors(self):
         self.login(self.EDITOR_EMAIL)
         response = self.testapp.get(
-            '%s/%s' % (feconf.EXPLORATION_URL_PREFIX, self.EXP_ID))
+            '{0!s}/{1!s}'.format(feconf.EXPLORATION_URL_PREFIX, self.EXP_ID))
         self.assertEqual(response.status_int, 200)
         self.logout()
 
@@ -84,7 +84,7 @@ class ReaderPermissionsTest(test_utils.GenericTestBase):
         self.set_admins([self.ADMIN_EMAIL])
         self.login(self.ADMIN_EMAIL)
         response = self.testapp.get(
-            '%s/%s' % (feconf.EXPLORATION_URL_PREFIX, self.EXP_ID))
+            '{0!s}/{1!s}'.format(feconf.EXPLORATION_URL_PREFIX, self.EXP_ID))
         self.assertEqual(response.status_int, 200)
         self.logout()
 
@@ -92,7 +92,7 @@ class ReaderPermissionsTest(test_utils.GenericTestBase):
         rights_manager.publish_exploration(self.EDITOR_ID, self.EXP_ID)
 
         response = self.testapp.get(
-            '%s/%s' % (feconf.EXPLORATION_URL_PREFIX, self.EXP_ID),
+            '{0!s}/{1!s}'.format(feconf.EXPLORATION_URL_PREFIX, self.EXP_ID),
             expect_errors=True)
         self.assertEqual(response.status_int, 200)
 
@@ -102,7 +102,7 @@ class ReaderPermissionsTest(test_utils.GenericTestBase):
         self.signup(self.VIEWER_EMAIL, self.VIEWER_USERNAME)
         self.login(self.VIEWER_EMAIL)
         response = self.testapp.get(
-            '%s/%s' % (feconf.EXPLORATION_URL_PREFIX, self.EXP_ID),
+            '{0!s}/{1!s}'.format(feconf.EXPLORATION_URL_PREFIX, self.EXP_ID),
             expect_errors=True)
         self.assertEqual(response.status_int, 200)
 
@@ -138,7 +138,7 @@ class ReaderControllerEndToEndTests(test_utils.GenericTestBase):
         self.EXP_ID = exploration_id
 
         reader_dict = self.get_json(
-            '%s/%s' % (feconf.EXPLORATION_INIT_URL_PREFIX, self.EXP_ID))
+            '{0!s}/{1!s}'.format(feconf.EXPLORATION_INIT_URL_PREFIX, self.EXP_ID))
 
         self.last_state_name = reader_dict['exploration']['init_state_name']
         init_state_data = (
@@ -220,12 +220,12 @@ class FeedbackIntegrationTest(test_utils.GenericTestBase):
         # Viewer opens exploration
         self.login(self.VIEWER_EMAIL)
         exploration_dict = self.get_json(
-            '%s/%s' % (feconf.EXPLORATION_INIT_URL_PREFIX, EXP_ID))
+            '{0!s}/{1!s}'.format(feconf.EXPLORATION_INIT_URL_PREFIX, EXP_ID))
         state_name_1 = exploration_dict['exploration']['init_state_name']
 
         # Viewer gives 1st feedback
         self.post_json(
-            '/explorehandler/give_feedback/%s' % EXP_ID,
+            '/explorehandler/give_feedback/{0!s}'.format(EXP_ID),
             {
                 'state_name': state_name_1,
                 'feedback': 'This is a feedback message.',
@@ -238,7 +238,7 @@ class FeedbackIntegrationTest(test_utils.GenericTestBase):
 
         # Viewer gives 2nd feedback
         self.post_json(
-            '/explorehandler/give_feedback/%s' % EXP_ID,
+            '/explorehandler/give_feedback/{0!s}'.format(EXP_ID),
             {
                 'state_name': state_name_2,
                 'feedback': 'This is a 2nd feedback message.',
@@ -319,10 +319,10 @@ class RatingsIntegrationTests(test_utils.GenericTestBase):
         self.signup('user@example.com', 'user')
         self.login('user@example.com')
         csrf_token = self.get_csrf_token_from_response(
-            self.testapp.get('/explore/%s' % self.EXP_ID))
+            self.testapp.get('/explore/{0!s}'.format(self.EXP_ID)))
 
         # User checks rating
-        ratings = self.get_json('/explorehandler/rating/%s' % self.EXP_ID)
+        ratings = self.get_json('/explorehandler/rating/{0!s}'.format(self.EXP_ID))
         self.assertEqual(ratings['user_rating'], None)
         self.assertEqual(
             ratings['overall_ratings'],
@@ -330,11 +330,11 @@ class RatingsIntegrationTests(test_utils.GenericTestBase):
 
         # User rates and checks rating
         self.put_json(
-            '/explorehandler/rating/%s' % self.EXP_ID, {
+            '/explorehandler/rating/{0!s}'.format(self.EXP_ID), {
                 'user_rating': 2
             }, csrf_token
         )
-        ratings = self.get_json('/explorehandler/rating/%s' % self.EXP_ID)
+        ratings = self.get_json('/explorehandler/rating/{0!s}'.format(self.EXP_ID))
         self.assertEqual(ratings['user_rating'], 2)
         self.assertEqual(
             ratings['overall_ratings'],
@@ -343,11 +343,11 @@ class RatingsIntegrationTests(test_utils.GenericTestBase):
         # User re-rates and checks rating
         self.login('user@example.com')
         self.put_json(
-            '/explorehandler/rating/%s' % self.EXP_ID, {
+            '/explorehandler/rating/{0!s}'.format(self.EXP_ID), {
                 'user_rating': 5
             }, csrf_token
         )
-        ratings = self.get_json('/explorehandler/rating/%s' % self.EXP_ID)
+        ratings = self.get_json('/explorehandler/rating/{0!s}'.format(self.EXP_ID))
         self.assertEqual(ratings['user_rating'], 5)
         self.assertEqual(
             ratings['overall_ratings'],
@@ -361,16 +361,16 @@ class RatingsIntegrationTests(test_utils.GenericTestBase):
         self.signup('user@example.com', 'user')
         self.login('user@example.com')
         csrf_token = self.get_csrf_token_from_response(
-            self.testapp.get('/explore/%s' % self.EXP_ID))
+            self.testapp.get('/explore/{0!s}'.format(self.EXP_ID)))
         self.logout()
 
-        ratings = self.get_json('/explorehandler/rating/%s' % self.EXP_ID)
+        ratings = self.get_json('/explorehandler/rating/{0!s}'.format(self.EXP_ID))
         self.assertEqual(ratings['user_rating'], None)
         self.assertEqual(
             ratings['overall_ratings'],
             {'1': 0, '2': 0, '3': 0, '4': 0, '5': 0})
         self.put_json(
-            '/explorehandler/rating/%s' % self.EXP_ID, {
+            '/explorehandler/rating/{0!s}'.format(self.EXP_ID), {
                 'user_rating': 1
             }, csrf_token, expected_status_int=401, expect_errors=True
         )
@@ -383,9 +383,9 @@ class RatingsIntegrationTests(test_utils.GenericTestBase):
 
         self.login('a@example.com')
         csrf_token = self.get_csrf_token_from_response(
-            self.testapp.get('/explore/%s' % self.EXP_ID))
+            self.testapp.get('/explore/{0!s}'.format(self.EXP_ID)))
         self.put_json(
-            '/explorehandler/rating/%s' % self.EXP_ID, {
+            '/explorehandler/rating/{0!s}'.format(self.EXP_ID), {
                 'user_rating': 4
             }, csrf_token
         )
@@ -393,15 +393,15 @@ class RatingsIntegrationTests(test_utils.GenericTestBase):
 
         self.login('b@example.com')
         csrf_token = self.get_csrf_token_from_response(
-            self.testapp.get('/explore/%s' % self.EXP_ID))
-        ratings = self.get_json('/explorehandler/rating/%s' % self.EXP_ID)
+            self.testapp.get('/explore/{0!s}'.format(self.EXP_ID)))
+        ratings = self.get_json('/explorehandler/rating/{0!s}'.format(self.EXP_ID))
         self.assertEqual(ratings['user_rating'], None)
         self.put_json(
-            '/explorehandler/rating/%s' % self.EXP_ID, {
+            '/explorehandler/rating/{0!s}'.format(self.EXP_ID), {
                 'user_rating': 4
             }, csrf_token
         )
-        ratings = self.get_json('/explorehandler/rating/%s' % self.EXP_ID)
+        ratings = self.get_json('/explorehandler/rating/{0!s}'.format(self.EXP_ID))
         self.assertEqual(ratings['user_rating'], 4)
         self.assertEqual(
             ratings['overall_ratings'],

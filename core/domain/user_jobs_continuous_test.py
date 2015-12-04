@@ -78,7 +78,7 @@ class RecentUpdatesAggregatorUnitTests(test_utils.GenericTestBase):
             'author_id': user_id,
             'last_updated_ms': last_updated_ms,
             'subject': (
-                'New %s created with title \'%s\'.' % (
+                'New {0!s} created with title \'{1!s}\'.'.format(
                     activity_type, activity_title)),
             'type': commit_type,
         }
@@ -705,7 +705,7 @@ class UserImpactAggregatorTest(test_utils.GenericTestBase):
         """
         # Each user id needs to be unique since each user can only give an
         # exploration one rating.
-        user_ids = ['user%d' % i for i in range(num_ratings)]
+        user_ids = ['user{0:d}'.format(i) for i in range(num_ratings)]
         for user_id in user_ids:
             rating_services.assign_rating_to_exploration(
                 user_id, exp_id, rating
@@ -716,7 +716,7 @@ class UserImpactAggregatorTest(test_utils.GenericTestBase):
         times."""
         exp_version = 1
         state = exploration.init_state_name
-        session_ids = ['session%d' % i for i in range(num_completions)]
+        session_ids = ['session{0:d}'.format(i) for i in range(num_completions)]
         for session_id in session_ids:
             event_services.StartExplorationEventHandler.record(
                 exploration.id, exp_version, state, session_id, {},

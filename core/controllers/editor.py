@@ -141,8 +141,8 @@ def require_editor(handler):
 
         state_name = self.unescape_state_name(escaped_state_name)
         if state_name not in exploration.states:
-            logging.error('Could not find state: %s' % state_name)
-            logging.error('Available states: %s' % exploration.states.keys())
+            logging.error('Could not find state: {0!s}'.format(state_name))
+            logging.error('Available states: {0!s}'.format(exploration.states.keys()))
             raise self.PageNotFoundException
 
         return handler(self, exploration_id, state_name, **kwargs)
@@ -352,8 +352,7 @@ class ExplorationHandler(EditorHandler):
         if role == rights_manager.ROLE_ADMIN:
             if not self.is_admin:
                 logging.error(
-                    '%s tried to delete an exploration, but is not an admin.'
-                    % self.user_id)
+                    '{0!s} tried to delete an exploration, but is not an admin.'.format(self.user_id))
                 raise self.UnauthorizedUserException(
                     'User %s does not have permissions to delete exploration '
                     '%s' % (self.user_id, exploration_id))
@@ -366,19 +365,17 @@ class ExplorationHandler(EditorHandler):
                     'User %s does not have permissions to delete exploration '
                     '%s' % (self.user_id, exploration_id))
         elif role is not None:
-            raise self.InvalidInputException('Invalid role: %s' % role)
+            raise self.InvalidInputException('Invalid role: {0!s}'.format(role))
 
         logging.info(
-            '%s %s tried to delete exploration %s' %
-            (role, self.user_id, exploration_id))
+            '{0!s} {1!s} tried to delete exploration {2!s}'.format(role, self.user_id, exploration_id))
 
         exploration = exp_services.get_exploration_by_id(exploration_id)
         can_delete = rights_manager.Actor(self.user_id).can_delete(
             rights_manager.ACTIVITY_TYPE_EXPLORATION, exploration.id)
         if not can_delete:
             raise self.UnauthorizedUserException(
-                'User %s does not have permissions to delete exploration %s' %
-                (self.user_id, exploration_id))
+                'User {0!s} does not have permissions to delete exploration {1!s}'.format(self.user_id, exploration_id))
 
         is_exploration_cloned = rights_manager.is_exploration_cloned(
             exploration_id)
@@ -386,8 +383,7 @@ class ExplorationHandler(EditorHandler):
             self.user_id, exploration_id, force_deletion=is_exploration_cloned)
 
         logging.info(
-            '%s %s deleted exploration %s' %
-            (role, self.user_id, exploration_id))
+            '{0!s} {1!s} deleted exploration {2!s}'.format(role, self.user_id, exploration_id))
 
 
 class ExplorationRightsHandler(EditorHandler):
@@ -493,8 +489,8 @@ class ResolvedAnswersHandler(EditorHandler):
 
         if not isinstance(resolved_answers, list):
             raise self.InvalidInputException(
-                'Expected a list of resolved answers; received %s.' %
-                resolved_answers)
+                'Expected a list of resolved answers; received {0!s}.'.format(
+                resolved_answers))
 
         if 'resolved_answers' in self.payload:
             event_services.DefaultRuleAnswerResolutionEventHandler.record(
@@ -581,8 +577,7 @@ class UntrainedAnswersHandler(EditorHandler):
                 ]
             except Exception as e:
                 logging.warning(
-                    'Error loading untrained answers for interaction %s: %s.' %
-                    (interaction.id, e))
+                    'Error loading untrained answers for interaction {0!s}: {1!s}.'.format(interaction.id, e))
 
         self.render_json({
             'unhandled_answers': unhandled_answers
@@ -609,13 +604,13 @@ class ExplorationDownloadHandler(EditorHandler):
         width = int(self.request.get('width', default_value=80))
 
         # If the title of the exploration has changed, we use the new title
-        filename = 'oppia-%s-v%s' % (
+        filename = 'oppia-{0!s}-v{1!s}'.format(
             utils.to_ascii(exploration.title.replace(' ', '')), version)
 
         if output_format == feconf.OUTPUT_FORMAT_ZIP:
             self.response.headers['Content-Type'] = 'text/plain'
             self.response.headers['Content-Disposition'] = (
-                'attachment; filename=%s.zip' % str(filename))
+                'attachment; filename={0!s}.zip'.format(str(filename)))
             self.response.write(
                 exp_services.export_to_zip_file(exploration_id, version))
         elif output_format == feconf.OUTPUT_FORMAT_JSON:
@@ -623,7 +618,7 @@ class ExplorationDownloadHandler(EditorHandler):
                     exploration_id, version=version, width=width))
         else:
             raise self.InvalidInputException(
-                'Unrecognized output format %s' % output_format)
+                'Unrecognized output format {0!s}'.format(output_format))
 
 
 class StateDownloadHandler(EditorHandler):
@@ -702,17 +697,16 @@ class ExplorationRevertHandler(EditorHandler):
 
         if not isinstance(revert_to_version, int):
             raise self.InvalidInputException(
-                'Expected an integer version to revert to; received %s.' %
-                revert_to_version)
+                'Expected an integer version to revert to; received {0!s}.'.format(
+                revert_to_version))
         if not isinstance(current_version, int):
             raise self.InvalidInputException(
-                'Expected an integer current version; received %s.' %
-                current_version)
+                'Expected an integer current version; received {0!s}.'.format(
+                current_version))
 
         if revert_to_version < 1 or revert_to_version >= current_version:
             raise self.InvalidInputException(
-                'Cannot revert to version %s from version %s.' %
-                (revert_to_version, current_version))
+                'Cannot revert to version {0!s} from version {1!s}.'.format(revert_to_version, current_version))
 
         exp_services.revert_exploration(
             self.user_id, exploration_id, current_version, revert_to_version)
@@ -760,8 +754,8 @@ class StateRulesStatsHandler(EditorHandler):
 
         state_name = self.unescape_state_name(escaped_state_name)
         if state_name not in exploration.states:
-            logging.error('Could not find state: %s' % state_name)
-            logging.error('Available states: %s' % exploration.states.keys())
+            logging.error('Could not find state: {0!s}'.format(state_name))
+            logging.error('Available states: {0!s}'.format(exploration.states.keys()))
             raise self.PageNotFoundException
 
         self.render_json({
@@ -803,12 +797,11 @@ class ImageUploadHandler(EditorHandler):
             if (extension not in
                     feconf.ACCEPTED_IMAGE_FORMATS_AND_EXTENSIONS[file_format]):
                 raise self.InvalidInputException(
-                    'Expected a filename ending in .%s; received %s' %
-                    (file_format, filename))
+                    'Expected a filename ending in .{0!s}; received {1!s}'.format(file_format, filename))
         else:
             primary_name = filename
 
-        filepath = '%s.%s' % (primary_name, file_format)
+        filepath = '{0!s}.{1!s}'.format(primary_name, file_format)
 
         fs = fs_domain.AbstractFileSystem(
             fs_domain.ExplorationFileSystem(exploration_id))

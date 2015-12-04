@@ -73,7 +73,7 @@ class _Gae(_Platform):
                 from core.storage.user import gae_models as user_models
                 returned_models.append(user_models)
             else:
-                raise Exception('Invalid model name: %s' % name)
+                raise Exception('Invalid model name: {0!s}'.format(name))
 
         return tuple(returned_models)
 

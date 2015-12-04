@@ -88,9 +88,9 @@ class ForumPage(base.BaseHandler):
 
         self.values.update({
             'EMBEDDED_GOOGLE_GROUP_URL': (
-                '%s&showtabs=false&hideforumtitle=true&parenturl=%s' % (
+                '{0!s}&showtabs=false&hideforumtitle=true&parenturl={1!s}'.format(
                     EMBEDDED_GOOGLE_GROUP_URL.value,
-                    urllib.quote(self.request.uri, safe=''),
+                    urllib.quote(self.request.uri, safe='')
                 )
             ),
             'on_localhost': netloc.startswith('localhost'),

@@ -143,7 +143,7 @@ class RecentUpdatesMRJobManager(
         for ind, activity_model in enumerate(activity_models):
             if activity_model is None:
                 logging.error(
-                    'Could not find %s %s' % (
+                    'Could not find {0!s} {1!s}'.format(
                         activity_type, activity_ids_list[ind]))
                 continue
 
@@ -189,7 +189,7 @@ class RecentUpdatesMRJobManager(
     def map(item):
         user_id = item.id
         job_queued_msec = RecentUpdatesMRJobManager._get_job_queued_msec()
-        reducer_key = '%s@%s' % (user_id, job_queued_msec)
+        reducer_key = '{0!s}@{1!s}'.format(user_id, job_queued_msec)
 
         exploration_ids_list = item.activity_ids
         collection_ids_list = item.collection_ids
@@ -238,7 +238,7 @@ class RecentUpdatesMRJobManager(
     def reduce(key, stringified_values):
         if '@' not in key:
             logging.error(
-                'Invalid reducer key for RecentUpdatesMRJob: %s' % key)
+                'Invalid reducer key for RecentUpdatesMRJob: {0!s}'.format(key))
 
         user_id = key[:key.find('@')]
         job_queued_msec = float(key[key.find('@') + 1:])

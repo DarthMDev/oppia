@@ -45,7 +45,7 @@ class JobModel(base_models.BaseModel):
         job_type = entity_name
         current_time_str = str(int(utils.get_current_time_in_millisecs()))
         random_int = random.randint(0, 1000)
-        return '%s-%s-%s' % (job_type, current_time_str, random_int)
+        return '{0!s}-{1!s}-{2!s}'.format(job_type, current_time_str, random_int)
 
     # The job type.
     job_type = ndb.StringProperty(indexed=True)

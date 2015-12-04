@@ -134,7 +134,7 @@ def _lint_js_files(node_path, jscs_path, config_jscsrc, input_dir):
     jscs_cmd_args = [node_path, jscs_path, config_jscsrc]
 
     for ind, filename in enumerate(files_to_lint):
-        print 'Linting file %d/%d: %s ...' % (
+        print 'Linting file {0:d}/{1:d}: {2!s} ...'.format(
             ind + 1, num_js_files, filename)
 
         proc_args = jscs_cmd_args + [filename]
@@ -154,9 +154,9 @@ def _lint_js_files(node_path, jscs_path, config_jscsrc, input_dir):
     print '----------------------------------------'
 
     if num_files_with_errors:
-        print 'FAILED    %s JavaScript files' % num_files_with_errors
+        print 'FAILED    {0!s} JavaScript files'.format(num_files_with_errors)
     else:
-        print 'SUCCESS   %s JavaScript files linted (%.1f secs)' % (
+        print 'SUCCESS   {0!s} JavaScript files linted ({1:.1f} secs)'.format(
             num_js_files, time.time() - start_time)
 
 
@@ -170,13 +170,13 @@ def _pre_commit_linter():
     if input_dir:
         input_dir = os.path.join(os.getcwd(), parsed_args.path)
         if not os.path.exists(input_dir):
-            print 'Could not locate directory %s. Exiting.' % input_dir
+            print 'Could not locate directory {0!s}. Exiting.'.format(input_dir)
             print '----------------------------------------'
             sys.exit(0)
 
     parent_dir = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
     jscsrc_path = os.path.join(os.getcwd(), '.jscsrc')
-    config_jscsrc = '--config=%s' % jscsrc_path
+    config_jscsrc = '--config={0!s}'.format(jscsrc_path)
     node_path = os.path.join(
         parent_dir, 'oppia_tools', 'node-4.2.1', 'bin', 'node')
     jscs_path = os.path.join(

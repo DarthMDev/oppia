@@ -83,13 +83,13 @@ def run_shell_cmd(exe, stdout=subprocess.PIPE, stderr=subprocess.PIPE):
         log('')
         for line in last_stdout:
             if line.startswith(LOG_LINE_PREFIX):
-                log('INFO: %s' % line[len(LOG_LINE_PREFIX): ])
+                log('INFO: {0!s}'.format(line[len(LOG_LINE_PREFIX): ]))
         log('')
 
-    result = '%s%s' % (last_stdout_str, last_stderr_str)
+    result = '{0!s}{1!s}'.format(last_stdout_str, last_stderr_str)
 
     if p.returncode != 0:
-        raise Exception('Error %s\n%s' % (p.returncode, result))
+        raise Exception('Error {0!s}\n{1!s}'.format(p.returncode, result))
 
     return result
 
@@ -108,14 +108,12 @@ class TaskThread(threading.Thread):
     def run(self):
         try:
             self.output = self.func()
-            log('FINISHED %s: %.1f secs' %
-                (self.name, time.time() - self.start_time), show_time=True)
+            log('FINISHED {0!s}: {1:.1f} secs'.format(self.name, time.time() - self.start_time), show_time=True)
             self.finished = True
         except Exception as e:
             self.exception = e
             if 'KeyboardInterrupt' not in str(self.exception):
-                log('ERROR %s: %.1f secs' %
-                    (self.name, time.time() - self.start_time), show_time=True)
+                log('ERROR {0!s}: {1:.1f} secs'.format(self.name, time.time() - self.start_time), show_time=True)
             self.finished = True
 
 
@@ -128,7 +126,7 @@ class TestingTaskSpec(object):
 
     def run(self):
         """Runs all tests corresponding to the given test target."""
-        test_target_flag = '--test_target=%s' % self.test_target
+        test_target_flag = '--test_target={0!s}'.format(self.test_target)
 
         if self.generate_coverage_report:
             exc_list = [
@@ -146,7 +144,7 @@ def _check_all_tasks(tasks):
 
     for task in tasks:
         if task.isAlive():
-            running_tasks_data.append('  %s (started %s)' % (
+            running_tasks_data.append('  {0!s} (started {1!s})'.format(
                 task.name,
                 time.strftime('%H:%M:%S', time.localtime(task.start_time))
             ))
@@ -185,7 +183,7 @@ def _execute_tasks(tasks, batch_size=24):
         time.sleep(5)
         if remaining_tasks:
             log('----------------------------------------')
-            log('Number of unstarted tasks: %s' % len(remaining_tasks))
+            log('Number of unstarted tasks: {0!s}'.format(len(remaining_tasks)))
         _check_all_tasks(tasks)
         log('----------------------------------------')
 
@@ -267,10 +265,10 @@ def main():
         spec = task_to_taskspec[task]
 
         if not task.finished:
-            print 'CANCELED  %s' % spec.test_target
+            print 'CANCELED  {0!s}'.format(spec.test_target)
             test_count = 0
         elif 'No tests were run' in str(task.exception):
-            print 'ERROR     %s: No tests found.' % spec.test_target
+            print 'ERROR     {0!s}: No tests found.'.format(spec.test_target)
             test_count = 0
         elif task.exception:
             exc_str = str(task.exception).decode('utf-8')
@@ -287,7 +285,7 @@ def main():
                 failures = int(tests_failed_regex_match.group(3))
                 total_errors += errors
                 total_failures += failures
-                print 'FAILED    %s: %s errors, %s failures' % (
+                print 'FAILED    {0!s}: {1!s} errors, {2!s} failures'.format(
                     spec.test_target, errors, failures)
             except AttributeError:
                 # There was an internal error, and the tests did not run. (The
@@ -304,8 +302,7 @@ def main():
                 r'Ran ([0-9]+) tests? in ([0-9\.]+)s', task.output)
             test_count = int(tests_run_regex_match.group(1))
             test_time = float(tests_run_regex_match.group(2))
-            print ('SUCCESS   %s: %d tests (%.1f secs)' %
-                   (spec.test_target, test_count, test_time))
+            print ('SUCCESS   {0!s}: {1:d} tests ({2:.1f} secs)'.format(spec.test_target, test_count, test_time))
 
         total_count += test_count
 
@@ -315,15 +312,14 @@ def main():
     elif (parsed_args.test_path is None and parsed_args.test_target is None
             and total_count != EXPECTED_TEST_COUNT):
         raise Exception(
-            'ERROR: Expected %s tests to be run, not %s.' %
-            (EXPECTED_TEST_COUNT, total_count))
+            'ERROR: Expected {0!s} tests to be run, not {1!s}.'.format(EXPECTED_TEST_COUNT, total_count))
     else:
-        print 'Ran %s test%s in %s test class%s.' % (
+        print 'Ran {0!s} test{1!s} in {2!s} test class{3!s}.'.format(
             total_count, '' if total_count == 1 else 's',
             len(tasks), '' if len(tasks) == 1 else 'es')
 
         if total_errors or total_failures:
-            print '(%s ERRORS, %s FAILURES)' % (total_errors, total_failures)
+            print '({0!s} ERRORS, {1!s} FAILURES)'.format(total_errors, total_failures)
         else:
             print 'All tests passed.'
 
@@ -331,7 +327,7 @@ def main():
         raise Exception('Task execution failed.')
     elif total_errors or total_failures:
         raise Exception(
-            '%s errors, %s failures' % (total_errors, total_failures))
+            '{0!s} errors, {1!s} failures'.format(total_errors, total_failures))
 
 
 if __name__ == '__main__':

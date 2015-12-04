@@ -769,9 +769,9 @@ class ContinuousComputationTests(test_utils.GenericTestBase):
             self.assertEqual(
                 StartExplorationEventCounter.get_count(self.EXP_ID), 1)
             self.assertEqual(StartExplorationRealtimeModel.get(
-                '0:%s' % self.EXP_ID).count, 1)
+                '0:{0!s}'.format(self.EXP_ID)).count, 1)
             self.assertEqual(StartExplorationRealtimeModel.get(
-                '1:%s' % self.EXP_ID).count, 1)
+                '1:{0!s}'.format(self.EXP_ID)).count, 1)
 
             # The batch job has not run yet, so no entity for self.EXP_ID will
             # have been created in the batch model yet.
@@ -782,10 +782,10 @@ class ContinuousComputationTests(test_utils.GenericTestBase):
             StartExplorationEventCounter.start_computation()
             # Data in realtime layer 0 is still there.
             self.assertEqual(StartExplorationRealtimeModel.get(
-                '0:%s' % self.EXP_ID).count, 1)
+                '0:{0!s}'.format(self.EXP_ID)).count, 1)
             # Data in realtime layer 1 has been deleted.
             self.assertIsNone(StartExplorationRealtimeModel.get(
-                '1:%s' % self.EXP_ID, strict=False))
+                '1:{0!s}'.format(self.EXP_ID), strict=False))
 
             self.assertEqual(self.count_jobs_in_taskqueue(), 1)
             self.process_and_flush_pending_tasks()
@@ -798,10 +798,10 @@ class ContinuousComputationTests(test_utils.GenericTestBase):
                 StartExplorationEventCounter.get_count(self.EXP_ID), 1)
             # Data in realtime layer 0 has been deleted.
             self.assertIsNone(StartExplorationRealtimeModel.get(
-                '0:%s' % self.EXP_ID, strict=False))
+                '0:{0!s}'.format(self.EXP_ID), strict=False))
             # Data in realtime layer 1 has been deleted.
             self.assertIsNone(StartExplorationRealtimeModel.get(
-                '1:%s' % self.EXP_ID, strict=False))
+                '1:{0!s}'.format(self.EXP_ID), strict=False))
 
     def test_events_coming_in_while_batch_job_is_running(self):
         with self.swap(

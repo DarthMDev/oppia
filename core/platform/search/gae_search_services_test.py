@@ -65,13 +65,13 @@ class SearchAddToIndexTests(test_utils.GenericTestBase):
         self.assertEqual(retrieved_doc.field('abc').value, 'def')
 
     def test_insert_multiple_with_id(self):
-        docs = [{'id': 'id%d' % n, 'name': 'doc%d' % n} for n in range(5)]
+        docs = [{'id': 'id{0:d}'.format(n), 'name': 'doc{0:d}'.format(n)} for n in range(5)]
         result = gae_search_services.add_documents_to_index(docs, 'my_index')
         index = search.Index('my_index')
         for n in range(5):
-            retrieved_doc = index.get('id%d' % n)
-            self.assertEqual(retrieved_doc.field('name').value, 'doc%d' % n)
-            self.assertEqual(result[n], 'id%d' % n)
+            retrieved_doc = index.get('id{0:d}'.format(n))
+            self.assertEqual(retrieved_doc.field('name').value, 'doc{0:d}'.format(n))
+            self.assertEqual(result[n], 'id{0:d}'.format(n))
 
     def test_insert_document_with_multi_valued_property(self):
         doc = {'id': 'doc', 'prop': ['val1', 'val2', 'val3']}
@@ -275,13 +275,13 @@ class SearchRemoveFromIndexTests(test_utils.GenericTestBase):
     def test_delete_multiple_documents(self):
         index = search.Index('my_index')
         for i in xrange(10):
-            field = search.TextField(name='k', value='v%d' % i)
-            doc = search.Document(doc_id='doc%d' % i, fields=[field])
+            field = search.TextField(name='k', value='v{0:d}'.format(i))
+            doc = search.Document(doc_id='doc{0:d}'.format(i), fields=[field])
             index.put([doc])
         gae_search_services.delete_documents_from_index(
             ['doc' + str(i) for i in xrange(10)], 'my_index')
         for i in xrange(10):
-            self.assertIsNone(index.get('doc%d' % i))
+            self.assertIsNone(index.get('doc{0:d}'.format(i)))
 
     def test_doc_ids_must_be_strings(self):
         with self.assertRaisesRegexp(ValueError, str(dict)):
@@ -642,7 +642,7 @@ class SearchQueryTests(test_utils.GenericTestBase):
 
     def test_arguments_are_preserved_in_retries(self):
         for i in xrange(3):
-            doc = search.Document(doc_id='doc%d' % i, fields=[
+            doc = search.Document(doc_id='doc{0:d}'.format(i), fields=[
                 search.TextField('prop', 'val'),
                 search.NumberField('index', i)
             ])

@@ -37,7 +37,7 @@ class ObjectEditorTemplateHandler(base.BaseHandler):
                 obj_services.Registry.get_object_class_by_type(
                     obj_type).get_editor_html_template())
         except Exception as e:
-            logging.error('Object editor not found: %s. %s' % (obj_type, e))
+            logging.error('Object editor not found: {0!s}. {1!s}'.format(obj_type, e))
             raise self.PageNotFoundException
 
 
@@ -51,8 +51,7 @@ class ValueGeneratorHandler(base.BaseHandler):
                 value_generators_domain.Registry.get_generator_class_by_id(
                     generator_id).get_html_template())
         except Exception as e:
-            logging.error('Value generator not found: %s. %s' %
-                          (generator_id, e))
+            logging.error('Value generator not found: {0!s}. {1!s}'.format(generator_id, e))
             raise self.PageNotFoundException
 
 
@@ -73,7 +72,7 @@ class ImageHandler(base.BaseHandler):
             # If the following is not cast to str, an error occurs in the wsgi
             # library because unicode gets used.
             self.response.headers['Content-Type'] = str(
-                'image/%s' % file_format)
+                'image/{0!s}'.format(file_format))
 
             fs = fs_domain.AbstractFileSystem(
                 fs_domain.ExplorationFileSystem(exploration_id))

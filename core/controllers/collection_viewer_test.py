@@ -43,14 +43,14 @@ class CollectionViewerPermissionsTest(test_utils.GenericTestBase):
 
     def test_unpublished_collections_are_invisible_to_logged_out_users(self):
         response = self.testapp.get(
-            '%s/%s' % (feconf.COLLECTION_URL_PREFIX, self.COLLECTION_ID),
+            '{0!s}/{1!s}'.format(feconf.COLLECTION_URL_PREFIX, self.COLLECTION_ID),
             expect_errors=True)
         self.assertEqual(response.status_int, 404)
 
     def test_unpublished_collections_are_invisible_to_unconnected_users(self):
         self.login(self.NEW_USER_EMAIL)
         response = self.testapp.get(
-            '%s/%s' % (feconf.COLLECTION_URL_PREFIX, self.COLLECTION_ID),
+            '{0!s}/{1!s}'.format(feconf.COLLECTION_URL_PREFIX, self.COLLECTION_ID),
             expect_errors=True)
         self.assertEqual(response.status_int, 404)
         self.logout()
@@ -64,7 +64,7 @@ class CollectionViewerPermissionsTest(test_utils.GenericTestBase):
 
         self.login(OTHER_EDITOR_EMAIL)
         response = self.testapp.get(
-            '%s/%s' % (feconf.COLLECTION_URL_PREFIX, self.COLLECTION_ID),
+            '{0!s}/{1!s}'.format(feconf.COLLECTION_URL_PREFIX, self.COLLECTION_ID),
             expect_errors=True)
         self.assertEqual(response.status_int, 404)
         self.logout()
@@ -72,7 +72,7 @@ class CollectionViewerPermissionsTest(test_utils.GenericTestBase):
     def test_unpublished_collections_are_visible_to_their_editors(self):
         self.login(self.EDITOR_EMAIL)
         response = self.testapp.get(
-            '%s/%s' % (feconf.COLLECTION_URL_PREFIX, self.COLLECTION_ID))
+            '{0!s}/{1!s}'.format(feconf.COLLECTION_URL_PREFIX, self.COLLECTION_ID))
         self.assertEqual(response.status_int, 200)
         self.logout()
 
@@ -81,7 +81,7 @@ class CollectionViewerPermissionsTest(test_utils.GenericTestBase):
         self.set_admins([self.ADMIN_EMAIL])
         self.login(self.ADMIN_EMAIL)
         response = self.testapp.get(
-            '%s/%s' % (feconf.COLLECTION_URL_PREFIX, self.COLLECTION_ID))
+            '{0!s}/{1!s}'.format(feconf.COLLECTION_URL_PREFIX, self.COLLECTION_ID))
         self.assertEqual(response.status_int, 200)
         self.logout()
 
@@ -89,7 +89,7 @@ class CollectionViewerPermissionsTest(test_utils.GenericTestBase):
         rights_manager.publish_collection(self.EDITOR_ID, self.COLLECTION_ID)
 
         response = self.testapp.get(
-            '%s/%s' % (feconf.COLLECTION_URL_PREFIX, self.COLLECTION_ID),
+            '{0!s}/{1!s}'.format(feconf.COLLECTION_URL_PREFIX, self.COLLECTION_ID),
             expect_errors=True)
         self.assertEqual(response.status_int, 200)
 
@@ -98,7 +98,7 @@ class CollectionViewerPermissionsTest(test_utils.GenericTestBase):
 
         self.login(self.NEW_USER_EMAIL)
         response = self.testapp.get(
-            '%s/%s' % (feconf.COLLECTION_URL_PREFIX, self.COLLECTION_ID),
+            '{0!s}/{1!s}'.format(feconf.COLLECTION_URL_PREFIX, self.COLLECTION_ID),
             expect_errors=True)
         self.assertEqual(response.status_int, 200)
 
@@ -121,7 +121,7 @@ class CollectionViewerControllerEndToEndTests(test_utils.GenericTestBase):
 
         # Request the collection from the data handler.
         response_dict = self.get_json(
-            '%s/0' % feconf.COLLECTION_DATA_URL_PREFIX)
+            '{0!s}/0'.format(feconf.COLLECTION_DATA_URL_PREFIX))
         collection_dict = response_dict['collection']
 
         # Verify the collection was properly loaded.
@@ -144,7 +144,7 @@ class CollectionViewerControllerEndToEndTests(test_utils.GenericTestBase):
         collection_services.record_played_exploration_in_collection_context(
             self.VIEWER_ID, '0', '0')
         response_dict = self.get_json(
-            '%s/0' % feconf.COLLECTION_DATA_URL_PREFIX)
+            '{0!s}/0'.format(feconf.COLLECTION_DATA_URL_PREFIX))
         collection_dict = response_dict['collection']
 
         self.assertEqual(
@@ -155,7 +155,7 @@ class CollectionViewerControllerEndToEndTests(test_utils.GenericTestBase):
         collection_services.record_played_exploration_in_collection_context(
             self.VIEWER_ID, '0', '13')
         response_dict = self.get_json(
-            '%s/0' % feconf.COLLECTION_DATA_URL_PREFIX)
+            '{0!s}/0'.format(feconf.COLLECTION_DATA_URL_PREFIX))
         collection_dict = response_dict['collection']
 
         self.assertEqual(
@@ -168,7 +168,7 @@ class CollectionViewerControllerEndToEndTests(test_utils.GenericTestBase):
         collection_services.record_played_exploration_in_collection_context(
             self.VIEWER_ID, '0', '14')
         response_dict = self.get_json(
-            '%s/0' % feconf.COLLECTION_DATA_URL_PREFIX)
+            '{0!s}/0'.format(feconf.COLLECTION_DATA_URL_PREFIX))
         collection_dict = response_dict['collection']
 
         self.assertEqual(
@@ -182,7 +182,7 @@ class CollectionViewerControllerEndToEndTests(test_utils.GenericTestBase):
         collection_services.record_played_exploration_in_collection_context(
             self.VIEWER_ID, '0', '4')
         response_dict = self.get_json(
-            '%s/0' % feconf.COLLECTION_DATA_URL_PREFIX)
+            '{0!s}/0'.format(feconf.COLLECTION_DATA_URL_PREFIX))
         collection_dict = response_dict['collection']
 
         self.assertEqual(collection_dict['next_exploration_ids'], [])

@@ -91,7 +91,7 @@ class CollectionModel(base_models.VersionedModel):
         # sure summary dicts get updated correctly when collections
         # are changed)
         CollectionCommitLogEntryModel(
-            id=('collection-%s-%s' % (self.id, self.version)),
+            id=('collection-{0!s}-{1!s}'.format(self.id, self.version)),
             user_id=committer_id,
             username=committer_username,
             collection_id=self.id,
@@ -178,7 +178,7 @@ class CollectionRightsModel(base_models.VersionedModel):
             # sure summary dicts get updated correctly when collections
             # are changed)
             CollectionCommitLogEntryModel(
-                id=('rights-%s-%s' % (self.id, self.version)),
+                id=('rights-{0!s}-{1!s}'.format(self.id, self.version)),
                 user_id=committer_id,
                 username=committer_username,
                 collection_id=self.id,
@@ -235,7 +235,7 @@ class CollectionCommitLogEntryModel(base_models.BaseModel):
 
     @classmethod
     def get_commit(cls, collection_id, version):
-        return cls.get_by_id('collection-%s-%s' % (collection_id, version))
+        return cls.get_by_id('collection-{0!s}-{1!s}'.format(collection_id, version))
 
     @classmethod
     def get_all_commits(cls, page_size, urlsafe_start_cursor):

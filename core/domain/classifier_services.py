@@ -165,7 +165,7 @@ class StringClassifier(object):
             if label_id == l:
                 return label_name
 
-        raise Exception('Label id %d does not exist.' % l)
+        raise Exception('Label id {0:d} does not exist.'.format(l))
 
     def _get_doc_with_label_vector(self, d):
         """Given a doc id, return the doc and its label bit vector."""
