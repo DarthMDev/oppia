@@ -181,7 +181,7 @@ class EditorTest(BaseEditorControllerTest):
         # then submit 'blah' once, 'blah2' twice and 'blah3' three times.
         # TODO(sll): Use the ExplorationPlayer in reader_test for this.
         exploration_dict = self.get_json(
-            '%s/0' % feconf.EXPLORATION_INIT_URL_PREFIX)
+            '{0!s}/0'.format(feconf.EXPLORATION_INIT_URL_PREFIX))
         self.assertEqual(
             exploration_dict['exploration']['title'], 'Welcome to Oppia!')
 
@@ -200,7 +200,7 @@ class EditorTest(BaseEditorControllerTest):
 
         response = self.testapp.get('/create/0')
         csrf_token = self.get_csrf_token_from_response(response)
-        url = str('/createhandler/resolved_answers/0/%s' % state_name)
+        url = str('/createhandler/resolved_answers/0/{0!s}'.format(state_name))
 
         def _get_unresolved_answers():
             return stats_domain.StateRuleAnswerLog.get(
@@ -254,7 +254,7 @@ class EditorTest(BaseEditorControllerTest):
                 feconf.SYSTEM_COMMITTER_ID, '15')
 
             exploration_dict = self.get_json(
-                '%s/15' % feconf.EXPLORATION_INIT_URL_PREFIX)
+                '{0!s}/15'.format(feconf.EXPLORATION_INIT_URL_PREFIX))
             self.assertEqual(
                 exploration_dict['exploration']['title'],
                 'Demonstrating fuzzy rules')
@@ -286,10 +286,10 @@ class EditorTest(BaseEditorControllerTest):
             self.login(self.EDITOR_EMAIL)
             response = self.testapp.get('/create/15')
             csrf_token = self.get_csrf_token_from_response(response)
-            url = str('/createhandler/training_data/15/%s' % state_name)
+            url = str('/createhandler/training_data/15/{0!s}'.format(state_name))
 
             exploration_dict = self.get_json(
-                '%s/15' % feconf.EXPLORATION_INIT_URL_PREFIX)
+                '{0!s}/15'.format(feconf.EXPLORATION_INIT_URL_PREFIX))
 
             # Only two of the four submitted answers should be unhandled.
             response_dict = self.get_json(url)
@@ -316,7 +316,7 @@ class EditorTest(BaseEditorControllerTest):
                 _create_training_data('joyful'))
 
             exploration_dict = self.get_json(
-                '%s/15' % feconf.EXPLORATION_INIT_URL_PREFIX)
+                '{0!s}/15'.format(feconf.EXPLORATION_INIT_URL_PREFIX))
 
             # If one of the values is added to the training data of a fuzzy
             # rule, then it should not be returned as an unhandled answer.
@@ -350,7 +350,7 @@ class EditorTest(BaseEditorControllerTest):
                 _create_training_data('sad'))
 
             exploration_dict = self.get_json(
-                '%s/15' % feconf.EXPLORATION_INIT_URL_PREFIX)
+                '{0!s}/15'.format(feconf.EXPLORATION_INIT_URL_PREFIX))
 
             # If both are classified, then nothing should be returned
             # unhandled.
@@ -369,7 +369,7 @@ class EditorTest(BaseEditorControllerTest):
             self.assertEqual(response_dict['unhandled_answers'], [])
 
             exploration_dict = self.get_json(
-                '%s/15' % feconf.EXPLORATION_INIT_URL_PREFIX)
+                '{0!s}/15'.format(feconf.EXPLORATION_INIT_URL_PREFIX))
 
             # If one of the existing training data elements in the fuzzy rule
             # is removed (5 in this case), but it is not backed up by an
@@ -502,18 +502,18 @@ param_changes: []
         exploration.rename_state('State 2', 'State B')
         exploration.delete_state('State 3')
         exp_services._save_exploration(self.OWNER_ID, exploration, '', [])
-        response = self.testapp.get('/create/%s' % EXP_ID)
+        response = self.testapp.get('/create/{0!s}'.format(EXP_ID))
 
         # Check download to zip file
         # Download to zip file using download handler
-        EXPLORATION_DOWNLOAD_URL = '/createhandler/download/%s' % EXP_ID
+        EXPLORATION_DOWNLOAD_URL = '/createhandler/download/{0!s}'.format(EXP_ID)
         response = self.testapp.get(EXPLORATION_DOWNLOAD_URL)
 
         # Check downloaded zip file
         self.assertEqual(response.headers['Content-Type'], 'text/plain')
         filename = 'oppia-ThetitleforZIPdownloadhandlertest!-v2.zip'
         self.assertEqual(response.headers['Content-Disposition'],
-                         'attachment; filename=%s' % str(filename))
+                         'attachment; filename={0!s}'.format(str(filename)))
         zf_saved = zipfile.ZipFile(StringIO.StringIO(response.body))
         self.assertEqual(
             zf_saved.namelist(),
@@ -543,8 +543,7 @@ param_changes: []
         # Download to JSON string using download handler
         self.maxDiff = None
         EXPLORATION_DOWNLOAD_URL = (
-            '/createhandler/download/%s?output_format=%s&width=50' %
-            (EXP_ID, feconf.OUTPUT_FORMAT_JSON))
+            '/createhandler/download/{0!s}?output_format={1!s}&width=50'.format(EXP_ID, feconf.OUTPUT_FORMAT_JSON))
         response = self.get_json(EXPLORATION_DOWNLOAD_URL)
 
         # Check downloaded dict
@@ -572,14 +571,13 @@ param_changes: []
         exploration.rename_state('State 2', 'State B')
         exploration.delete_state('State 3')
         exp_services._save_exploration(self.OWNER_ID, exploration, '', [])
-        response = self.testapp.get('/create/%s' % EXP_ID)
+        response = self.testapp.get('/create/{0!s}'.format(EXP_ID))
 
         # Check download state as YAML string
         self.maxDiff = None
         state_name = 'State%20A'
         EXPLORATION_DOWNLOAD_URL = (
-            '/createhandler/download_state/%s?state=%s&width=50' %
-            (EXP_ID, state_name))
+            '/createhandler/download_state/{0!s}?state={1!s}&width=50'.format(EXP_ID, state_name))
         response = self.testapp.get(EXPLORATION_DOWNLOAD_URL)
         self.assertEqual(self.SAMPLE_STATE_STRING, response.body)
 
@@ -601,19 +599,19 @@ class ExplorationDeletionRightsTest(BaseEditorControllerTest):
 
         self.login(self.EDITOR_EMAIL)
         response = self.testapp.delete(
-            '/createhandler/data/%s' % UNPUBLISHED_EXP_ID, expect_errors=True)
+            '/createhandler/data/{0!s}'.format(UNPUBLISHED_EXP_ID), expect_errors=True)
         self.assertEqual(response.status_int, 401)
         self.logout()
 
         self.login(self.VIEWER_EMAIL)
         response = self.testapp.delete(
-            '/createhandler/data/%s' % UNPUBLISHED_EXP_ID, expect_errors=True)
+            '/createhandler/data/{0!s}'.format(UNPUBLISHED_EXP_ID), expect_errors=True)
         self.assertEqual(response.status_int, 401)
         self.logout()
 
         self.login(self.OWNER_EMAIL)
         response = self.testapp.delete(
-            '/createhandler/data/%s' % UNPUBLISHED_EXP_ID)
+            '/createhandler/data/{0!s}'.format(UNPUBLISHED_EXP_ID))
         self.assertEqual(response.status_int, 200)
         self.logout()
 
@@ -631,25 +629,25 @@ class ExplorationDeletionRightsTest(BaseEditorControllerTest):
 
         self.login(self.EDITOR_EMAIL)
         response = self.testapp.delete(
-            '/createhandler/data/%s' % PUBLISHED_EXP_ID, expect_errors=True)
+            '/createhandler/data/{0!s}'.format(PUBLISHED_EXP_ID), expect_errors=True)
         self.assertEqual(response.status_int, 401)
         self.logout()
 
         self.login(self.VIEWER_EMAIL)
         response = self.testapp.delete(
-            '/createhandler/data/%s' % PUBLISHED_EXP_ID, expect_errors=True)
+            '/createhandler/data/{0!s}'.format(PUBLISHED_EXP_ID), expect_errors=True)
         self.assertEqual(response.status_int, 401)
         self.logout()
 
         self.login(self.OWNER_EMAIL)
         response = self.testapp.delete(
-            '/createhandler/data/%s' % PUBLISHED_EXP_ID, expect_errors=True)
+            '/createhandler/data/{0!s}'.format(PUBLISHED_EXP_ID), expect_errors=True)
         self.assertEqual(response.status_int, 401)
         self.logout()
 
         self.login(self.ADMIN_EMAIL)
         response = self.testapp.delete(
-            '/createhandler/data/%s' % PUBLISHED_EXP_ID)
+            '/createhandler/data/{0!s}'.format(PUBLISHED_EXP_ID))
         self.assertEqual(response.status_int, 200)
         self.logout()
 
@@ -688,13 +686,13 @@ class VersioningIntegrationTest(BaseEditorControllerTest):
         """Test reverting to old exploration versions."""
         # Open editor page
         response = self.testapp.get(
-            '%s/%s' % (feconf.EDITOR_URL_PREFIX, self.EXP_ID))
+            '{0!s}/{1!s}'.format(feconf.EDITOR_URL_PREFIX, self.EXP_ID))
         csrf_token = self.get_csrf_token_from_response(response)
 
         # May not revert to any version that's not 1
         for rev_version in (-1, 0, 2, 3, 4, '1', ()):
             response_dict = self.post_json(
-                '/createhandler/revert/%s' % self.EXP_ID, {
+                '/createhandler/revert/{0!s}'.format(self.EXP_ID), {
                     'current_version': 2,
                     'revert_to_version': rev_version
                 }, csrf_token, expect_errors=True, expected_status_int=400)
@@ -708,7 +706,7 @@ class VersioningIntegrationTest(BaseEditorControllerTest):
 
             # Check that exploration is really not reverted to old version
             reader_dict = self.get_json(
-                '%s/%s' % (feconf.EXPLORATION_INIT_URL_PREFIX, self.EXP_ID))
+                '{0!s}/{1!s}'.format(feconf.EXPLORATION_INIT_URL_PREFIX, self.EXP_ID))
             init_state_name = reader_dict['exploration']['init_state_name']
             init_state_data = (
                 reader_dict['exploration']['states'][init_state_name])
@@ -719,14 +717,14 @@ class VersioningIntegrationTest(BaseEditorControllerTest):
         # Revert to version 1
         rev_version = 1
         response_dict = self.post_json(
-            '/createhandler/revert/%s' % self.EXP_ID, {
+            '/createhandler/revert/{0!s}'.format(self.EXP_ID), {
                 'current_version': 2,
                 'revert_to_version': rev_version
             }, csrf_token)
 
         # Check that exploration is really reverted to version 1
         reader_dict = self.get_json(
-            '%s/%s' % (feconf.EXPLORATION_INIT_URL_PREFIX, self.EXP_ID))
+            '{0!s}/{1!s}'.format(feconf.EXPLORATION_INIT_URL_PREFIX, self.EXP_ID))
 
         init_state_name = reader_dict['exploration']['init_state_name']
         init_state_data = (
@@ -739,7 +737,7 @@ class VersioningIntegrationTest(BaseEditorControllerTest):
         """Test retrieval of old exploration versions."""
         # The latest version contains 'ABC'.
         reader_dict = self.get_json(
-            '%s/%s' % (feconf.EXPLORATION_INIT_URL_PREFIX, self.EXP_ID))
+            '{0!s}/{1!s}'.format(feconf.EXPLORATION_INIT_URL_PREFIX, self.EXP_ID))
         init_state_name = reader_dict['exploration']['init_state_name']
         init_state_data = (
             reader_dict['exploration']['states'][init_state_name])
@@ -749,7 +747,7 @@ class VersioningIntegrationTest(BaseEditorControllerTest):
 
         # v1 contains 'Hi, welcome to Oppia!'.
         reader_dict = self.get_json(
-            '%s/%s?v=1' % (feconf.EXPLORATION_INIT_URL_PREFIX, self.EXP_ID))
+            '{0!s}/{1!s}?v=1'.format(feconf.EXPLORATION_INIT_URL_PREFIX, self.EXP_ID))
         init_state_name = reader_dict['exploration']['init_state_name']
         init_state_data = (
             reader_dict['exploration']['states'][init_state_name])
@@ -759,7 +757,7 @@ class VersioningIntegrationTest(BaseEditorControllerTest):
 
         # v2 contains 'ABC'.
         reader_dict = self.get_json(
-            '%s/%s?v=2' % (feconf.EXPLORATION_INIT_URL_PREFIX, self.EXP_ID))
+            '{0!s}/{1!s}?v=2'.format(feconf.EXPLORATION_INIT_URL_PREFIX, self.EXP_ID))
         init_state_name = reader_dict['exploration']['init_state_name']
         init_state_data = (
             reader_dict['exploration']['states'][init_state_name])
@@ -769,7 +767,7 @@ class VersioningIntegrationTest(BaseEditorControllerTest):
 
         # v3 does not exist.
         response = self.testapp.get(
-            '%s/%s?v=3' % (feconf.EXPLORATION_INIT_URL_PREFIX, self.EXP_ID),
+            '{0!s}/{1!s}?v=3'.format(feconf.EXPLORATION_INIT_URL_PREFIX, self.EXP_ID),
             expect_errors=True)
         self.assertEqual(response.status_int, 404)
 
@@ -794,7 +792,7 @@ class ExplorationEditRightsTest(BaseEditorControllerTest):
 
         response = self.testapp.get(feconf.GALLERY_URL)
         self.assertEqual(response.status_int, 200)
-        response = self.testapp.get('/create/%s' % EXP_ID)
+        response = self.testapp.get('/create/{0!s}'.format(EXP_ID))
         self.assertEqual(response.status_int, 200)
         self.assert_can_edit(response.body)
 
@@ -805,7 +803,7 @@ class ExplorationEditRightsTest(BaseEditorControllerTest):
         # Test that Joe is banned. (He can still access the gallery.)
         response = self.testapp.get(feconf.GALLERY_URL, expect_errors=True)
         self.assertEqual(response.status_int, 200)
-        response = self.testapp.get('/create/%s' % EXP_ID, expect_errors=True)
+        response = self.testapp.get('/create/{0!s}'.format(EXP_ID), expect_errors=True)
         self.assertEqual(response.status_int, 200)
         self.assert_cannot_edit(response.body)
 
@@ -814,7 +812,7 @@ class ExplorationEditRightsTest(BaseEditorControllerTest):
 
         # Sandra logs in and is unaffected.
         self.login('sandra@example.com')
-        response = self.testapp.get('/create/%s' % EXP_ID)
+        response = self.testapp.get('/create/{0!s}'.format(EXP_ID))
         self.assertEqual(response.status_int, 200)
         self.assert_can_edit(response.body)
         self.logout()
@@ -858,11 +856,11 @@ class ExplorationRightsIntegrationTest(BaseEditorControllerTest):
         exploration.states['State 3'].update_interaction_id('TextInput')
 
         response = self.testapp.get(
-            '%s/%s' % (feconf.EDITOR_URL_PREFIX, EXP_ID))
+            '{0!s}/{1!s}'.format(feconf.EDITOR_URL_PREFIX, EXP_ID))
         csrf_token = self.get_csrf_token_from_response(response)
 
         # Owner adds rights for other users
-        rights_url = '%s/%s' % (feconf.EXPLORATION_RIGHTS_PREFIX, EXP_ID)
+        rights_url = '{0!s}/{1!s}'.format(feconf.EXPLORATION_RIGHTS_PREFIX, EXP_ID)
         self.put_json(
             rights_url, {
                 'version': exploration.version,
@@ -886,20 +884,20 @@ class ExplorationRightsIntegrationTest(BaseEditorControllerTest):
 
         # Check that viewer can access editor page but cannot edit.
         self.login(self.VIEWER_EMAIL)
-        response = self.testapp.get('/create/%s' % EXP_ID, expect_errors=True)
+        response = self.testapp.get('/create/{0!s}'.format(EXP_ID), expect_errors=True)
         self.assertEqual(response.status_int, 200)
         self.assert_cannot_edit(response.body)
         self.logout()
 
         # Check that collaborator can access editor page and can edit.
         self.login(self.COLLABORATOR_EMAIL)
-        response = self.testapp.get('/create/%s' % EXP_ID)
+        response = self.testapp.get('/create/{0!s}'.format(EXP_ID))
         self.assertEqual(response.status_int, 200)
         self.assert_can_edit(response.body)
         csrf_token = self.get_csrf_token_from_response(response)
 
         # Check that collaborator can add a new state called 'State 4'
-        add_url = '%s/%s' % (feconf.EXPLORATION_DATA_PREFIX, EXP_ID)
+        add_url = '{0!s}/{1!s}'.format(feconf.EXPLORATION_DATA_PREFIX, EXP_ID)
         response_dict = self.put_json(
             add_url,
             {
@@ -922,7 +920,7 @@ class ExplorationRightsIntegrationTest(BaseEditorControllerTest):
 
         # Check that collaborator cannot add new members
         exploration = exp_services.get_exploration_by_id(EXP_ID)
-        rights_url = '%s/%s' % (feconf.EXPLORATION_RIGHTS_PREFIX, EXP_ID)
+        rights_url = '{0!s}/{1!s}'.format(feconf.EXPLORATION_RIGHTS_PREFIX, EXP_ID)
         response_dict = self.put_json(
             rights_url, {
                 'version': exploration.version,
@@ -935,13 +933,13 @@ class ExplorationRightsIntegrationTest(BaseEditorControllerTest):
 
         # Check that collaborator2 can access editor page and can edit.
         self.login(self.COLLABORATOR2_EMAIL)
-        response = self.testapp.get('/create/%s' % EXP_ID)
+        response = self.testapp.get('/create/{0!s}'.format(EXP_ID))
         self.assertEqual(response.status_int, 200)
         self.assert_can_edit(response.body)
         csrf_token = self.get_csrf_token_from_response(response)
 
         # Check that collaborator2 can add a new state called 'State 5'
-        add_url = '%s/%s' % (feconf.EXPLORATION_DATA_PREFIX, EXP_ID)
+        add_url = '{0!s}/{1!s}'.format(feconf.EXPLORATION_DATA_PREFIX, EXP_ID)
         response_dict = self.put_json(
             add_url,
             {
@@ -964,7 +962,7 @@ class ExplorationRightsIntegrationTest(BaseEditorControllerTest):
 
         # Check that collaborator2 cannot add new members
         exploration = exp_services.get_exploration_by_id(EXP_ID)
-        rights_url = '%s/%s' % (feconf.EXPLORATION_RIGHTS_PREFIX, EXP_ID)
+        rights_url = '{0!s}/{1!s}'.format(feconf.EXPLORATION_RIGHTS_PREFIX, EXP_ID)
         response_dict = self.put_json(
             rights_url, {
                 'version': exploration.version,

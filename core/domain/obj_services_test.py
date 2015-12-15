@@ -58,9 +58,9 @@ class ObjectJsFilenamesUnitTests(test_utils.GenericTestBase):
         for obj_type, obj_cls in all_object_classes.iteritems():
             if obj_cls.has_editor_js_template():
                 template = obj_cls.get_editor_js_template()
-                directive_name = '%sEditor' % obj_type
+                directive_name = '{0!s}Editor'.format(obj_type)
                 normalized_directive_name = (
                     directive_name[0].lower() + directive_name[1:])
                 self.assertIn(
-                    'oppia.directive(\'%s\'' % normalized_directive_name,
-                    template, msg='(%s)' % obj_type)
+                    'oppia.directive(\'{0!s}\''.format(normalized_directive_name),
+                    template, msg='({0!s})'.format(obj_type))

@@ -192,7 +192,7 @@ class BaseJobManager(object):
             job_id, model.status_code, STATUS_CODE_CANCELED)
         cls._require_correct_job_type(model.job_type)
 
-        cancel_message = 'Canceled by %s' % (user_id or 'system')
+        cancel_message = 'Canceled by {0!s}'.format((user_id or 'system'))
 
         # Cancel the job.
         cls._pre_cancel_hook(job_id, cancel_message)
@@ -281,14 +281,13 @@ class BaseJobManager(object):
         valid_new_status_codes = VALID_STATUS_CODE_TRANSITIONS[old_status_code]
         if new_status_code not in valid_new_status_codes:
             raise Exception(
-                'Invalid status code change for job %s: from %s to %s' %
-                (job_id, old_status_code, new_status_code))
+                'Invalid status code change for job {0!s}: from {1!s} to {2!s}'.format(job_id, old_status_code, new_status_code))
 
     @classmethod
     def _require_correct_job_type(cls, job_type):
         if job_type != cls.__name__:
             raise Exception(
-                'Invalid job type %s for class %s' % (job_type, cls.__name__))
+                'Invalid job type {0!s} for class {1!s}'.format(job_type, cls.__name__))
 
     @classmethod
     def _pre_enqueue_hook(cls, job_id):
@@ -337,8 +336,7 @@ class BaseDeferredJobManager(BaseJobManager):
     def _run_job(cls, job_id, additional_job_params):
         """Starts the job."""
         logging.info(
-            'Job %s started at %s' %
-            (job_id, utils.get_current_time_in_millisecs()))
+            'Job {0!s} started at {1!s}'.format(job_id, utils.get_current_time_in_millisecs()))
         cls.register_start(job_id)
 
         try:
@@ -346,20 +344,18 @@ class BaseDeferredJobManager(BaseJobManager):
         except Exception as e:
             logging.error(traceback.format_exc())
             logging.error(
-                'Job %s failed at %s' %
-                (job_id, utils.get_current_time_in_millisecs()))
+                'Job {0!s} failed at {1!s}'.format(job_id, utils.get_current_time_in_millisecs()))
             cls.register_failure(
-                job_id, '%s\n%s' % (unicode(e), traceback.format_exc()))
+                job_id, '{0!s}\n{1!s}'.format(unicode(e), traceback.format_exc()))
             raise taskqueue_services.PermanentTaskFailure(
-                'Task failed: %s\n%s' % (unicode(e), traceback.format_exc()))
+                'Task failed: {0!s}\n{1!s}'.format(unicode(e), traceback.format_exc()))
 
         # Note that the job may have been canceled after it started and before
         # it reached this stage. This will result in an exception when the
         # validity of the status code transition is checked.
         cls.register_completion(job_id, result)
         logging.info(
-            'Job %s completed at %s' %
-            (job_id, utils.get_current_time_in_millisecs()))
+            'Job {0!s} completed at {1!s}'.format(job_id, utils.get_current_time_in_millisecs()))
 
     @classmethod
     def _real_enqueue(cls, job_id, additional_job_params):
@@ -407,11 +403,10 @@ class StoreMapReduceResults(base_handler.PipelineBase):
         except Exception as e:
             logging.error(traceback.format_exc())
             logging.error(
-                'Job %s failed at %s' %
-                (job_id, utils.get_current_time_in_millisecs()))
+                'Job {0!s} failed at {1!s}'.format(job_id, utils.get_current_time_in_millisecs()))
             job_class.register_failure(
                 job_id,
-                '%s\n%s' % (unicode(e), traceback.format_exc()))
+                '{0!s}\n{1!s}'.format(unicode(e), traceback.format_exc()))
 
 
 class GoogleCloudStorageConsistentJsonOutputWriter(
@@ -419,7 +414,7 @@ class GoogleCloudStorageConsistentJsonOutputWriter(
 
     def write(self, data):
         super(GoogleCloudStorageConsistentJsonOutputWriter, self).write(
-            '%s\n' % json.dumps(data))
+            '{0!s}\n'.format(json.dumps(data)))
 
 
 class BaseMapReduceJobManager(BaseJobManager):
@@ -438,7 +433,7 @@ class BaseMapReduceJobManager(BaseJobManager):
         mapper_params = context.get().mapreduce_spec.mapper.params
         if param_name not in mapper_params:
             raise Exception(
-                'Could not find %s in %s' % (param_name, mapper_params))
+                'Could not find {0!s} in {1!s}'.format(param_name, mapper_params))
         return context.get().mapreduce_spec.mapper.params[param_name]
 
     @classmethod
@@ -493,14 +488,14 @@ class BaseMapReduceJobManager(BaseJobManager):
     def _real_enqueue(cls, job_id, additional_job_params):
         entity_class_types = cls.entity_classes_to_map_over()
         entity_class_names = [
-            '%s.%s' % (
+            '{0!s}.{1!s}'.format(
                 entity_class_type.__module__, entity_class_type.__name__)
             for entity_class_type in entity_class_types]
 
         kwargs = {
             'job_name': job_id,
-            'mapper_spec': '%s.%s.map' % (cls.__module__, cls.__name__),
-            'reducer_spec': '%s.%s.reduce' % (cls.__module__, cls.__name__),
+            'mapper_spec': '{0!s}.{1!s}.map'.format(cls.__module__, cls.__name__),
+            'reducer_spec': '{0!s}.{1!s}.reduce'.format(cls.__module__, cls.__name__),
             'input_reader_spec': (
                 'core.jobs.MultipleDatastoreEntitiesInputReader'),
             'output_writer_spec': (
@@ -533,7 +528,7 @@ class BaseMapReduceJobManager(BaseJobManager):
                     additional_job_params[param_name])
 
         mr_pipeline = MapReduceJobPipeline(
-            job_id, '%s.%s' % (cls.__module__, cls.__name__), kwargs)
+            job_id, '{0!s}.{1!s}'.format(cls.__module__, cls.__name__), kwargs)
         mr_pipeline.start(base_path='/mapreduce/worker/pipeline')
 
     @classmethod
@@ -666,7 +661,7 @@ class BaseRealtimeDatastoreClassForContinuousComputations(
         """Returns an ID used to identify the element with the given entity id
         in the currently active realtime datastore layer.
         """
-        return '%s:%s' % (layer_index, raw_entity_id)
+        return '{0!s}:{1!s}'.format(layer_index, raw_entity_id)
 
     @classmethod
     def delete_layer(cls, layer_index, latest_created_on_datetime):
@@ -684,7 +679,7 @@ class BaseRealtimeDatastoreClassForContinuousComputations(
     @classmethod
     def get(cls, entity_id, strict=True):
         if not cls._is_valid_realtime_id(entity_id):
-            raise ValueError('Invalid realtime id: %s' % entity_id)
+            raise ValueError('Invalid realtime id: {0!s}'.format(entity_id))
 
         return super(
             BaseRealtimeDatastoreClassForContinuousComputations, cls
@@ -694,8 +689,7 @@ class BaseRealtimeDatastoreClassForContinuousComputations(
         if (self.realtime_layer is None or
                 str(self.realtime_layer) != self.id[0]):
             raise Exception(
-                'Realtime layer %s does not match realtime id %s' %
-                (self.realtime_layer, self.id))
+                'Realtime layer {0!s} does not match realtime id {1!s}'.format(self.realtime_layer, self.id))
 
         return super(
             BaseRealtimeDatastoreClassForContinuousComputations, self).put()
@@ -1007,7 +1001,7 @@ class BaseContinuousComputationManager(object):
 
     @classmethod
     def on_batch_job_canceled(cls):
-        logging.info('Job %s canceled.' % cls.__name__)
+        logging.info('Job {0!s} canceled.'.format(cls.__name__))
         # The job should already be stopping, and should therefore be marked
         # idle.
         job_status = cls._register_end_of_batch_job_and_return_status()
@@ -1019,7 +1013,7 @@ class BaseContinuousComputationManager(object):
     @classmethod
     def on_batch_job_failure(cls):
         # TODO(sll): Alert the site admin via email.
-        logging.error('Job %s failed.' % cls.__name__)
+        logging.error('Job {0!s} failed.'.format(cls.__name__))
         job_status = cls._register_end_of_batch_job_and_return_status()
         if job_status == job_models.CONTINUOUS_COMPUTATION_STATUS_CODE_RUNNING:
             cls._kickoff_batch_job_after_previous_one_ends()
@@ -1208,11 +1202,10 @@ class JobCleanupManager(BaseMapReduceJobManager):
         values = [ast.literal_eval(v) for v in stringified_values]
         if key.endswith('_deleted'):
             logging.warning(
-                'Delete count: %s entities (%s)' % (sum(values), key))
+                'Delete count: {0!s} entities ({1!s})'.format(sum(values), key))
         else:
             logging.warning(
-                'Entities remaining count: %s entities (%s)' %
-                (sum(values), key))
+                'Entities remaining count: {0!s} entities ({1!s})'.format(sum(values), key))
 
 
 ABSTRACT_BASE_CLASSES = frozenset([

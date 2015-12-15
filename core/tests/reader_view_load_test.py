@@ -174,7 +174,7 @@ class WebSession(object):
         request = urllib2.Request(url)
         for key, value in self.common_headers.items():
             request.add_header(key, value)
-        response = self.open(request, 'GET %s' % url)
+        response = self.open(request, 'GET {0!s}'.format(url))
         assert_equals(expected_code, response.code)
         return response.read()
 
@@ -186,7 +186,7 @@ class WebSession(object):
 
         data = urllib.urlencode(args_dict)
         request = urllib2.Request(url, data)
-        response = self.open(request, 'POST %s' % url)
+        response = self.open(request, 'POST {0!s}'.format(url))
         assert_equals(expected_code, response.code)
         return response.read()
 
@@ -285,12 +285,12 @@ class ReaderViewLoadTest(object):
     def init_player(self, exploration_id, expected_title, expected_response):
         self.exp_id = exploration_id
 
-        body = self._get('%s/explore/%s' % (self.host, self.exp_id))
+        body = self._get('{0!s}/explore/{1!s}'.format(self.host, self.exp_id))
         assert_contains('Learn', body)
         assert_contains('Return to the gallery', body)
 
         body = self._get_json(
-            '%s/explorehandler/init/%s' % (self.host, self.exp_id))
+            '{0!s}/explorehandler/init/{1!s}'.format(self.host, self.exp_id))
         assert_equals(body['title'], expected_title)
         assert_contains(expected_response, body['init_html'])
 
@@ -299,7 +299,7 @@ class ReaderViewLoadTest(object):
         self.state_history = [self.last_state_name]
 
     def submit_and_compare(self, answer, expected_response):
-        url = '%s/explorehandler/transition/%s/%s' % (
+        url = '{0!s}/explorehandler/transition/{1!s}/{2!s}'.format(
             self.host, self.exp_id, urllib.quote(self.last_state_name))
         body = self._post_json(url, {
             'answer': answer, 'params': self.last_params,
@@ -337,7 +337,7 @@ def run_all(args):
                     args.start_uid + iteration_index * args.thread_count +
                     index))
                 task = TaskThread(
-                    test.run, name='ReaderViewLoadTest-%s' % index)
+                    test.run, name='ReaderViewLoadTest-{0!s}'.format(index))
                 tasks.append(task)
             try:
                 TaskThread.execute_task_list(tasks)

@@ -99,10 +99,10 @@ class ExplorationFileSystem(object):
         """
         if version is None:
             return file_models.FileMetadataModel.get_model(
-                self._exploration_id, 'assets/%s' % filepath)
+                self._exploration_id, 'assets/{0!s}'.format(filepath))
         else:
             return file_models.FileMetadataModel.get_version(
-                self._exploration_id, 'assets/%s' % filepath, version)
+                self._exploration_id, 'assets/{0!s}'.format(filepath), version)
 
     def _get_file_data(self, filepath, version):
         """Return the desired file content.
@@ -111,10 +111,10 @@ class ExplorationFileSystem(object):
         """
         if version is None:
             return file_models.FileModel.get_model(
-                self._exploration_id, 'assets/%s' % filepath)
+                self._exploration_id, 'assets/{0!s}'.format(filepath))
         else:
             return file_models.FileModel.get_version(
-                self._exploration_id, 'assets/%s' % filepath, version)
+                self._exploration_id, 'assets/{0!s}'.format(filepath), version)
 
     def _save_file(self, user_id, filepath, raw_bytes):
         """Create or update a file."""
@@ -124,13 +124,13 @@ class ExplorationFileSystem(object):
         metadata = self._get_file_metadata(filepath, None)
         if not metadata:
             metadata = file_models.FileMetadataModel.create(
-                self._exploration_id, 'assets/%s' % filepath)
+                self._exploration_id, 'assets/{0!s}'.format(filepath))
         metadata.size = len(raw_bytes)
 
         data = self._get_file_data(filepath, None)
         if not data:
             data = file_models.FileModel.create(
-                self._exploration_id, 'assets/%s' % filepath)
+                self._exploration_id, 'assets/{0!s}'.format(filepath))
         data.content = raw_bytes
 
         data.commit(user_id, CHANGE_LIST_SAVE)
@@ -194,8 +194,8 @@ class ExplorationFileSystem(object):
         # The trailing slash is necessary to prevent non-identical directory
         # names with the same prefix from matching, e.g. /abcd/123.png should
         # not match a query for files under /abc/.
-        prefix = '%s' % utils.vfs_construct_path(
-            '/', self._exploration_id, 'assets', dir_name)
+        prefix = '{0!s}'.format(utils.vfs_construct_path(
+            '/', self._exploration_id, 'assets', dir_name))
         if not prefix.endswith('/'):
             prefix += '/'
 
@@ -266,7 +266,7 @@ class AbstractFileSystem(object):
 
         # This check prevents directory traversal.
         if not normalized_path.startswith(base_dir):
-            raise IOError('Invalid filepath: %s' % filepath)
+            raise IOError('Invalid filepath: {0!s}'.format(filepath))
 
     def isfile(self, filepath):
         """Checks if a file exists. Similar to os.path.isfile(...)."""
@@ -283,8 +283,7 @@ class AbstractFileSystem(object):
         file_stream = self.open(filepath, version=version, mode=mode)
         if file_stream is None:
             raise IOError(
-                'File %s (version %s) not found.'
-                % (filepath, version if version else 'latest'))
+                'File {0!s} (version {1!s}) not found.'.format(filepath, version if version else 'latest'))
         return file_stream.read()
 
     def commit(self, user_id, filepath, raw_bytes):

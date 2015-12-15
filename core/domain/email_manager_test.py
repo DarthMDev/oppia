@@ -296,7 +296,7 @@ class SignupEmailTests(test_utils.GenericTestBase):
 
             self.assertEqual(
                 messages[0].sender,
-                'Email Sender <%s>' % feconf.SYSTEM_EMAIL_ADDRESS)
+                'Email Sender <{0!s}>'.format(feconf.SYSTEM_EMAIL_ADDRESS))
             self.assertEqual(messages[0].to, self.EDITOR_EMAIL)
             self.assertEqual(messages[0].subject, 'Welcome!')
             self.assertEqual(
@@ -415,7 +415,7 @@ class SignupEmailTests(test_utils.GenericTestBase):
                 sent_email_model.sender_id, feconf.SYSTEM_COMMITTER_ID)
             self.assertEqual(
                 sent_email_model.sender_email,
-                'Email Sender <%s>' % feconf.SYSTEM_EMAIL_ADDRESS)
+                'Email Sender <{0!s}>'.format(feconf.SYSTEM_EMAIL_ADDRESS))
             self.assertEqual(
                 sent_email_model.intent, email_models.INTENT_SIGNUP)
             self.assertEqual(

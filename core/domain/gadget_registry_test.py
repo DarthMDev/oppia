@@ -39,7 +39,7 @@ class GadgetRegistryUnitTests(test_utils.GenericTestBase):
                 feconf.ALLOWED_GADGETS.iteritems()):
             contents = os.listdir(
                 os.path.join(os.getcwd(), gadget_definition['dir']))
-            self.assertIn('%s.py' % gadget_name, contents)
+            self.assertIn('{0!s}.py'.format(gadget_name), contents)
 
     def test_get_all_specs(self):
         """Test the get_all_specs() method."""

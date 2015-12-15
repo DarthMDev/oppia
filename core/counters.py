@@ -25,7 +25,7 @@ class PerfCounter(object):
 
     def __init__(self, name, description):
         if name in Registry._counters:
-            raise Exception('Counter %s already exists.' % name)
+            raise Exception('Counter {0!s} already exists.'.format(name))
 
         self._name = name
         self._description = description

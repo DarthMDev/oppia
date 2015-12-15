@@ -94,14 +94,13 @@ SENDER_VALIDATORS = {
 
 def _require_sender_id_is_valid(intent, sender_id):
     if intent not in SENDER_VALIDATORS:
-        raise Exception('Invalid email intent string: %s' % intent)
+        raise Exception('Invalid email intent string: {0!s}'.format(intent))
     else:
         if not SENDER_VALIDATORS[intent](sender_id):
             logging.error(
-                'Invalid sender_id %s for email with intent \'%s\'' %
-                (sender_id, intent))
+                'Invalid sender_id {0!s} for email with intent \'{1!s}\''.format(sender_id, intent))
             raise Exception(
-                'Invalid sender_id for email with intent \'%s\'' % intent)
+                'Invalid sender_id for email with intent \'{0!s}\''.format(intent))
 
 
 def _send_email(
@@ -130,7 +129,7 @@ def _send_email(
     cleaned_plaintext_body = html_cleaner.strip_html_tags(raw_plaintext_body)
 
     def _send_email_in_transaction():
-        sender_email = '%s <%s>' % (
+        sender_email = '{0!s} <{1!s}>'.format(
             EMAIL_SENDER_NAME.value, feconf.SYSTEM_EMAIL_ADDRESS)
         email_services.send_mail(
             sender_email, recipient_email, email_subject,
@@ -158,7 +157,7 @@ def send_post_signup_email(user_id):
 
     user_settings = user_services.get_user_settings(user_id)
     email_subject = SIGNUP_EMAIL_CONTENT.value['subject']
-    email_body = 'Hi %s,<br><br>%s<br><br>%s' % (
+    email_body = 'Hi {0!s},<br><br>{1!s}<br><br>{2!s}'.format(
         user_settings.username,
         SIGNUP_EMAIL_CONTENT.value['html_body'],
         EMAIL_FOOTER.value)

@@ -121,8 +121,7 @@ def _validate_customization_args_and_values(
 
     if not isinstance(customization_args, dict):
         raise utils.ValidationError(
-            'Expected customization args to be a dict, received %s'
-            % customization_args)
+            'Expected customization args to be a dict, received {0!s}'.format(customization_args))
 
     # Validate and clean up the customization args.
 
@@ -135,12 +134,11 @@ def _validate_customization_args_and_values(
     for (arg_name, arg_value) in customization_args.iteritems():
         if not isinstance(arg_name, basestring):
             raise utils.ValidationError(
-                'Invalid customization arg name: %s' % arg_name)
+                'Invalid customization arg name: {0!s}'.format(arg_name))
         if arg_name not in ca_spec_names:
             extra_args.append(arg_name)
             logging.warning(
-                '%s %s does not support customization arg %s.'
-                % (item_name.capitalize(), item_type, arg_name))
+                '{0!s} {1!s} does not support customization arg {2!s}.'.format(item_name.capitalize(), item_type, arg_name))
     for extra_arg in extra_args:
         del customization_args[extra_arg]
 
@@ -221,7 +219,7 @@ class ExplorationChange(object):
         For a gadget, property_name must be one of GADGET_PROPERTIES.
         """
         if 'cmd' not in change_dict:
-            raise Exception('Invalid change_dict: %s' % change_dict)
+            raise Exception('Invalid change_dict: {0!s}'.format(change_dict))
         self.cmd = change_dict['cmd']
 
         if self.cmd == CMD_ADD_STATE:
@@ -233,7 +231,7 @@ class ExplorationChange(object):
             self.state_name = change_dict['state_name']
         elif self.cmd == CMD_EDIT_STATE_PROPERTY:
             if change_dict['property_name'] not in self.STATE_PROPERTIES:
-                raise Exception('Invalid change_dict: %s' % change_dict)
+                raise Exception('Invalid change_dict: {0!s}'.format(change_dict))
             self.state_name = change_dict['state_name']
             self.property_name = change_dict['property_name']
             self.new_value = change_dict['new_value']
@@ -241,7 +239,7 @@ class ExplorationChange(object):
         elif self.cmd == CMD_EDIT_EXPLORATION_PROPERTY:
             if (change_dict['property_name'] not in
                     self.EXPLORATION_PROPERTIES):
-                raise Exception('Invalid change_dict: %s' % change_dict)
+                raise Exception('Invalid change_dict: {0!s}'.format(change_dict))
             self.property_name = change_dict['property_name']
             self.new_value = change_dict['new_value']
             self.old_value = change_dict.get('old_value')
@@ -256,7 +254,7 @@ class ExplorationChange(object):
             self.gadget_name = change_dict['gadget_name']
         elif self.cmd == CMD_EDIT_GADGET_PROPERTY:
             if change_dict['property_name'] not in self.GADGET_PROPERTIES:
-                raise Exception('Invalid gadget change_dict: %s' % change_dict)
+                raise Exception('Invalid gadget change_dict: {0!s}'.format(change_dict))
             self.gadget_name = change_dict['gadget_name']
             self.property_name = change_dict['property_name']
             self.new_value = change_dict['new_value']
@@ -265,7 +263,7 @@ class ExplorationChange(object):
             self.from_version = change_dict['from_version']
             self.to_version = change_dict['to_version']
         else:
-            raise Exception('Invalid change_dict: %s' % change_dict)
+            raise Exception('Invalid change_dict: {0!s}'.format(change_dict))
 
 
 class ExplorationCommitLogEntry(object):
@@ -323,10 +321,10 @@ class Content(object):
         # TODO(sll): Add HTML sanitization checking.
         # TODO(sll): Validate customization args for rich-text components.
         if not self.type == 'text':
-            raise utils.ValidationError('Invalid content type: %s' % self.type)
+            raise utils.ValidationError('Invalid content type: {0!s}'.format(self.type))
         if not isinstance(self.value, basestring):
             raise utils.ValidationError(
-                'Invalid content value: %s' % self.value)
+                'Invalid content value: {0!s}'.format(self.value))
 
     def to_html(self, params):
         """Exports this content object to an HTML string.
@@ -368,7 +366,7 @@ class RuleSpec(object):
         else:
             param_list = [utils.to_ascii(val) for
                          (key, val) in self.inputs.iteritems()]
-            return '%s(%s)' % (self.rule_type, ','.join(param_list))
+            return '{0!s}({1!s})'.format(self.rule_type, ','.join(param_list))
 
     def validate(self, rule_params_list, exp_param_specs_dict):
         """Validates a RuleSpec value object. It ensures the inputs dict does
@@ -390,7 +388,7 @@ class RuleSpec(object):
         """
         if not isinstance(self.inputs, dict):
             raise utils.ValidationError(
-                'Expected inputs to be a dict, received %s' % self.inputs)
+                'Expected inputs to be a dict, received {0!s}'.format(self.inputs))
         input_key_set = set(self.inputs.keys())
         param_names_set = set([rp[0] for rp in rule_params_list])
         leftover_input_keys = input_key_set - param_names_set
@@ -405,8 +403,7 @@ class RuleSpec(object):
         # Check if there are missing parameters.
         if leftover_param_names:
             raise utils.ValidationError(
-                'RuleSpec \'%s\' is missing inputs: %s'
-                % (self.rule_type, leftover_param_names))
+                'RuleSpec \'{0!s}\' is missing inputs: {1!s}'.format(self.rule_type, leftover_param_names))
 
         rule_params_dict = {rp[0]: rp[1] for rp in rule_params_list}
         for (param_name, param_value) in self.inputs.iteritems():
@@ -478,13 +475,11 @@ class Outcome(object):
                 'Every outcome should have a destination.')
         if not isinstance(self.dest, basestring):
             raise utils.ValidationError(
-                'Expected outcome dest to be a string, received %s'
-                % self.dest)
+                'Expected outcome dest to be a string, received {0!s}'.format(self.dest))
 
         if not isinstance(self.feedback, list):
             raise utils.ValidationError(
-                'Expected outcome feedback to be a list, received %s'
-                % self.feedback)
+                'Expected outcome feedback to be a list, received {0!s}'.format(self.feedback))
         for feedback_item in self.feedback:
             if not isinstance(feedback_item, basestring):
                 raise utils.ValidationError(
@@ -493,8 +488,7 @@ class Outcome(object):
 
         if not isinstance(self.param_changes, list):
             raise utils.ValidationError(
-                'Expected outcome param_changes to be a list, received %s'
-                % self.param_changes)
+                'Expected outcome param_changes to be a list, received {0!s}'.format(self.param_changes))
         for param_change in self.param_changes:
             param_change.validate()
 
@@ -531,12 +525,10 @@ class AnswerGroup(object):
         # Rule validation.
         if not isinstance(self.rule_specs, list):
             raise utils.ValidationError(
-                'Expected answer group rules to be a list, received %s'
-                % self.rule_specs)
+                'Expected answer group rules to be a list, received {0!s}'.format(self.rule_specs))
         if len(self.rule_specs) < 1:
             raise utils.ValidationError(
-                'There must be at least one rule for each answer group.'
-                % self.rule_specs)
+                'There must be at least one rule for each answer group.'.format(*self.rule_specs))
 
         all_rule_classes = rule_domain.get_rules_for_obj_type(obj_type)
         for rule_spec in self.rule_specs:
@@ -546,7 +538,7 @@ class AnswerGroup(object):
                     if r.__name__ == rule_spec.rule_type)
             except StopIteration:
                 raise utils.ValidationError(
-                    'Unrecognized rule type: %s' % rule_spec.rule_type)
+                    'Unrecognized rule type: {0!s}'.format(rule_spec.rule_type))
 
             rule_spec.validate(
                 rule_domain.get_param_list(rule_class.description),
@@ -587,14 +579,14 @@ class TriggerInstance(object):
     def validate(self):
         if not isinstance(self.trigger_type, basestring):
             raise utils.ValidationError(
-                'Expected trigger type to be a string, received %s' %
-                self.trigger_type)
+                'Expected trigger type to be a string, received {0!s}'.format(
+                self.trigger_type))
 
         try:
             trigger = trigger_registry.Registry.get_trigger(self.trigger_type)
         except KeyError:
             raise utils.ValidationError(
-                'Unknown trigger type: %s' % self.trigger_type)
+                'Unknown trigger type: {0!s}'.format(self.trigger_type))
 
         # Verify that the customization args are valid.
         _validate_customization_args_and_values(
@@ -715,13 +707,13 @@ class InteractionInstance(object):
     def validate(self, exp_param_specs_dict):
         if not isinstance(self.id, basestring):
             raise utils.ValidationError(
-                'Expected interaction id to be a string, received %s' %
-                self.id)
+                'Expected interaction id to be a string, received {0!s}'.format(
+                self.id))
         try:
             interaction = interaction_registry.Registry.get_interaction_by_id(
                 self.id)
         except KeyError:
-            raise utils.ValidationError('Invalid interaction id: %s' % self.id)
+            raise utils.ValidationError('Invalid interaction id: {0!s}'.format(self.id))
 
         _validate_customization_args_and_values(
             'interaction', self.id, self.customization_args,
@@ -729,8 +721,7 @@ class InteractionInstance(object):
 
         if not isinstance(self.answer_groups, list):
             raise utils.ValidationError(
-                'Expected answer groups to be a list, received %s.'
-                % self.answer_groups)
+                'Expected answer groups to be a list, received {0!s}.'.format(self.answer_groups))
         if not self.is_terminal and self.default_outcome is None:
             raise utils.ValidationError(
                 'Non-terminal interactions must have a default outcome.')
@@ -751,8 +742,7 @@ class InteractionInstance(object):
 
         if not isinstance(self.fallbacks, list):
             raise utils.ValidationError(
-                'Expected fallbacks to be a list, received %s'
-                % self.fallbacks)
+                'Expected fallbacks to be a list, received {0!s}'.format(self.fallbacks))
         for fallback in self.fallbacks:
             fallback.validate()
 
@@ -810,13 +800,13 @@ class GadgetInstance(object):
 
         if not isinstance(gadget_name, basestring):
             raise utils.ValidationError(
-                'Gadget name must be a string. Received type: %s' % str(
-                    type(gadget_name).__name__)
+                'Gadget name must be a string. Received type: {0!s}'.format(str(
+                    type(gadget_name).__name__))
             )
 
         if len(gadget_name) > GadgetInstance._MAX_GADGET_NAME_LENGTH:
             raise utils.ValidationError(
-                '%s gadget name exceeds maximum length of %d' % (
+                '{0!s} gadget name exceeds maximum length of {1:d}'.format(
                     gadget_name,
                     GadgetInstance._MAX_GADGET_NAME_LENGTH
                 )
@@ -834,8 +824,8 @@ class GadgetInstance(object):
             self.gadget
         except KeyError:
             raise utils.ValidationError(
-                'Unknown gadget with type %s is not in the registry.' % (
-                    self.type)
+                'Unknown gadget with type {0!s} is not in the registry.'.format((
+                    self.type))
             )
 
         self._validate_gadget_name(self.name)
@@ -849,8 +839,8 @@ class GadgetInstance(object):
 
         if self.visible_in_states == []:
             raise utils.ValidationError(
-                '%s gadget not visible in any states.' % (
-                    self.name))
+                '{0!s} gadget not visible in any states.'.format((
+                    self.name)))
 
         # Validate state name visibility isn't repeated within each gadget.
         if len(self.visible_in_states) != len(set(self.visible_in_states)):
@@ -859,7 +849,7 @@ class GadgetInstance(object):
                 in collections.Counter(self.visible_in_states).items()
                 if count > 1]
             raise utils.ValidationError(
-                '%s specifies visibility repeatedly for state%s: %s' % (
+                '{0!s} specifies visibility repeatedly for state{1!s}: {2!s}'.format(
                     self.type,
                     's' if len(redundant_visible_states) > 1 else '',
                     ', '.join(redundant_visible_states)))
@@ -968,7 +958,7 @@ class SkinInstance(object):
             # Validate existence of panels in the skin.
             if not panel in self.skin.panels_properties:
                 raise utils.ValidationError(
-                    '%s panel not found in skin %s' % (
+                    '{0!s} panel not found in skin {1!s}'.format(
                         panel, self.skin_id)
                 )
 
@@ -980,8 +970,8 @@ class SkinInstance(object):
                 gadget_instance.validate()
                 if gadget_instance.name in gadget_instance_names:
                     raise utils.ValidationError(
-                        '%s gadget instance name must be unique.' % (
-                            gadget_instance.name)
+                        '{0!s} gadget instance name must be unique.'.format((
+                            gadget_instance.name))
                     )
                 gadget_instance_names.append(gadget_instance.name)
 
@@ -1053,8 +1043,7 @@ class State(object):
     def validate(self, exp_param_specs_dict, allow_null_interaction):
         if not isinstance(self.content, list):
             raise utils.ValidationError(
-                'Expected state content to be a list, received %s'
-                % self.content)
+                'Expected state content to be a list, received {0!s}'.format(self.content))
         if len(self.content) != 1:
             raise utils.ValidationError(
                 'The state content list must have exactly one element. '
@@ -1063,8 +1052,7 @@ class State(object):
 
         if not isinstance(self.param_changes, list):
             raise utils.ValidationError(
-                'Expected state param_changes to be a list, received %s'
-                % self.param_changes)
+                'Expected state param_changes to be a list, received {0!s}'.format(self.param_changes))
         for param_change in self.param_changes:
             param_change.validate()
 
@@ -1096,8 +1084,7 @@ class State(object):
     def update_interaction_answer_groups(self, answer_groups_list):
         if not isinstance(answer_groups_list, list):
             raise Exception(
-                'Expected interaction_answer_groups to be a list, received %s'
-                % answer_groups_list)
+                'Expected interaction_answer_groups to be a list, received {0!s}'.format(answer_groups_list))
 
         interaction_answer_groups = []
 
@@ -1127,8 +1114,7 @@ class State(object):
                 rule_inputs = rule_spec.inputs
                 if not isinstance(rule_inputs, dict):
                     raise Exception(
-                        'Expected rule_inputs to be a dict, received %s'
-                        % rule_inputs)
+                        'Expected rule_inputs to be a dict, received {0!s}'.format(rule_inputs))
                 for param_name, value in rule_inputs.iteritems():
                     param_type = rule_domain.get_obj_type_for_param_name(
                         matched_rule, param_name)
@@ -1143,8 +1129,7 @@ class State(object):
                             normalized_param = param_type.normalize(value)
                         except TypeError:
                             raise Exception(
-                                '%s has the wrong type. It should be a %s.' %
-                                (value, param_type.__name__))
+                                '{0!s} has the wrong type. It should be a {1!s}.'.format(value, param_type.__name__))
                     rule_inputs[param_name] = normalized_param
 
                 answer_group.rule_specs.append(rule_spec)
@@ -1155,8 +1140,7 @@ class State(object):
         if default_outcome_dict:
             if not isinstance(default_outcome_dict, dict):
                 raise Exception(
-                    'Expected default_outcome_dict to be a dict, received %s'
-                    % default_outcome_dict)
+                    'Expected default_outcome_dict to be a dict, received {0!s}'.format(default_outcome_dict))
             self.interaction.default_outcome = Outcome.from_dict(
                 default_outcome_dict)
             self.interaction.default_outcome.feedback = [
@@ -1177,8 +1161,7 @@ class State(object):
     def update_interaction_fallbacks(self, fallbacks_list):
         if not isinstance(fallbacks_list, list):
             raise Exception(
-                'Expected fallbacks_list to be a list, received %s'
-                % fallbacks_list)
+                'Expected fallbacks_list to be a list, received {0!s}'.format(fallbacks_list))
         self.interaction.fallbacks = [
             Fallback.from_dict(fallback_dict)
             for fallback_dict in fallbacks_list]
@@ -1366,32 +1349,31 @@ class Exploration(object):
         """
         if not isinstance(self.title, basestring):
             raise utils.ValidationError(
-                'Expected title to be a string, received %s' % self.title)
+                'Expected title to be a string, received {0!s}'.format(self.title))
         utils.require_valid_name(self.title, 'the exploration title')
 
         if not isinstance(self.category, basestring):
             raise utils.ValidationError(
-                'Expected category to be a string, received %s'
-                % self.category)
+                'Expected category to be a string, received {0!s}'.format(self.category))
         utils.require_valid_name(self.category, 'the exploration category')
 
         if not isinstance(self.objective, basestring):
             raise utils.ValidationError(
-                'Expected objective to be a string, received %s' %
-                self.objective)
+                'Expected objective to be a string, received {0!s}'.format(
+                self.objective))
 
         if not isinstance(self.language_code, basestring):
             raise utils.ValidationError(
-                'Expected language_code to be a string, received %s' %
-                self.language_code)
+                'Expected language_code to be a string, received {0!s}'.format(
+                self.language_code))
         if not any([self.language_code == lc['code']
                     for lc in feconf.ALL_LANGUAGE_CODES]):
             raise utils.ValidationError(
-                'Invalid language_code: %s' % self.language_code)
+                'Invalid language_code: {0!s}'.format(self.language_code))
 
         if not isinstance(self.tags, list):
             raise utils.ValidationError(
-                'Expected \'tags\' to be a list, received %s' % self.tags)
+                'Expected \'tags\' to be a list, received {0!s}'.format(self.tags))
         for tag in self.tags:
             if not isinstance(tag, basestring):
                 raise utils.ValidationError(
@@ -1421,16 +1403,16 @@ class Exploration(object):
 
         if not isinstance(self.blurb, basestring):
             raise utils.ValidationError(
-                'Expected blurb to be a string, received %s' % self.blurb)
+                'Expected blurb to be a string, received {0!s}'.format(self.blurb))
 
         if not isinstance(self.author_notes, basestring):
             raise utils.ValidationError(
-                'Expected author_notes to be a string, received %s' %
-                self.author_notes)
+                'Expected author_notes to be a string, received {0!s}'.format(
+                self.author_notes))
 
         if not isinstance(self.states, dict):
             raise utils.ValidationError(
-                'Expected states to be a dict, received %s' % self.states)
+                'Expected states to be a dict, received {0!s}'.format(self.states))
         if not self.states:
             raise utils.ValidationError('This exploration has no states.')
         for state_name in self.states:
@@ -1453,14 +1435,12 @@ class Exploration(object):
 
         if not isinstance(self.param_specs, dict):
             raise utils.ValidationError(
-                'Expected param_specs to be a dict, received %s'
-                % self.param_specs)
+                'Expected param_specs to be a dict, received {0!s}'.format(self.param_specs))
 
         for param_name in self.param_specs:
             if not isinstance(param_name, basestring):
                 raise utils.ValidationError(
-                    'Expected parameter name to be a string, received %s (%s).'
-                    % param_name, type(param_name))
+                    'Expected parameter name to be a string, received {0!s} ({1!s}).'.format(*param_name), type(param_name))
             if not re.match(feconf.ALPHANUMERIC_REGEX, param_name):
                 raise utils.ValidationError(
                     'Only parameter names with characters in [a-zA-Z0-9] are '
@@ -1469,14 +1449,12 @@ class Exploration(object):
 
         if not isinstance(self.param_changes, list):
             raise utils.ValidationError(
-                'Expected param_changes to be a list, received %s'
-                % self.param_changes)
+                'Expected param_changes to be a list, received {0!s}'.format(self.param_changes))
         for param_change in self.param_changes:
             param_change.validate()
             if param_change.name not in self.param_specs:
                 raise utils.ValidationError(
-                    'No parameter named \'%s\' exists in this exploration'
-                    % param_change.name)
+                    'No parameter named \'{0!s}\' exists in this exploration'.format(param_change.name))
             if param_change.name in feconf.INVALID_PARAMETER_NAMES:
                 raise utils.ValidationError(
                     'The exploration-level parameter with name \'%s\' is '
@@ -1514,15 +1492,13 @@ class Exploration(object):
             if (interaction.default_outcome is not None and
                     interaction.default_outcome.dest not in all_state_names):
                 raise utils.ValidationError(
-                    'The destination %s is not a valid state.'
-                    % interaction.default_outcome.dest)
+                    'The destination {0!s} is not a valid state.'.format(interaction.default_outcome.dest))
 
             for group in interaction.answer_groups:
                 # Check group destinations.
                 if group.outcome.dest not in all_state_names:
                     raise utils.ValidationError(
-                        'The destination %s is not a valid state.'
-                        % group.outcome.dest)
+                        'The destination {0!s} is not a valid state.'.format(group.outcome.dest))
 
                 for param_change in group.outcome.param_changes:
                     if param_change.name not in self.param_specs:
@@ -1539,8 +1515,7 @@ class Exploration(object):
                 # Check fallback destinations.
                 if fallback.outcome.dest not in all_state_names:
                     raise utils.ValidationError(
-                        'The fallback destination %s is not a valid state.'
-                        % fallback.outcome.dest)
+                        'The fallback destination {0!s} is not a valid state.'.format(fallback.outcome.dest))
 
                 for param_change in fallback.outcome.param_changes:
                     if param_change.name not in self.param_specs:
@@ -1556,7 +1531,7 @@ class Exploration(object):
             self.states.keys())
         if missing_state_names:
             raise utils.ValidationError(
-                'Exploration missing required state%s: %s' % (
+                'Exploration missing required state{0!s}: {1!s}'.format(
                     's' if len(missing_state_names) > 1 else '',
                     ', '.join(sorted(missing_state_names)))
                 )
@@ -1589,7 +1564,7 @@ class Exploration(object):
             if len(warnings_list) > 0:
                 warning_str = ''
                 for ind, warning in enumerate(warnings_list):
-                    warning_str += '%s. %s ' % (ind + 1, warning)
+                    warning_str += '{0!s}. {1!s} '.format(ind + 1, warning)
                 raise utils.ValidationError(
                     'Please fix the following issues before saving this '
                     'exploration: %s' % warning_str)
@@ -1738,7 +1713,7 @@ class Exploration(object):
         """Adds multiple states to the exploration."""
         for state_name in state_names:
             if state_name in self.states:
-                raise ValueError('Duplicate state name %s' % state_name)
+                raise ValueError('Duplicate state name {0!s}'.format(state_name))
 
         for state_name in state_names:
             self.states[state_name] = State.create_default_state(state_name)
@@ -1746,10 +1721,10 @@ class Exploration(object):
     def rename_state(self, old_state_name, new_state_name):
         """Renames the given state."""
         if old_state_name not in self.states:
-            raise ValueError('State %s does not exist' % old_state_name)
+            raise ValueError('State {0!s} does not exist'.format(old_state_name))
         if (old_state_name != new_state_name and
                 new_state_name in self.states):
-            raise ValueError('Duplicate state name: %s' % new_state_name)
+            raise ValueError('Duplicate state name: {0!s}'.format(new_state_name))
 
         if old_state_name == new_state_name:
             return
@@ -1775,7 +1750,7 @@ class Exploration(object):
     def delete_state(self, state_name):
         """Deletes the given state."""
         if state_name not in self.states:
-            raise ValueError('State %s does not exist' % state_name)
+            raise ValueError('State {0!s} does not exist'.format(state_name))
 
         # Do not allow deletion of initial states.
         if self.init_state_name == state_name:
@@ -1806,10 +1781,10 @@ class Exploration(object):
     def rename_gadget(self, old_gadget_name, new_gadget_name):
         """Renames the given gadget."""
         if old_gadget_name not in self.get_all_gadget_names():
-            raise ValueError('Gadget %s does not exist.' % old_gadget_name)
+            raise ValueError('Gadget {0!s} does not exist.'.format(old_gadget_name))
         if (old_gadget_name != new_gadget_name and
                 new_gadget_name in self.get_all_gadget_names()):
-            raise ValueError('Duplicate gadget name: %s' % new_gadget_name)
+            raise ValueError('Duplicate gadget name: {0!s}'.format(new_gadget_name))
 
         if old_gadget_name == new_gadget_name:
             return
@@ -1822,7 +1797,7 @@ class Exploration(object):
     def delete_gadget(self, gadget_name):
         """Deletes the given gadget."""
         if gadget_name not in self.get_all_gadget_names():
-            raise ValueError('Gadget %s does not exist.' % gadget_name)
+            raise ValueError('Gadget {0!s} does not exist.'.format(gadget_name))
 
         panel = self._get_panel_for_gadget(gadget_name)
         gadget_index = None
@@ -1841,7 +1816,7 @@ class Exploration(object):
             for gadget_instance in gadget_instances:
                 if gadget_instance.name == gadget_name:
                     return gadget_instance
-        raise ValueError('Gadget %s does not exist.' % gadget_name)
+        raise ValueError('Gadget {0!s} does not exist.'.format(gadget_name))
 
     def get_all_gadget_names(self):
         """Convenience method to query against current gadget names."""
@@ -1859,7 +1834,7 @@ class Exploration(object):
             for gadget_instance in gadget_instances:
                 if gadget_instance.name == gadget_name:
                     return panel
-        raise ValueError('Gadget %s does not exist.' % gadget_name)
+        raise ValueError('Gadget {0!s} does not exist.'.format(gadget_name))
 
     def _update_gadget_visibilities_for_renamed_state(
             self, old_state_name, new_state_name):
@@ -2151,7 +2126,7 @@ class Exploration(object):
         versioned_exploration_states['states_schema_version'] = (
             current_states_schema_version + 1)
 
-        conversion_fn = getattr(cls, '_convert_states_v%s_dict_to_v%s_dict' % (
+        conversion_fn = getattr(cls, '_convert_states_v{0!s}_dict_to_v{1!s}_dict'.format(
             current_states_schema_version, current_states_schema_version + 1))
         versioned_exploration_states['states'] = conversion_fn(
             versioned_exploration_states['states'])
@@ -2512,10 +2487,10 @@ class ExplorationSummary(object):
         """
 
         def _get_thumbnail_image_url(category):
-            return '/images/gallery/exploration_background_%s_small.png' % (
+            return '/images/gallery/exploration_background_{0!s}_small.png'.format((
                 feconf.CATEGORIES_TO_COLORS[category] if
                 category in feconf.CATEGORIES_TO_COLORS else
-                feconf.DEFAULT_COLOR)
+                feconf.DEFAULT_COLOR))
 
         self.id = exploration_id
         self.title = title

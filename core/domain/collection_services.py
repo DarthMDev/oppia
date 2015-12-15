@@ -80,9 +80,9 @@ def _migrate_collection_to_latest_schema(versioned_collection):
 def _get_collection_memcache_key(collection_id, version=None):
     """Returns a memcache key for an collection."""
     if version:
-        return 'collection-version:%s:%s' % (collection_id, version)
+        return 'collection-version:{0!s}:{1!s}'.format(collection_id, version)
     else:
-        return 'collection:%s' % collection_id
+        return 'collection:{0!s}'.format(collection_id)
 
 
 def get_collection_from_model(collection_model, run_conversion=True):
@@ -202,8 +202,7 @@ def get_multiple_collections_by_id(collection_ids, strict=True):
 
     if strict and not_found:
         raise ValueError(
-            'Couldn\'t find collections with the following ids:\n%s'
-            % '\n'.join(not_found))
+            'Couldn\'t find collections with the following ids:\n{0!s}'.format('\n'.join(not_found)))
 
     cache_update = {
         cid: db_results_dict[cid] for cid in db_results_dict.iterkeys()
@@ -370,8 +369,8 @@ def get_collection_summaries_matching_query(query_string, cursor=None):
             break
         else:
             logging.error(
-                'Search index contains stale collection ids: %s' %
-                ', '.join(invalid_collection_ids))
+                'Search index contains stale collection ids: {0!s}'.format(
+                ', '.join(invalid_collection_ids)))
 
     if (len(summary_models) < feconf.GALLERY_PAGE_SIZE
             and search_cursor is not None):
@@ -433,7 +432,7 @@ def apply_change_list(collection_id, change_list):
 
     except Exception as e:
         logging.error(
-            '%s %s %s %s' % (
+            '{0!s} {1!s} {2!s} {3!s}'.format(
                 e.__class__.__name__, e, collection_id, change_list)
         )
         raise
@@ -514,7 +513,7 @@ def _create_collection(committer_id, collection, commit_message, commit_cmds):
 
 def save_new_collection(committer_id, collection):
     commit_message = (
-        'New collection created with title \'%s\'.' % collection.title)
+        'New collection created with title \'{0!s}\'.'.format(collection.title))
     _create_collection(committer_id, collection, commit_message, [{
         'cmd': CMD_CREATE_NEW,
         'title': collection.title,
@@ -702,8 +701,7 @@ def save_new_collection_from_yaml(committer_id, yaml_content, collection_id):
     collection = collection_domain.Collection.from_yaml(
         collection_id, yaml_content)
     commit_message = (
-        'New collection created from YAML file with title \'%s\'.'
-        % collection.title)
+        'New collection created from YAML file with title \'{0!s}\'.'.format(collection.title))
 
     _create_collection(committer_id, collection, commit_message, [{
         'cmd': CMD_CREATE_NEW,
@@ -717,7 +715,7 @@ def save_new_collection_from_yaml(committer_id, yaml_content, collection_id):
 def delete_demo(collection_id):
     """Deletes a single demo collection."""
     if not collection_domain.Collection.is_demo_collection_id(collection_id):
-        raise Exception('Invalid demo collection id %s' % collection_id)
+        raise Exception('Invalid demo collection id {0!s}'.format(collection_id))
 
     collection = get_collection_by_id(collection_id, strict=False)
     if not collection:
@@ -737,7 +735,7 @@ def load_demo(collection_id):
     delete_demo(collection_id)
 
     if not collection_domain.Collection.is_demo_collection_id(collection_id):
-        raise Exception('Invalid demo collection id %s' % collection_id)
+        raise Exception('Invalid demo collection id {0!s}'.format(collection_id))
 
     demo_filepath = os.path.join(
         feconf.SAMPLE_COLLECTIONS_DIR,
@@ -746,7 +744,7 @@ def load_demo(collection_id):
     if demo_filepath.endswith('yaml'):
         yaml_content = utils.get_file_contents(demo_filepath)
     else:
-        raise Exception('Unrecognized file path: %s' % demo_filepath)
+        raise Exception('Unrecognized file path: {0!s}'.format(demo_filepath))
 
     collection = save_new_collection_from_yaml(
         feconf.SYSTEM_COMMITTER_ID, yaml_content, collection_id)
@@ -763,7 +761,7 @@ def load_demo(collection_id):
         if exp_services.get_exploration_by_id(exp_id, strict=False) is None:
             exp_services.load_demo(exp_id)
 
-    logging.info('Collection with id %s was loaded.' % collection_id)
+    logging.info('Collection with id {0!s} was loaded.'.format(collection_id))
 
 
 # TODO(bhenning): Cleanup search logic and abstract it between explorations and

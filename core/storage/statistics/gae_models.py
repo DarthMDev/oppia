@@ -171,7 +171,7 @@ class StartExplorationEventLogEntryModel(base_models.BaseModel):
     @classmethod
     def get_new_event_entity_id(cls, exp_id, session_id):
         timestamp = datetime.datetime.utcnow()
-        return cls.get_new_id('%s:%s:%s' % (
+        return cls.get_new_id('{0!s}:{1!s}:{2!s}'.format(
                               utils.get_time_in_millisecs(timestamp),
                               exp_id,
                               session_id))
@@ -261,7 +261,7 @@ class MaybeLeaveExplorationEventLogEntryModel(base_models.BaseModel):
     @classmethod
     def get_new_event_entity_id(cls, exp_id, session_id):
         timestamp = datetime.datetime.utcnow()
-        return cls.get_new_id('%s:%s:%s' % (
+        return cls.get_new_id('{0!s}:{1!s}:{2!s}'.format(
                               utils.get_time_in_millisecs(timestamp),
                               exp_id,
                               session_id))
@@ -345,7 +345,7 @@ class CompleteExplorationEventLogEntryModel(base_models.BaseModel):
     @classmethod
     def get_new_event_entity_id(cls, exp_id, session_id):
         timestamp = datetime.datetime.utcnow()
-        return cls.get_new_id('%s:%s:%s' % (
+        return cls.get_new_id('{0!s}:{1!s}:{2!s}'.format(
                               utils.get_time_in_millisecs(timestamp),
                               exp_id,
                               session_id))
@@ -414,7 +414,7 @@ class StateHitEventLogEntryModel(base_models.BaseModel):
     @classmethod
     def get_new_event_entity_id(cls, exp_id, session_id):
         timestamp = datetime.datetime.utcnow()
-        return cls.get_new_id('%s:%s:%s' % (
+        return cls.get_new_id('{0!s}:{1!s}:{2!s}'.format(
                               utils.get_time_in_millisecs(timestamp),
                               exp_id,
                               session_id))
@@ -459,7 +459,7 @@ class ExplorationAnnotationsModel(base_models.BaseMapReduceBatchResultsModel):
 
     @classmethod
     def get_entity_id(cls, exploration_id, exploration_version):
-        return '%s:%s' % (exploration_id, exploration_version)
+        return '{0!s}:{1!s}'.format(exploration_id, exploration_version)
 
     @classmethod
     def create(

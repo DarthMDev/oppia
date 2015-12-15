@@ -368,7 +368,7 @@ class BaseHandler(webapp2.RequestHandler):
         self.response.headers['X-Content-Type-Options'] = 'nosniff'
 
         json_output = json.dumps(values, cls=utils.JSONEncoderForHTML)
-        self.response.write('%s%s' % (feconf.XSSI_PREFIX, json_output))
+        self.response.write('{0!s}{1!s}'.format(feconf.XSSI_PREFIX, json_output))
 
         # Calculate the processing time of this request.
         duration = datetime.datetime.utcnow() - self.start_time
@@ -393,14 +393,14 @@ class BaseHandler(webapp2.RequestHandler):
                 BEFORE_END_BODY_TAG_HOOK.value),
             'DEFAULT_LANGUAGE_CODE': feconf.ALL_LANGUAGE_CODES[0]['code'],
             'DEV_MODE': feconf.DEV_MODE,
-            'DOMAIN_URL': '%s://%s' % (scheme, netloc),
+            'DOMAIN_URL': '{0!s}://{1!s}'.format(scheme, netloc),
             'ACTIVITY_STATUS_PRIVATE': (
                 rights_manager.ACTIVITY_STATUS_PRIVATE),
             'ACTIVITY_STATUS_PUBLIC': (
                 rights_manager.ACTIVITY_STATUS_PUBLIC),
             'ACTIVITY_STATUS_PUBLICIZED': (
                 rights_manager.ACTIVITY_STATUS_PUBLICIZED),
-            'FULL_URL': '%s://%s/%s' % (scheme, netloc, path),
+            'FULL_URL': '{0!s}://{1!s}/{2!s}'.format(scheme, netloc, path),
             'INVALID_NAME_CHARS': feconf.INVALID_NAME_CHARS,
             # TODO(sll): Consider including the obj_editor html directly as
             # part of the base HTML template?
@@ -455,7 +455,7 @@ class BaseHandler(webapp2.RequestHandler):
                 self.response.headers['X-Frame-Options'] = iframe_restriction
             else:
                 raise Exception(
-                    'Invalid X-Frame-Options: %s' % iframe_restriction)
+                    'Invalid X-Frame-Options: {0!s}'.format(iframe_restriction))
 
         self.response.expires = 'Mon, 01 Jan 1990 00:00:00 GMT'
         self.response.pragma = 'no-cache'
@@ -490,7 +490,7 @@ class BaseHandler(webapp2.RequestHandler):
             logging.error('Invalid URL requested: %s', self.request.uri)
             self.error(404)
             self._render_exception(404, {
-                'error': 'Could not find the page %s.' % self.request.uri})
+                'error': 'Could not find the page {0!s}.'.format(self.request.uri)})
             return
 
         if isinstance(exception, self.NotLoggedInException):
@@ -581,7 +581,7 @@ class CsrfTokenManager(object):
         digester.update(str(issued_on))
 
         digest = digester.digest()
-        token = '%s/%s' % (issued_on, base64.urlsafe_b64encode(digest))
+        token = '{0!s}/{1!s}'.format(issued_on, base64.urlsafe_b64encode(digest))
 
         return token
 

@@ -84,7 +84,7 @@ class CollectionChange(object):
         one of COLLECTION_PROPERTIES.
         """
         if 'cmd' not in change_dict:
-            raise Exception('Invalid change_dict: %s' % change_dict)
+            raise Exception('Invalid change_dict: {0!s}'.format(change_dict))
         self.cmd = change_dict['cmd']
 
         if self.cmd == CMD_ADD_COLLECTION_NODE:
@@ -94,7 +94,7 @@ class CollectionChange(object):
         elif self.cmd == CMD_EDIT_COLLECTION_NODE_PROPERTY:
             if (change_dict['property_name'] not in
                     self.COLLECTION_NODE_PROPERTIES):
-                raise Exception('Invalid change_dict: %s' % change_dict)
+                raise Exception('Invalid change_dict: {0!s}'.format(change_dict))
             self.exploration_id = change_dict['exploration_id']
             self.property_name = change_dict['property_name']
             self.new_value = change_dict['new_value']
@@ -102,7 +102,7 @@ class CollectionChange(object):
         elif self.cmd == CMD_EDIT_COLLECTION_PROPERTY:
             if (change_dict['property_name'] not in
                     self.COLLECTION_PROPERTIES):
-                raise Exception('Invalid change_dict: %s' % change_dict)
+                raise Exception('Invalid change_dict: {0!s}'.format(change_dict))
             self.property_name = change_dict['property_name']
             self.new_value = change_dict['new_value']
             self.old_value = change_dict.get('old_value')
@@ -110,7 +110,7 @@ class CollectionChange(object):
             self.from_version = change_dict['from_version']
             self.to_version = change_dict['to_version']
         else:
-            raise Exception('Invalid change_dict: %s' % change_dict)
+            raise Exception('Invalid change_dict: {0!s}'.format(change_dict))
 
 
 class CollectionCommitLogEntry(object):
@@ -201,18 +201,18 @@ class CollectionNode(object):
 
         if not isinstance(self.exploration_id, basestring):
             raise utils.ValidationError(
-                'Expected exploration ID to be a string, received %s' %
-                self.exploration_id)
+                'Expected exploration ID to be a string, received {0!s}'.format(
+                self.exploration_id))
 
         if not isinstance(self.prerequisite_skills, list):
             raise utils.ValidationError(
-                'Expected prerequisite_skills to be a list, received %s' %
-                self.prerequisite_skills)
+                'Expected prerequisite_skills to be a list, received {0!s}'.format(
+                self.prerequisite_skills))
 
         if len(set(self.prerequisite_skills)) != len(self.prerequisite_skills):
             raise utils.ValidationError(
-                'The prerequisite_skills list has duplicate entries: %s' %
-                self.prerequisite_skills)
+                'The prerequisite_skills list has duplicate entries: {0!s}'.format(
+                self.prerequisite_skills))
 
         for prerequisite_skill in self.prerequisite_skills:
             if not isinstance(prerequisite_skill, basestring):
@@ -222,19 +222,19 @@ class CollectionNode(object):
 
         if not isinstance(self.acquired_skills, list):
             raise utils.ValidationError(
-                'Expected acquired_skills to be a list, received %s' %
-                self.acquired_skills)
+                'Expected acquired_skills to be a list, received {0!s}'.format(
+                self.acquired_skills))
 
         if len(set(self.acquired_skills)) != len(self.acquired_skills):
             raise utils.ValidationError(
-                'The acquired_skills list has duplicate entries: %s' %
-                self.acquired_skills)
+                'The acquired_skills list has duplicate entries: {0!s}'.format(
+                self.acquired_skills))
 
         for acquired_skill in self.acquired_skills:
             if not isinstance(acquired_skill, basestring):
                 raise utils.ValidationError(
-                    'Expected all acquired skills to be strings, received %s' %
-                    acquired_skill)
+                    'Expected all acquired skills to be strings, received {0!s}'.format(
+                    acquired_skill))
 
         redundant_skills = (
             set(self.prerequisite_skills) & set(self.acquired_skills))
@@ -428,16 +428,16 @@ class Collection(object):
     def add_node(self, exploration_id):
         if self.get_node(exploration_id) is not None:
             raise ValueError(
-                'Exploration is already part of this collection: %s' %
-                exploration_id)
+                'Exploration is already part of this collection: {0!s}'.format(
+                exploration_id))
         self.nodes.append(CollectionNode.create_default_node(exploration_id))
 
     def delete_node(self, exploration_id):
         node_index = self._find_node(exploration_id)
         if node_index is None:
             raise ValueError(
-                'Exploration is not part of this collection: %s' %
-                exploration_id)
+                'Exploration is not part of this collection: {0!s}'.format(
+                exploration_id))
         del self.nodes[node_index]
 
     def validate(self, strict=True):
@@ -445,19 +445,18 @@ class Collection(object):
 
         if not isinstance(self.title, basestring):
             raise utils.ValidationError(
-                'Expected title to be a string, received %s' % self.title)
+                'Expected title to be a string, received {0!s}'.format(self.title))
         utils.require_valid_name(self.title, 'the collection title')
 
         if not isinstance(self.category, basestring):
             raise utils.ValidationError(
-                'Expected category to be a string, received %s'
-                % self.category)
+                'Expected category to be a string, received {0!s}'.format(self.category))
         utils.require_valid_name(self.category, 'the collection category')
 
         if not isinstance(self.objective, basestring):
             raise utils.ValidationError(
-                'Expected objective to be a string, received %s' %
-                self.objective)
+                'Expected objective to be a string, received {0!s}'.format(
+                self.objective))
 
         if not self.objective:
             raise utils.ValidationError(
@@ -465,18 +464,18 @@ class Collection(object):
 
         if not isinstance(self.schema_version, int):
             raise utils.ValidationError(
-                'Expected schema version to be an integer, received %s' %
-                self.schema_version)
+                'Expected schema version to be an integer, received {0!s}'.format(
+                self.schema_version))
 
         if self.schema_version != feconf.CURRENT_COLLECTION_SCHEMA_VERSION:
             raise utils.ValidationError(
-                'Expected schema version to be %s, received %s' % (
+                'Expected schema version to be {0!s}, received {1!s}'.format(
                     feconf.CURRENT_COLLECTION_SCHEMA_VERSION,
                     self.schema_version))
 
         if not isinstance(self.nodes, list):
             raise utils.ValidationError(
-                'Expected nodes to be a list, received %s' % self.nodes)
+                'Expected nodes to be a list, received {0!s}'.format(self.nodes))
 
         all_exp_ids = self.exploration_ids
         if len(set(all_exp_ids)) != len(all_exp_ids):

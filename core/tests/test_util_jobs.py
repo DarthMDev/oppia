@@ -76,7 +76,7 @@ class ExpCopiesMRJobManager(
     def map(item):
         if ExpCopiesMRJobManager._entity_created_before_job_queued(item):
             for count in range(10):
-                yield ('%scopy%d' % (item.id, count),
+                yield ('{0!s}copy{1:d}'.format(item.id, count),
                        exp_services.get_exploration_from_model(item).to_yaml())
 
     @staticmethod

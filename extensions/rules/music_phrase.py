@@ -32,7 +32,7 @@ def _get_midi_note_value(note):
         if note['readableNoteName'] in NOTE_MAP:
             return NOTE_MAP[note['readableNoteName']]
     else:
-        raise Exception('Invalid music note %s.' % note)
+        raise Exception('Invalid music note {0!s}.'.format(note))
 
 
 def _convert_sequence_to_midi(sequence):

@@ -179,7 +179,7 @@ def _validate_topic_similarities(data):
 
     for topic in topics_list:
         if topic not in feconf.DEFAULT_CATEGORIES:
-            raise Exception('Topic %s not in list of known topics.' % topic)
+            raise Exception('Topic {0!s} not in list of known topics.'.format(topic))
 
     for index, topic in enumerate(topics_list):
         if len(topic_similarities_values[index]) != topics_length:

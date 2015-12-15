@@ -181,8 +181,7 @@ class ExplorationMigrationJobManager(jobs.BaseMapReduceJobManager):
             old_exploration.validate()
         except Exception as e:
             logging.error(
-                'Exploration %s failed non-strict validation: %s' %
-                (item.id, e))
+                'Exploration {0!s} failed non-strict validation: {1!s}'.format(item.id, e))
             return
 
         # If the exploration model being stored in the datastore is not the
@@ -200,7 +199,7 @@ class ExplorationMigrationJobManager(jobs.BaseMapReduceJobManager):
             }]
             exp_services.update_exploration(
                 feconf.MIGRATION_BOT_USERNAME, item.id, commit_cmds,
-                'Update exploration states from schema version %d to %d.' % (
+                'Update exploration states from schema version {0:d} to {1:d}.'.format(
                     item.states_schema_version,
                     feconf.CURRENT_EXPLORATION_STATES_SCHEMA_VERSION))
 
@@ -228,7 +227,7 @@ class InteractionAuditOneOffJob(jobs.BaseMapReduceJobManager):
 
         exploration = exp_services.get_exploration_from_model(item)
         for state_name, state in exploration.states.iteritems():
-            exp_and_state_key = '%s %s' % (item.id, state_name)
+            exp_and_state_key = '{0!s} {1!s}'.format(item.id, state_name)
             yield (state.interaction.id, exp_and_state_key)
 
     @staticmethod

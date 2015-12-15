@@ -43,8 +43,7 @@ class UserServiceHandler(base.BaseHandler):
         """Handles POST requests."""
         username = self.payload.get('username')
         logging.info(
-            '[MODERATOR] %s requested email corresponding to username %s' %
-            (self.user_id, username))
+            '[MODERATOR] {0!s} requested email corresponding to username {1!s}'.format(self.user_id, username))
 
         self.render_json({
             'user_email': user_services.get_email_from_username(username),

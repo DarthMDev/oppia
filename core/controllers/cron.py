@@ -153,7 +153,7 @@ class CronMapreduceCleanupHandler(base.BaseHandler):
                     p.cleanup()
                     num_cleaned += 1
 
-        logging.warning('%s MR jobs cleaned up.' % num_cleaned)
+        logging.warning('{0!s} MR jobs cleaned up.'.format(num_cleaned))
 
         if job_models.JobModel.do_unfinished_jobs_exist(
                 jobs.JobCleanupManager.__name__):

@@ -64,21 +64,21 @@ class BaseObject(object):
     def get_editor_js_template(cls):
         if cls.edit_js_filename is None:
             raise Exception(
-                'There is no editor template defined for objects of type %s' %
-                cls.__name__)
+                'There is no editor template defined for objects of type {0!s}'.format(
+                cls.__name__))
         return utils.get_file_contents(os.path.join(
             os.getcwd(), feconf.OBJECT_TEMPLATES_DIR,
-            '%s.js' % cls.edit_js_filename))
+            '{0!s}.js'.format(cls.edit_js_filename)))
 
     @classmethod
     def get_editor_html_template(cls):
         if cls.edit_html_filename is None:
             raise Exception(
-                'There is no editor template defined for objects of type %s' %
-                cls.__name__)
+                'There is no editor template defined for objects of type {0!s}'.format(
+                cls.__name__))
         return utils.get_file_contents(os.path.join(
             os.getcwd(), feconf.OBJECT_TEMPLATES_DIR,
-            '%s.html' % cls.edit_html_filename))
+            '{0!s}.html'.format(cls.edit_html_filename)))
 
 
 class Boolean(BaseObject):
@@ -185,7 +185,7 @@ class CodeString(BaseObject):
     def normalize(cls, raw):
         if '\t' in raw:
             raise TypeError(
-                'Unexpected tab characters in code string: %s' % raw)
+                'Unexpected tab characters in code string: {0!s}'.format(raw))
         return schema_utils.normalize_against_schema(raw, cls.SCHEMA)
 
 
@@ -419,7 +419,7 @@ class CheckedProof(BaseObject):
                 assert isinstance(raw['error_line_number'], int)
             return copy.deepcopy(raw)
         except Exception:
-            raise TypeError('Cannot convert to checked proof %s' % raw)
+            raise TypeError('Cannot convert to checked proof {0!s}'.format(raw))
 
 
 class LogicQuestion(BaseObject):
@@ -453,7 +453,7 @@ class LogicQuestion(BaseObject):
 
             return copy.deepcopy(raw)
         except Exception:
-            raise TypeError('Cannot convert to a logic question %s' % raw)
+            raise TypeError('Cannot convert to a logic question {0!s}'.format(raw))
 
 
 class LogicErrorCategory(BaseObject):
@@ -564,7 +564,7 @@ class Graph(BaseObject):
             assert len(set(edge_pairs)) == len(edge_pairs)
 
         except Exception:
-            raise TypeError('Cannot convert to graph %s' % raw)
+            raise TypeError('Cannot convert to graph {0!s}'.format(raw))
 
         return raw
 
@@ -612,7 +612,7 @@ class NormalizedRectangle2D(BaseObject):
             raw[1][1] = clamp(0.0, raw[1][1], 1.0)
 
         except Exception:
-            raise TypeError('Cannot convert to Normalized Rectangle %s' % raw)
+            raise TypeError('Cannot convert to Normalized Rectangle {0!s}'.format(raw))
 
         return raw
 

@@ -71,14 +71,14 @@ class SentEmailModel(base_models.BaseModel):
 
     @classmethod
     def _generate_id(cls, intent):
-        id_prefix = '%s.' % intent
+        id_prefix = '{0!s}.'.format(intent)
 
         MAX_RETRIES = 10
         RAND_RANGE = 127 * 127
         ID_LENGTH = 12
 
         for i in range(MAX_RETRIES):
-            new_id = '%s.%s' % (
+            new_id = '{0!s}.{1!s}'.format(
                 id_prefix,
                 utils.convert_to_hash(
                     str(utils.get_random_int(RAND_RANGE)), ID_LENGTH))

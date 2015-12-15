@@ -50,7 +50,7 @@ class HtmlCleanerUnitTests(test_utils.GenericTestBase):
         for datum in TEST_DATA:
             self.assertEqual(
                 html_cleaner.clean(datum[0]), datum[1],
-                '\n\nOriginal text: %s' % datum[0])
+                '\n\nOriginal text: {0!s}'.format(datum[0]))
 
     def test_bad_tags_suppressed(self):
         TEST_DATA = [(
@@ -79,7 +79,7 @@ class HtmlCleanerUnitTests(test_utils.GenericTestBase):
         for datum in TEST_DATA:
             self.assertEqual(
                 html_cleaner.clean(datum[0]), datum[1],
-                '\n\nOriginal text: %s' % datum[0])
+                '\n\nOriginal text: {0!s}'.format(datum[0]))
 
     def test_oppia_custom_tags(self):
         TEST_DATA = [(
@@ -99,7 +99,7 @@ class HtmlCleanerUnitTests(test_utils.GenericTestBase):
         for datum in TEST_DATA:
             self.assertEqual(
                 html_cleaner.clean(datum[0]), datum[1],
-                '\n\nOriginal text: %s' % datum[0])
+                '\n\nOriginal text: {0!s}'.format(datum[0]))
 
 
 class HtmlStripperUnitTests(test_utils.GenericTestBase):

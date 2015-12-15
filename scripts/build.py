@@ -29,7 +29,7 @@ def _minify(source_path, target_path):
     """Runs the given file through a minifier and outputs it to target_path."""
     YUICOMPRESSOR_DIR = (
         '../oppia_tools/yuicompressor-2.4.8/yuicompressor-2.4.8.jar')
-    cmd = 'java -jar %s %s -o %s' % (
+    cmd = 'java -jar {0!s} {1!s} -o {2!s}'.format(
         YUICOMPRESSOR_DIR, source_path, target_path)
     subprocess.check_call(cmd, shell=True)
 
@@ -92,10 +92,10 @@ for root in os.listdir(os.path.join(os.getcwd())):
     if any([s in root for s in ['.git', 'third_party', 'extensions']]):
         continue
 
-    print('Processing %s' % os.path.join(os.getcwd(), root))
+    print('Processing {0!s}'.format(os.path.join(os.getcwd(), root)))
     for root, dirs, files in os.walk(os.path.join(os.getcwd(), root)):
         for directory in dirs:
-            print('Processing %s' % os.path.join(root, directory))
+            print('Processing {0!s}'.format(os.path.join(root, directory)))
         for filename in files:
             source_path = os.path.join(root, filename)
             if source_path.find(OUT_DIR) > 0:

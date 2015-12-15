@@ -31,7 +31,7 @@ def filter_a(name, value):
         url_components = urlparse.urlsplit(value)
         if url_components[0] in ['http', 'https']:
             return True
-        logging.error('Found invalid URL href: %s' % value)
+        logging.error('Found invalid URL href: {0!s}'.format(value))
 
     return False
 

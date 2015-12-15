@@ -231,14 +231,14 @@ class ProfileLinkTests(test_utils.GenericTestBase):
 
     def test_get_profile_picture_invalid_username(self):
         response = self.testapp.get(
-            '%s%s' % (self.PROFILE_PIC_URL, self.USERNAME), expect_errors=True
+            '{0!s}{1!s}'.format(self.PROFILE_PIC_URL, self.USERNAME), expect_errors=True
         )
         self.assertEqual(response.status_int, 404)
 
     def test_get_profile_picture_valid_username(self):
         self.signup(self.EMAIL, self.USERNAME)
         response_dict = self.get_json(
-            '%s%s' % (self.PROFILE_PIC_URL, self.USERNAME)
+            '{0!s}{1!s}'.format(self.PROFILE_PIC_URL, self.USERNAME)
         )
         self.assertEqual(
             response_dict['profile_picture_data_url_for_username'],
@@ -279,7 +279,7 @@ class ProfileDataHandlerTests(test_utils.GenericTestBase):
         # Viewer looks at editor's profile page.
         self.login(self.VIEWER_EMAIL)
         response = self.get_json(
-            '/profilehandler/data/%s' % self.EDITOR_USERNAME)
+            '/profilehandler/data/{0!s}'.format(self.EDITOR_USERNAME))
         self.assertEqual(response['user_bio'], 'My new editor bio')
         self.assertEqual(response['subject_interests'], ['editor', 'editing'])
         self.logout()
@@ -287,14 +287,14 @@ class ProfileDataHandlerTests(test_utils.GenericTestBase):
         # Editor looks at their own profile page.
         self.login(self.EDITOR_EMAIL)
         response = self.get_json(
-            '/profilehandler/data/%s' % self.EDITOR_USERNAME)
+            '/profilehandler/data/{0!s}'.format(self.EDITOR_USERNAME))
         self.assertEqual(response['user_bio'], 'My new editor bio')
         self.assertEqual(response['subject_interests'], ['editor', 'editing'])
         self.logout()
 
         # Looged-out user looks at editor's profile page/
         response = self.get_json(
-            '/profilehandler/data/%s' % self.EDITOR_USERNAME)
+            '/profilehandler/data/{0!s}'.format(self.EDITOR_USERNAME))
         self.assertEqual(response['user_bio'], 'My new editor bio')
         self.assertEqual(response['subject_interests'], ['editor', 'editing'])
 
@@ -310,7 +310,7 @@ class FirstContributionDateTests(test_utils.GenericTestBase):
         self.login(self.EMAIL)
         self.user_id = self.get_user_id_from_email(self.EMAIL)
         response_dict = self.get_json(
-            '/profilehandler/data/%s' % self.USERNAME)
+            '/profilehandler/data/{0!s}'.format(self.USERNAME))
         self.assertIsNone(response_dict['first_contribution_msec'])
 
         # Update the first_contribution_msec to the current time in milliseconds.
@@ -320,7 +320,7 @@ class FirstContributionDateTests(test_utils.GenericTestBase):
 
         # Test the contribution date correctly changes to current_time_in_msecs.
         response_dict = self.get_json(
-            '/profilehandler/data/%s' % self.USERNAME)
+            '/profilehandler/data/{0!s}'.format(self.USERNAME))
         self.assertEqual(
             response_dict['first_contribution_msec'],
             first_time_in_msecs)
@@ -331,7 +331,7 @@ class FirstContributionDateTests(test_utils.GenericTestBase):
         user_services.update_first_contribution_msec_if_not_set(
             self.user_id, second_time_in_msecs)
         response_dict = self.get_json(
-            '/profilehandler/data/%s' % self.USERNAME)
+            '/profilehandler/data/{0!s}'.format(self.USERNAME))
         self.assertEqual(
             response_dict['first_contribution_msec'],
             first_time_in_msecs)
@@ -350,7 +350,7 @@ class UserContributionsTests(test_utils.GenericTestBase):
         # that they have 0 created/edited explorations.
         self.signup(self.EMAIL_A, self.USERNAME_A)
         response_dict = self.get_json(
-            '/profilehandler/data/%s' % self.USERNAME_A)
+            '/profilehandler/data/{0!s}'.format(self.USERNAME_A))
         self.assertEqual(
             response_dict['created_exploration_summary_dicts'], [])
         self.assertEqual(
@@ -366,7 +366,7 @@ class UserContributionsTests(test_utils.GenericTestBase):
         rights_manager.publish_exploration(self.user_a_id, self.EXP_ID_1)
 
         response_dict = self.get_json(
-            '/profilehandler/data/%s' % self.USERNAME_A)
+            '/profilehandler/data/{0!s}'.format(self.USERNAME_A))
 
         self.assertEqual(len(
             response_dict['created_exploration_summary_dicts']), 1)
@@ -399,7 +399,7 @@ class UserContributionsTests(test_utils.GenericTestBase):
         }], 'Test edit')
 
         response_dict = self.get_json(
-            '/profilehandler/data/%s' % self.USERNAME_B)
+            '/profilehandler/data/{0!s}'.format(self.USERNAME_B))
         self.assertEqual(len(
             response_dict['created_exploration_summary_dicts']), 0)
         self.assertEqual(len(

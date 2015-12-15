@@ -99,7 +99,7 @@ class RuleDataUnitTests(test_utils.GenericTestBase):
 
                     self.assertTrue(
                         param_obj_type.has_editor_js_template(),
-                        msg='(%s)' % clazz.description)
+                        msg='({0!s})'.format(clazz.description))
                     at_least_one_rule_found = True
                 clses.append(clazz)
 

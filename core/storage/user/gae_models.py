@@ -164,7 +164,7 @@ class ExplorationUserDataModel(base_models.BaseModel):
 
     @classmethod
     def _generate_id(cls, user_id, exploration_id):
-        return '%s.%s' % (user_id, exploration_id)
+        return '{0!s}.{1!s}'.format(user_id, exploration_id)
 
     @classmethod
     def create(cls, user_id, exploration_id):
@@ -209,7 +209,7 @@ class CollectionProgressModel(base_models.BaseModel):
 
     @classmethod
     def _generate_id(cls, user_id, collection_id):
-        return '%s.%s' % (user_id, collection_id)
+        return '{0!s}.{1!s}'.format(user_id, collection_id)
 
     @classmethod
     def create(cls, user_id, collection_id):

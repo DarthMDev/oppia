@@ -66,7 +66,7 @@ def normalize_against_schema(obj, schema):
     normalized_obj = None
 
     if schema[SCHEMA_KEY_TYPE] == SCHEMA_TYPE_BOOL:
-        assert isinstance(obj, bool), ('Expected bool, received %s' % obj)
+        assert isinstance(obj, bool), ('Expected bool, received {0!s}'.format(obj))
         normalized_obj = obj
     elif schema[SCHEMA_KEY_TYPE] == SCHEMA_TYPE_CUSTOM:
         # Importing this at the top of the file causes a circular dependency.
@@ -77,7 +77,7 @@ def normalize_against_schema(obj, schema):
             schema[SCHEMA_KEY_OBJ_TYPE])
         normalized_obj = obj_class.normalize(obj)
     elif schema[SCHEMA_KEY_TYPE] == SCHEMA_TYPE_DICT:
-        assert isinstance(obj, dict), ('Expected dict, received %s' % obj)
+        assert isinstance(obj, dict), ('Expected dict, received {0!s}'.format(obj))
         expected_dict_keys = [
             p[SCHEMA_KEY_NAME] for p in schema[SCHEMA_KEY_PROPERTIES]]
         assert set(obj.keys()) == set(expected_dict_keys)
@@ -90,23 +90,23 @@ def normalize_against_schema(obj, schema):
     elif schema[SCHEMA_KEY_TYPE] == SCHEMA_TYPE_FLOAT:
         obj = float(obj)
         assert isinstance(obj, numbers.Real), (
-            'Expected float, received %s' % obj)
+            'Expected float, received {0!s}'.format(obj))
         normalized_obj = obj
     elif schema[SCHEMA_KEY_TYPE] == SCHEMA_TYPE_INT:
         obj = int(obj)
         assert isinstance(obj, numbers.Integral), (
-            'Expected int, received %s' % obj)
-        assert isinstance(obj, int), ('Expected int, received %s' % obj)
+            'Expected int, received {0!s}'.format(obj))
+        assert isinstance(obj, int), ('Expected int, received {0!s}'.format(obj))
         normalized_obj = obj
     elif schema[SCHEMA_KEY_TYPE] == SCHEMA_TYPE_HTML:
         assert isinstance(obj, basestring), (
-            'Expected unicode HTML string, received %s' % obj)
+            'Expected unicode HTML string, received {0!s}'.format(obj))
         obj = unicode(obj)
         assert isinstance(obj, unicode), (
-            'Expected unicode, received %s' % obj)
+            'Expected unicode, received {0!s}'.format(obj))
         normalized_obj = html_cleaner.clean(obj)
     elif schema[SCHEMA_KEY_TYPE] == SCHEMA_TYPE_LIST:
-        assert isinstance(obj, list), ('Expected list, received %s' % obj)
+        assert isinstance(obj, list), ('Expected list, received {0!s}'.format(obj))
         item_schema = schema[SCHEMA_KEY_ITEMS]
         if SCHEMA_KEY_LEN in schema:
             assert len(obj) == schema[SCHEMA_KEY_LEN]
@@ -115,18 +115,17 @@ def normalize_against_schema(obj, schema):
         ]
     elif schema[SCHEMA_KEY_TYPE] == SCHEMA_TYPE_UNICODE:
         assert isinstance(obj, basestring), (
-            'Expected unicode string, received %s' % obj)
+            'Expected unicode string, received {0!s}'.format(obj))
         obj = unicode(obj)
         assert isinstance(obj, unicode), (
-            'Expected unicode, received %s' % obj)
+            'Expected unicode, received {0!s}'.format(obj))
         normalized_obj = obj
     else:
-        raise Exception('Invalid schema type: %s' % schema[SCHEMA_KEY_TYPE])
+        raise Exception('Invalid schema type: {0!s}'.format(schema[SCHEMA_KEY_TYPE]))
 
     if SCHEMA_KEY_CHOICES in schema:
         assert normalized_obj in schema[SCHEMA_KEY_CHOICES], (
-            'Received %s which is not in the allowed range of choices: %s' %
-            (normalized_obj, schema[SCHEMA_KEY_CHOICES]))
+            'Received {0!s} which is not in the allowed range of choices: {1!s}'.format(normalized_obj, schema[SCHEMA_KEY_CHOICES]))
 
     # When type normalization is finished, apply the post-normalizers in the
     # given order.
@@ -143,7 +142,7 @@ def normalize_against_schema(obj, schema):
             kwargs = dict(validator)
             del kwargs['id']
             assert _Validators.get(validator['id'])(normalized_obj, **kwargs), (
-                'Validation failed: %s (%s) for object %s' % (
+                'Validation failed: {0!s} ({1!s}) for object {2!s}'.format(
                     validator['id'], kwargs, normalized_obj))
 
     return normalized_obj
@@ -167,7 +166,7 @@ class Normalizers(object):
     @classmethod
     def get(cls, normalizer_id):
         if not hasattr(cls, normalizer_id):
-            raise Exception('Invalid normalizer id: %s' % normalizer_id)
+            raise Exception('Invalid normalizer id: {0!s}'.format(normalizer_id))
         return getattr(cls, normalizer_id)
 
     @staticmethod
@@ -219,7 +218,7 @@ class _Validators(object):
     @classmethod
     def get(cls, validator_id):
         if not hasattr(cls, validator_id):
-            raise Exception('Invalid validator id: %s' % validator_id)
+            raise Exception('Invalid validator id: {0!s}'.format(validator_id))
         return getattr(cls, validator_id)
 
     @staticmethod

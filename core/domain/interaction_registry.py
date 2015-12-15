@@ -91,9 +91,9 @@ class Registry(object):
 
         # Add the base validator.
         html_fragments = [
-            '<script>%s</script>' %
+            '<script>{0!s}</script>'.format(
             utils.get_file_contents(os.path.join(
-                feconf.INTERACTIONS_DIR, 'baseValidator.js'))]
+                feconf.INTERACTIONS_DIR, 'baseValidator.js')))]
 
         # Add individual validators for each interaction.
         html_fragments += [

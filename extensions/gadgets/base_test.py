@@ -184,7 +184,7 @@ class GadgetUnitTests(test_utils.GenericTestBase):
 
             try:
                 self.assertTrue(os.path.isfile(os.path.join(
-                    gadget_dir, '%sSpec.js' % gadget_type)))
+                    gadget_dir, '{0!s}Spec.js'.format(gadget_type))))
                 optional_dirs_and_files_count += 1
             except Exception:
                 pass
@@ -201,10 +201,10 @@ class GadgetUnitTests(test_utils.GenericTestBase):
                 dir_contents
             )
 
-            py_file = os.path.join(gadget_dir, '%s.py' % gadget_type)
+            py_file = os.path.join(gadget_dir, '{0!s}.py'.format(gadget_type))
             html_file = os.path.join(
-                gadget_dir, '%s.html' % gadget_type)
-            js_file = os.path.join(gadget_dir, '%s.js' % gadget_type)
+                gadget_dir, '{0!s}.html'.format(gadget_type))
+            js_file = os.path.join(gadget_dir, '{0!s}.js'.format(gadget_type))
 
             self.assertTrue(os.path.isfile(py_file))
             self.assertTrue(os.path.isfile(html_file))
@@ -213,10 +213,10 @@ class GadgetUnitTests(test_utils.GenericTestBase):
             js_file_content = utils.get_file_contents(js_file)
             html_file_content = utils.get_file_contents(html_file)
             self.assertIn(
-                'oppiaGadget%s' % gadget_type, js_file_content)
+                'oppiaGadget{0!s}'.format(gadget_type), js_file_content)
             self.assertIn(
-                '<script type="text/ng-template" id="gadget/%s"' %
-                    gadget_type,
+                '<script type="text/ng-template" id="gadget/{0!s}"'.format(
+                    gadget_type),
                 html_file_content)
             self.assertNotIn('<script>', js_file_content)
             self.assertNotIn('</script>', js_file_content)

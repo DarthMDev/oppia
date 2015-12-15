@@ -48,7 +48,7 @@ class FrontendErrorHandler(base.BaseHandler):
 
     def post(self):
         """Records errors reported by the frontend."""
-        logging.error('Frontend error: %s' % self.payload.get('error'))
+        logging.error('Frontend error: {0!s}'.format(self.payload.get('error')))
         self.render_json(self.values)
 
 
@@ -176,25 +176,25 @@ urls = [
 
     get_redirect_route(r'/', galleries.GalleryPage, 'gallery_page'),
     get_redirect_route(
-        r'%s' % feconf.GALLERY_URL, galleries.GalleryPage, 'gallery_page'),
+        r'{0!s}'.format(feconf.GALLERY_URL), galleries.GalleryPage, 'gallery_page'),
     get_redirect_route(
-        r'%s' % feconf.GALLERY_DATA_URL, galleries.GalleryHandler,
+        r'{0!s}'.format(feconf.GALLERY_DATA_URL), galleries.GalleryHandler,
         'gallery_handler'),
 
     get_redirect_route(
-        r'%s' % feconf.LEARN_GALLERY_URL, galleries.GalleryRedirectPage,
+        r'{0!s}'.format(feconf.LEARN_GALLERY_URL), galleries.GalleryRedirectPage,
         'learn_gallery_page'),
     get_redirect_route(
-        r'%s' % feconf.PLAYTEST_QUEUE_URL, galleries.GalleryRedirectPage,
+        r'{0!s}'.format(feconf.PLAYTEST_QUEUE_URL), galleries.GalleryRedirectPage,
         'playtest_queue_page'),
     get_redirect_route(
-        r'%s' % feconf.CONTRIBUTE_GALLERY_URL, galleries.GalleryRedirectPage,
+        r'{0!s}'.format(feconf.CONTRIBUTE_GALLERY_URL), galleries.GalleryRedirectPage,
         'contribute_gallery_page'),
     get_redirect_route(
-        r'%s' % feconf.NEW_EXPLORATION_URL,
+        r'{0!s}'.format(feconf.NEW_EXPLORATION_URL),
         galleries.NewExploration, 'new_exploration'),
     get_redirect_route(
-        r'%s' % feconf.UPLOAD_EXPLORATION_URL,
+        r'{0!s}'.format(feconf.UPLOAD_EXPLORATION_URL),
         galleries.UploadExploration, 'upload_exploration'),
     get_redirect_route(
         r'/explorationsummarieshandler/data',
@@ -217,12 +217,12 @@ urls = [
         r'/preferenceshandler/profile_picture_by_username/<username>', profile.ProfilePictureHandlerByUsername,
         'profile_picture_handler_by_username'),
     get_redirect_route(
-        r'%s' % feconf.SIGNUP_URL, profile.SignupPage, 'signup_page'),
+        r'{0!s}'.format(feconf.SIGNUP_URL), profile.SignupPage, 'signup_page'),
     get_redirect_route(
-        r'%s' % feconf.SIGNUP_DATA_URL, profile.SignupHandler,
+        r'{0!s}'.format(feconf.SIGNUP_DATA_URL), profile.SignupHandler,
         'signup_handler'),
     get_redirect_route(
-        r'%s' % feconf.USERNAME_CHECK_DATA_URL,
+        r'{0!s}'.format(feconf.USERNAME_CHECK_DATA_URL),
         profile.UsernameCheckHandler, 'username_check_handler'),
 
     get_redirect_route(
@@ -232,10 +232,10 @@ urls = [
         moderator.UserServiceHandler, 'moderator_user_service_handler'),
 
     get_redirect_route(
-        r'%s/<exploration_id>' % feconf.EXPLORATION_URL_PREFIX,
+        r'{0!s}/<exploration_id>'.format(feconf.EXPLORATION_URL_PREFIX),
         reader.ExplorationPage, 'exploration_page'),
     get_redirect_route(
-        r'%s/<exploration_id>' % feconf.EXPLORATION_INIT_URL_PREFIX,
+        r'{0!s}/<exploration_id>'.format(feconf.EXPLORATION_INIT_URL_PREFIX),
         reader.ExplorationHandler, 'exploration_handler'),
     get_redirect_route(
         r'/explorehandler/exploration_start_event/<exploration_id>',
@@ -267,7 +267,7 @@ urls = [
         reader.RecommendationsHandler, 'recommendations_handler'),
 
     get_redirect_route(
-        r'%s/<exploration_id>' % feconf.EDITOR_URL_PREFIX,
+        r'{0!s}/<exploration_id>'.format(feconf.EDITOR_URL_PREFIX),
         editor.ExplorationPage, 'editor_exploration_page'),
     get_redirect_route(
         r'/createhandler/data/<exploration_id>', editor.ExplorationHandler,
@@ -297,7 +297,7 @@ urls = [
         r'/createhandler/revert/<exploration_id>',
         editor.ExplorationRevertHandler, 'exploration_revert_handler'),
     get_redirect_route(
-        r'%s/<exploration_id>' % feconf.EXPLORATION_RIGHTS_PREFIX,
+        r'{0!s}/<exploration_id>'.format(feconf.EXPLORATION_RIGHTS_PREFIX),
         editor.ExplorationRightsHandler, 'exploration_rights_handler'),
     get_redirect_route(
         r'/createhandler/snapshots/<exploration_id>',
@@ -316,28 +316,28 @@ urls = [
         editor.StartedTutorialEventHandler, 'started_tutorial_event_handler'),
 
     get_redirect_route(
-        r'%s' % feconf.RECENT_COMMITS_DATA_URL,
+        r'{0!s}'.format(feconf.RECENT_COMMITS_DATA_URL),
         recent_commits.RecentCommitsHandler, 'recent_commits_handler'),
     get_redirect_route(
-        r'%s' % feconf.RECENT_FEEDBACK_MESSAGES_DATA_URL,
+        r'{0!s}'.format(feconf.RECENT_FEEDBACK_MESSAGES_DATA_URL),
         feedback.RecentFeedbackMessagesHandler,
         'recent_feedback_messages_handler'),
 
     get_redirect_route(
-        r'%s/<exploration_id>' % feconf.FEEDBACK_LAST_UPDATED_URL_PREFIX,
+        r'{0!s}/<exploration_id>'.format(feconf.FEEDBACK_LAST_UPDATED_URL_PREFIX),
         feedback.FeedbackLastUpdatedHandler, 'feedback_last_updated_handler'),
     get_redirect_route(
-        r'%s/<exploration_id>' % feconf.FEEDBACK_THREADLIST_URL_PREFIX,
+        r'{0!s}/<exploration_id>'.format(feconf.FEEDBACK_THREADLIST_URL_PREFIX),
         feedback.ThreadListHandler, 'feedback_threadlist_handler'),
     get_redirect_route(
-        r'%s/<exploration_id>/<thread_id>' % feconf.FEEDBACK_THREAD_URL_PREFIX,
+        r'{0!s}/<exploration_id>/<thread_id>'.format(feconf.FEEDBACK_THREAD_URL_PREFIX),
         feedback.ThreadHandler, 'feedback_thread_handler'),
 
     get_redirect_route(
-        r'%s/<collection_id>' % feconf.COLLECTION_URL_PREFIX,
+        r'{0!s}/<collection_id>'.format(feconf.COLLECTION_URL_PREFIX),
         collection_viewer.CollectionPage, 'collection_page'),
     get_redirect_route(
-        r'%s/<collection_id>' % feconf.COLLECTION_DATA_URL_PREFIX,
+        r'{0!s}/<collection_id>'.format(feconf.COLLECTION_DATA_URL_PREFIX),
         collection_viewer.CollectionDataHandler, 'collection_data_handler'),
 
     get_redirect_route(

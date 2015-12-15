@@ -149,10 +149,10 @@ class BaseInteraction(object):
         in a read-only view after it has been submitted.
         """
         js_directives = utils.get_file_contents(os.path.join(
-            feconf.INTERACTIONS_DIR, self.id, '%s.js' % self.id))
+            feconf.INTERACTIONS_DIR, self.id, '{0!s}.js'.format(self.id)))
         html_templates = utils.get_file_contents(os.path.join(
-            feconf.INTERACTIONS_DIR, self.id, '%s.html' % self.id))
-        return '<script>%s</script>\n%s' % (js_directives, html_templates)
+            feconf.INTERACTIONS_DIR, self.id, '{0!s}.html'.format(self.id)))
+        return '<script>{0!s}</script>\n{1!s}'.format(js_directives, html_templates)
 
     @property
     def validator_html(self):
@@ -160,9 +160,9 @@ class BaseInteraction(object):
         customization_args and submission handler.
         """
         return (
-            '<script>%s</script>\n' %
+            '<script>{0!s}</script>\n'.format(
             utils.get_file_contents(os.path.join(
-                feconf.INTERACTIONS_DIR, self.id, 'validator.js')))
+                feconf.INTERACTIONS_DIR, self.id, 'validator.js'))))
 
     def to_dict(self):
         """Gets a dict representing this interaction. Only default values are
@@ -201,7 +201,7 @@ class BaseInteraction(object):
             return next(
                 r for r in self.rules if r.__name__ == rule_name)
         except StopIteration:
-            raise Exception('Could not find rule with name %s' % rule_name)
+            raise Exception('Could not find rule with name {0!s}'.format(rule_name))
 
     def get_stats_log_html(self, state_customization_args, answer):
         """Gets the HTML for recording a learner's response in the stats log.

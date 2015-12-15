@@ -40,16 +40,16 @@ def assign_rating_to_exploration(user_id, exploration_id, new_rating):
 
     if not isinstance(new_rating, int):
         raise ValueError(
-            'Expected the rating to be an integer, received %s' % new_rating)
+            'Expected the rating to be an integer, received {0!s}'.format(new_rating))
 
     ALLOWED_RATINGS = [1, 2, 3, 4, 5]
     if new_rating not in ALLOWED_RATINGS:
-        raise ValueError('Expected a rating 1-5, received %s.' % new_rating)
+        raise ValueError('Expected a rating 1-5, received {0!s}.'.format(new_rating))
 
     try:
         exp_services.get_exploration_by_id(exploration_id)
     except:
-        raise Exception('Invalid exploration id %s' % exploration_id)
+        raise Exception('Invalid exploration id {0!s}'.format(exploration_id))
 
     def _update_user_rating():
         exp_user_data_model = user_models.ExplorationUserDataModel.get(

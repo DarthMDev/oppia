@@ -85,10 +85,10 @@ class BaseGadget(object):
         once the necessary attributes are supplied.
         """
         js_directives = utils.get_file_contents(os.path.join(
-            feconf.GADGETS_DIR, self.type, '%s.js' % self.type))
+            feconf.GADGETS_DIR, self.type, '{0!s}.js'.format(self.type)))
         html_templates = utils.get_file_contents(os.path.join(
-            feconf.GADGETS_DIR, self.type, '%s.html' % self.type))
-        return '<script>%s</script>\n%s' % (js_directives, html_templates)
+            feconf.GADGETS_DIR, self.type, '{0!s}.html'.format(self.type)))
+        return '<script>{0!s}</script>\n{1!s}'.format(js_directives, html_templates)
 
     def validate(self, customization_args):
         """Subclasses may override to perform additional validation."""

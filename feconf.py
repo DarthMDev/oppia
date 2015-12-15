@@ -293,7 +293,7 @@ FEEDBACK_LAST_UPDATED_URL_PREFIX = '/feedback_last_updated'
 FEEDBACK_THREAD_URL_PREFIX = '/threadhandler'
 FEEDBACK_THREADLIST_URL_PREFIX = '/threadlisthandler'
 GALLERY_URL = '/gallery'
-GALLERY_CREATE_MODE_URL = '%s?mode=create' % GALLERY_URL
+GALLERY_CREATE_MODE_URL = '{0!s}?mode=create'.format(GALLERY_URL)
 GALLERY_DATA_URL = '/galleryhandler/data'
 LEARN_GALLERY_URL = '/learn'
 NEW_EXPLORATION_URL = '/contributehandler/create_new'

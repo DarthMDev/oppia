@@ -59,7 +59,7 @@ class Registry(object):
         if obj_type not in cls.objects_dict:
             cls._refresh_registry()
         if obj_type not in cls.objects_dict:
-            raise TypeError('\'%s\' is not a valid object class.' % obj_type)
+            raise TypeError('\'{0!s}\' is not a valid object class.'.format(obj_type))
         return cls.objects_dict[obj_type]
 
 

@@ -160,7 +160,7 @@ class StatsAggregatorUnitTests(test_utils.GenericTestBase):
             self.assertEqual(self.count_jobs_in_taskqueue(), 1)
             self.process_and_flush_pending_tasks()
 
-            model_id = '%s:%s' % (exp_id, exp_version)
+            model_id = '{0!s}:{1!s}'.format(exp_id, exp_version)
             output_model = stats_models.ExplorationAnnotationsModel.get(
                 model_id)
             self.assertEqual(output_model.num_starts, 2)
@@ -190,7 +190,7 @@ class StatsAggregatorUnitTests(test_utils.GenericTestBase):
             self.assertEqual(self.count_jobs_in_taskqueue(), 1)
             self.process_and_flush_pending_tasks()
 
-            model_id = '%s:%s' % (exp_id, exp_version)
+            model_id = '{0!s}:{1!s}'.format(exp_id, exp_version)
             output_model = stats_models.ExplorationAnnotationsModel.get(
                 model_id)
             self.assertEqual(output_model.num_starts, 2)
@@ -217,7 +217,7 @@ class StatsAggregatorUnitTests(test_utils.GenericTestBase):
             self.assertEqual(self.count_jobs_in_taskqueue(), 1)
             self.process_and_flush_pending_tasks()
 
-            model_id = '%s:%s' % (exp_id, exp_version)
+            model_id = '{0!s}:{1!s}'.format(exp_id, exp_version)
             output_model = stats_models.ExplorationAnnotationsModel.get(
                 model_id)
             self.assertEqual(output_model.num_starts, 2)
@@ -243,7 +243,7 @@ class StatsAggregatorUnitTests(test_utils.GenericTestBase):
             self.assertEqual(self.count_jobs_in_taskqueue(), 1)
             self.process_and_flush_pending_tasks()
 
-            model_id = '%s:%s' % (exp_id, exp_version)
+            model_id = '{0!s}:{1!s}'.format(exp_id, exp_version)
             output_model = stats_models.ExplorationAnnotationsModel.get(
                 model_id)
             self.assertEqual(output_model.num_starts, 1)
@@ -289,7 +289,7 @@ class StatsAggregatorUnitTests(test_utils.GenericTestBase):
             self.assertEqual(self.count_jobs_in_taskqueue(), 1)
             self.process_and_flush_pending_tasks()
 
-            model_id = '%s:%s' % (exp_id, exp_version)
+            model_id = '{0!s}:{1!s}'.format(exp_id, exp_version)
             output_model = stats_models.ExplorationAnnotationsModel.get(
                 model_id)
             self.assertEqual(output_model.num_starts, 2)

@@ -204,9 +204,9 @@ class StatisticsMRJobManager(
                     'resolved_answer_count': item.resolved_answer_count,
                     'active_answer_count': item.active_answer_count}
                 yield (
-                    '%s:%s' % (exploration_id, VERSION_NONE),
+                    '{0!s}:{1!s}'.format(exploration_id, VERSION_NONE),
                     value)
-                yield ('%s:%s' % (exploration_id, VERSION_ALL), value)
+                yield ('{0!s}:{1!s}'.format(exploration_id, VERSION_ALL), value)
             else:
                 version = VERSION_NONE
                 if item.exploration_version is not None:
@@ -221,8 +221,8 @@ class StatisticsMRJobManager(
                     'exploration_id': item.exploration_id,
                     'version': version}
 
-                yield ('%s:%s' % (item.exploration_id, version), value)
-                yield ('%s:%s' % (item.exploration_id, VERSION_ALL), value)
+                yield ('{0!s}:{1!s}'.format(item.exploration_id, version), value)
+                yield ('{0!s}:{1!s}'.format(item.exploration_id, VERSION_ALL), value)
 
     @staticmethod
     def reduce(key, stringified_values):

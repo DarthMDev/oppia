@@ -172,16 +172,14 @@ class AdminHandler(base.BaseHandler):
             if self.payload.get('action') == 'reload_exploration':
                 exploration_id = self.payload.get('exploration_id')
                 logging.info(
-                    '[ADMIN] %s reloaded exploration %s' %
-                    (self.user_id, exploration_id))
+                    '[ADMIN] {0!s} reloaded exploration {1!s}'.format(self.user_id, exploration_id))
                 exp_services.load_demo(unicode(exploration_id))
                 rights_manager.release_ownership_of_exploration(
                     feconf.SYSTEM_COMMITTER_ID, unicode(exploration_id))
             elif self.payload.get('action') == 'reload_collection':
                 collection_id = self.payload.get('collection_id')
                 logging.info(
-                    '[ADMIN] %s reloaded collection %s' %
-                    (self.user_id, collection_id))
+                    '[ADMIN] {0!s} reloaded collection {1!s}'.format(self.user_id, collection_id))
                 collection_services.load_demo(unicode(collection_id))
                 rights_manager.release_ownership_of_collection(
                     feconf.SYSTEM_COMMITTER_ID, unicode(collection_id))
@@ -190,14 +188,12 @@ class AdminHandler(base.BaseHandler):
             elif self.payload.get('action') == 'save_config_properties':
                 new_config_property_values = self.payload.get(
                     'new_config_property_values')
-                logging.info('[ADMIN] %s saved config property values: %s' %
-                             (self.user_id, new_config_property_values))
+                logging.info('[ADMIN] {0!s} saved config property values: {1!s}'.format(self.user_id, new_config_property_values))
                 for (name, value) in new_config_property_values.iteritems():
                     config_services.set_property(self.user_id, name, value)
             elif self.payload.get('action') == 'revert_config_property':
                 config_property_id = self.payload.get('config_property_id')
-                logging.info('[ADMIN] %s reverted config property: %s' %
-                             (self.user_id, config_property_id))
+                logging.info('[ADMIN] {0!s} reverted config property: {1!s}'.format(self.user_id, config_property_id))
                 config_services.revert_property(
                     self.user_id, config_property_id)
             elif self.payload.get('action') == 'refresh_computed_property':

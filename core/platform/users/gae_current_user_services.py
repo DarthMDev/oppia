@@ -69,8 +69,7 @@ def get_user_id_from_email(email):
         u = users.User(email)
     except users.UserNotFoundError:
         logging.error(
-            'The email address %s does not correspond to a valid user_id'
-            % email)
+            'The email address {0!s} does not correspond to a valid user_id'.format(email))
         return None
 
     key = _FakeUser(id=email, user=u).put()

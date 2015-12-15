@@ -52,7 +52,7 @@ def webapp_add_wsgi_middleware(app):
             logging.exception('Recorder.save() failed')
             return
         t1 = time.time()
-        link = 'http://%s%s/details?time=%s' % (
+        link = 'http://{0!s}{1!s}/details?time={2!s}'.format(
             self.env.get('HTTP_HOST', ''),
             recording.config.stats_url,
             int(self.start_timestamp * 1000))
@@ -83,7 +83,7 @@ THIRD_PARTY_LIBS = [
 
 for lib_path in THIRD_PARTY_LIBS:
     if not os.path.isdir(lib_path):
-        raise Exception('Invalid path for third_party library: %s' % lib_path)
+        raise Exception('Invalid path for third_party library: {0!s}'.format(lib_path))
     sys.path.insert(0, lib_path)
 
 # Required, otherwise MapReduce third-party library will throw errors.

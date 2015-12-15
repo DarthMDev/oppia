@@ -57,7 +57,7 @@ class ConfigProperty(object):
 
     def __init__(self, name, schema, description, default_value):
         if name in Registry._config_registry:
-            raise Exception('Property with name %s already exists' % name)
+            raise Exception('Property with name {0!s} already exists'.format(name))
 
         self._name = name
         self._schema = schema
@@ -117,7 +117,7 @@ class ComputedProperty(ConfigProperty):
 
         default_value = self.fn(*self.args)
         super(ComputedProperty, self).__init__(
-            '%s%s' % (COMPUTED_PROPERTY_PREFIX, name),
+            '{0!s}{1!s}'.format(COMPUTED_PROPERTY_PREFIX, name),
             schema, description, default_value)
 
     @property
@@ -184,7 +184,7 @@ def update_admin_ids():
         if user_id is not None:
             admin_ids.append(user_id)
         else:
-            raise Exception('Bad admin email: %s' % email)
+            raise Exception('Bad admin email: {0!s}'.format(email))
     return admin_ids
 
 
@@ -201,7 +201,7 @@ def update_moderator_ids():
         if user_id is not None:
             moderator_ids.append(user_id)
         else:
-            raise Exception('Bad moderator email: %s' % email)
+            raise Exception('Bad moderator email: {0!s}'.format(email))
     return moderator_ids
 
 

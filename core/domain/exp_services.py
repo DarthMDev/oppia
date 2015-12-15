@@ -97,9 +97,9 @@ def _migrate_states_schema(versioned_exploration_states):
 def _get_exploration_memcache_key(exploration_id, version=None):
     """Returns a memcache key for an exploration."""
     if version:
-        return 'exploration-version:%s:%s' % (exploration_id, version)
+        return 'exploration-version:{0!s}:{1!s}'.format(exploration_id, version)
     else:
-        return 'exploration:%s' % exploration_id
+        return 'exploration:{0!s}'.format(exploration_id)
 
 
 def get_exploration_from_model(exploration_model, run_conversion=True):
@@ -222,8 +222,7 @@ def get_multiple_explorations_by_id(exp_ids, strict=True):
 
     if strict and not_found:
         raise ValueError(
-            'Couldn\'t find explorations with the following ids:\n%s'
-            % '\n'.join(not_found))
+            'Couldn\'t find explorations with the following ids:\n{0!s}'.format('\n'.join(not_found)))
 
     cache_update = {
         eid: db_results_dict[eid] for eid in db_results_dict.iterkeys()
@@ -373,8 +372,8 @@ def get_exploration_summaries_matching_query(query_string, cursor=None):
             break
         else:
             logging.error(
-                'Search index contains stale exploration ids: %s' %
-                ', '.join(invalid_exp_ids))
+                'Search index contains stale exploration ids: {0!s}'.format(
+                ', '.join(invalid_exp_ids)))
 
     if (len(summary_models) < feconf.GALLERY_PAGE_SIZE
             and search_cursor is not None):
@@ -412,7 +411,7 @@ def export_to_zip_file(exploration_id, version=None):
 
     o = StringIO.StringIO()
     with zipfile.ZipFile(o, mode='w', compression=zipfile.ZIP_DEFLATED) as zf:
-        zf.writestr('%s.yaml' % exploration.title, yaml_repr)
+        zf.writestr('{0!s}.yaml'.format(exploration.title), yaml_repr)
 
         fs = fs_domain.AbstractFileSystem(
             fs_domain.ExplorationFileSystem(exploration_id))
@@ -424,7 +423,7 @@ def export_to_zip_file(exploration_id, version=None):
             # for them.
             file_contents = fs.get(filepath, version=1)
 
-            str_filepath = 'assets/%s' % filepath
+            str_filepath = 'assets/{0!s}'.format(filepath)
             assert isinstance(str_filepath, str)
             unicode_filepath = str_filepath.decode('utf-8')
             zf.writestr(unicode_filepath, file_contents)
@@ -549,7 +548,7 @@ def apply_change_list(exploration_id, change_list):
 
     except Exception as e:
         logging.error(
-            '%s %s %s %s' % (
+            '{0!s} {1!s} {2!s} {3!s}'.format(
                 e.__class__.__name__, e, exploration_id,
                 pprint.pprint(change_list))
         )
@@ -590,31 +589,31 @@ class EntityChangeListSummarizer(object):
 
     @property
     def add_entity_cmd(self):
-        return 'add_%s' % self.entity_type
+        return 'add_{0!s}'.format(self.entity_type)
 
     @property
     def rename_entity_cmd(self):
-        return 'rename_%s' % self.entity_type
+        return 'rename_{0!s}'.format(self.entity_type)
 
     @property
     def delete_entity_cmd(self):
-        return 'delete_%s' % self.entity_type
+        return 'delete_{0!s}'.format(self.entity_type)
 
     @property
     def edit_entity_property_cmd(self):
-        return 'edit_%s_property' % self.entity_type
+        return 'edit_{0!s}_property'.format(self.entity_type)
 
     @property
     def entity_name(self):
-        return '%s_name' % self.entity_type
+        return '{0!s}_name'.format(self.entity_type)
 
     @property
     def new_entity_name(self):
-        return 'new_%s_name' % self.entity_type
+        return 'new_{0!s}_name'.format(self.entity_type)
 
     @property
     def old_entity_name(self):
-        return 'old_%s_name' % self.entity_type
+        return 'old_{0!s}_name'.format(self.entity_type)
 
     def process_changes(self, original_entity_names, changes):
         """Processes the changes, making results available in each of the
@@ -885,7 +884,7 @@ def _create_exploration(
 
 def save_new_exploration(committer_id, exploration):
     commit_message = (
-        'New exploration created with title \'%s\'.' % exploration.title)
+        'New exploration created with title \'{0!s}\'.'.format(exploration.title))
     _create_exploration(committer_id, exploration, commit_message, [{
         'cmd': CMD_CREATE_NEW,
         'title': exploration.title,
@@ -1132,7 +1131,7 @@ def revert_exploration(
         exploration.validate()
 
     exp_models.ExplorationModel.revert(exploration_model,
-        committer_id, 'Reverted exploration to version %s' % revert_to_version,
+        committer_id, 'Reverted exploration to version {0!s}'.format(revert_to_version),
         revert_to_version)
     memcache_services.delete(_get_exploration_memcache_key(exploration_id))
 
@@ -1162,7 +1161,7 @@ def get_demo_exploration_components(demo_path):
     elif os.path.isdir(demo_filepath):
         return utils.get_exploration_components_from_dir(demo_filepath)
     else:
-        raise Exception('Unrecognized file path: %s' % demo_path)
+        raise Exception('Unrecognized file path: {0!s}'.format(demo_path))
 
 
 def save_new_exploration_from_yaml_and_assets(
@@ -1174,8 +1173,7 @@ def save_new_exploration_from_yaml_and_assets(
     exploration = exp_domain.Exploration.from_untitled_yaml(
         exploration_id, title, category, yaml_content)
     commit_message = (
-        'New exploration created from YAML file with title \'%s\'.'
-        % exploration.title)
+        'New exploration created from YAML file with title \'{0!s}\'.'.format(exploration.title))
 
     _create_exploration(committer_id, exploration, commit_message, [{
         'cmd': CMD_CREATE_NEW,
@@ -1192,7 +1190,7 @@ def save_new_exploration_from_yaml_and_assets(
 def delete_demo(exploration_id):
     """Deletes a single demo exploration."""
     if not (0 <= int(exploration_id) < len(feconf.DEMO_EXPLORATIONS)):
-        raise Exception('Invalid demo exploration id %s' % exploration_id)
+        raise Exception('Invalid demo exploration id {0!s}'.format(exploration_id))
 
     exploration = get_exploration_by_id(exploration_id, strict=False)
     if not exploration:
@@ -1212,14 +1210,14 @@ def load_demo(exploration_id):
     delete_demo(exploration_id)
 
     if not (0 <= int(exploration_id) < len(feconf.DEMO_EXPLORATIONS)):
-        raise Exception('Invalid demo exploration id %s' % exploration_id)
+        raise Exception('Invalid demo exploration id {0!s}'.format(exploration_id))
 
     exploration_info = feconf.DEMO_EXPLORATIONS[int(exploration_id)]
 
     if len(exploration_info) == 3:
         (exp_filename, title, category) = exploration_info
     else:
-        raise Exception('Invalid demo exploration: %s' % exploration_info)
+        raise Exception('Invalid demo exploration: {0!s}'.format(exploration_info))
 
     yaml_content, assets_list = get_demo_exploration_components(exp_filename)
     save_new_exploration_from_yaml_and_assets(
@@ -1231,7 +1229,7 @@ def load_demo(exploration_id):
 
     index_explorations_given_ids([exploration_id])
 
-    logging.info('Exploration with id %s was loaded.' % exploration_id)
+    logging.info('Exploration with id {0!s} was loaded.'.format(exploration_id))
 
 
 def get_next_page_of_all_commits(

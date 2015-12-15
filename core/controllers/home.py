@@ -160,8 +160,8 @@ class MyExplorationsHandler(base.BaseHandler):
                 'community_owned': exp_summary.community_owned,
                 'is_editable': True,
                 'thumbnail_image_url': (
-                    '/images/gallery/exploration_background_%s_small.png' %
-                    _get_intro_card_color(exp_summary.category)),
+                    '/images/gallery/exploration_background_{0!s}_small.png'.format(
+                    _get_intro_card_color(exp_summary.category))),
                 'ratings': exp_summary.ratings,
                 'num_open_threads': (
                     feedback_thread_analytics['num_open_threads']),

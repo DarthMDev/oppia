@@ -40,7 +40,7 @@ def get_obj_type_for_param_name(rule_class, param_name):
         if item[0] == param_name:
             return item[1]
     raise Exception(
-        'Rule %s has no param called %s' % (rule_class.__name__, param_name))
+        'Rule {0!s} has no param called {1!s}'.format(rule_class.__name__, param_name))
 
 
 def get_rules_for_obj_type(obj_type):
@@ -50,7 +50,7 @@ def get_rules_for_obj_type(obj_type):
         obj_type: str. The name of the object type.
     """
     rule_dir = os.path.join(os.getcwd(), feconf.RULES_DIR)
-    rule_class_name = '%sRule' % obj_type
+    rule_class_name = '{0!s}Rule'.format(obj_type)
     results = []
 
     for loader, name, _ in pkgutil.iter_modules(path=[rule_dir]):
@@ -132,7 +132,7 @@ class Rule(object):
     def __init__(self, *args):
         if len(args) != len(self.params):
             raise ValueError(
-                'Expected parameters %s, received %s' % (self.params, args))
+                'Expected parameters {0!s}, received {1!s}'.format(self.params, args))
 
         for ind, param_tuple in enumerate(self.params):
             setattr(self, param_tuple[0], param_tuple[1].normalize(args[ind]))

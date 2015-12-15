@@ -350,7 +350,7 @@ class CollectionSummaryQueriesUnitTests(CollectionServicesUnitTests):
         query = ' '.join(terms)
         if categories:
             query += ' category=(' + ' OR '.join([
-                '"%s"' % category for category in categories]) + ')'
+                '"{0!s}"'.format(category) for category in categories]) + ')'
         return query
 
     def test_get_collection_summaries_with_no_query(self):
@@ -494,7 +494,7 @@ class CollectionCreateAndDeleteUnitTests(CollectionServicesUnitTests):
     def test_retrieval_of_multiple_collection(self):
         collections = {}
         chars = 'abcde'
-        collection_ids = ['%s%s' % (self.COLLECTION_ID, c) for c in chars]
+        collection_ids = ['{0!s}{1!s}'.format(self.COLLECTION_ID, c) for c in chars]
         for _id in collection_ids:
             collection = self.save_new_valid_collection(_id, self.OWNER_ID)
             collections[_id] = collection
@@ -689,7 +689,7 @@ class LoadingAndDeletionOfCollectionDemosTest(CollectionServicesUnitTests):
             duration = datetime.datetime.utcnow() - start_time
             processing_time = duration.seconds + duration.microseconds / 1E6
             self.log_line(
-                'Loaded and validated collection %s (%.2f seconds)' % (
+                'Loaded and validated collection {0!s} ({1:.2f} seconds)'.format(
                 collection.title.encode('utf-8'), processing_time))
 
         self.assertEqual(
